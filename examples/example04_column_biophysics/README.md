@@ -64,7 +64,8 @@ python run_site.py --census-dir /path/to/bci_census
 cd ../harvard
 python run_site.py --data /path/to/harvard_data --ameriflux AMF_US-xHA_FLUXNET_2019-2024_v1.3_r1.zip
 cd ../tonzi
-python run_site.py --ameriflux AMF_US-Ton_FLUXNET_2001-2025_v1.3_r1.zip --badm /path/to/base_badm
+python run_site.py --ameriflux AMF_US-Ton_FLUXNET_2001-2025_v1.3_r1.zip --badm /path/to/base_badm \
+    --modis /path/to/mcd15a3h
 ```
 
 Each `run_site.py` needs numpy, pandas, netCDF4, matplotlib and a built `edmore` (`--edmore` or

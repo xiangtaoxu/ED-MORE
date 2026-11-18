@@ -47,8 +47,7 @@ short_gap_max = 4                           # [records] interpolate gaps up to 2
 
 # The top tower's fluxes (23.5 m), for the calibration and the evaluation. A FLUXNET flux is measured
 # where its _QC column is 0. The partitioned GPP and respiration count where the NEE they come from was
-# measured. The understory eddy covariance (*_UNDER in the tower file) is not declared: [fluxes] takes
-# only the names in tower_inputs.FLUX_VARIABLES, one per flux.
+# measured.
 [fluxes]
 SW_out  = { column = "SW_OUT",          units = "W m-2" }
 LW_out  = { column = "LW_OUT",          units = "W m-2" }

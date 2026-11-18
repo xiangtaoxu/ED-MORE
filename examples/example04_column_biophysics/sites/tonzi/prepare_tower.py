@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
 """The Tonzi Ranch tower file: AmeriFlux US-Ton's flux tower (FLUXNET half hours), with US-Ton's own
-rain gauge and barometer from its BASE file, stand-ins where US-Ton measured nothing (the longwave,
-pressure and rain of Vaira Ranch, AmeriFlux US-Var; the product's ERA5 wind), and the understory eddy
-covariance, for tonzi_site.toml. US-Var is an open grassland 2.4 km south-east of US-Ton and 48 m lower
+rain gauge and barometer from its BASE file, and stand-ins where US-Ton measured nothing (the longwave,
+pressure and rain of Vaira Ranch, AmeriFlux US-Var; the product's ERA5 wind), for tonzi_site.toml. US-Var is an open grassland 2.4 km south-east of US-Ton and 48 m lower
 (the two sites' BADM coordinates and elevations).
 
 The choices, all about measured data only:
@@ -42,10 +41,7 @@ The choices, all about measured data only:
   a value, the product's ERA5 rain, P_QC = 2 (one half hour in 2010-2019).
 
 The top tower's fluxes are copied as the product gives them, with their _QC columns (tonzi_site.toml
-[fluxes]). The understory eddy covariance, about 2 m above the ground (Baldocchi et al. 2004, Agric.
-For. Meteorol. 123, section 2.3), is in the BASE file only (*_1_2_1) and is copied as extra columns:
-FC, LE, H and USTAR as measured, and the PI's gap-filled NEE with its partitioning into GPP and RECO;
-NEE_UNDER_QC is 0 where the PI's NEE is the measured FC, 1 where the PI filtered or filled it.
+[fluxes]).
 
 The clock is the product's and the BASE files': local standard time (UTC-8), TIMESTAMP_START marking
 each half hour's start.
@@ -91,9 +87,6 @@ FLUXES = ["SW_OUT", "LW_OUT", "NETRAD", "PPFD_OUT", "PPFD_DIF", "USTAR",
           "GPP_NT_VUT_REF", "RECO_NT_VUT_REF", "GPP_DT_VUT_REF", "RECO_DT_VUT_REF",
           "G_F_MDS", "G_F_MDS_QC"]
 SOIL_PREFIXES = ("TS_F_MDS_", "SWC_F_MDS_")
-# The understory eddy covariance: the output column <- US-Ton's BASE column.
-UNDERSTORY = {"FC_UNDER": "FC_1_2_1", "LE_UNDER": "LE_1_2_1", "H_UNDER": "H_1_2_1", "USTAR_UNDER": "USTAR_1_2_1",
-              "NEE_UNDER": "NEE_PI_F_1_2_1", "GPP_UNDER": "GPP_PI_F_1_2_1", "RECO_UNDER": "RECO_PI_F_1_2_1"}
 
 
 def read_table(zip_path, key, columns, start, end, prefixes=()):
@@ -175,7 +168,7 @@ def main(argv=None):
     product_columns = (["TIMESTAMP_END", "P", "P_ERA"] + [c for col, qc, _ in MET.values() for c in (col, qc) if c]
                        + [c for c in STAND_IN.values() if isinstance(c, str)] + FLUXES)
     d, source = read_table(args.ameriflux, "_FLUXMET_HH_", product_columns, start, end, SOIL_PREFIXES)
-    ton, ton_source = read_table(args.ton_base, "_BASE_HH_", ["PA", "P"] + list(UNDERSTORY.values()), start, end)
+    ton, ton_source = read_table(args.ton_base, "_BASE_HH_", ["PA", "P"], start, end)
     var, var_source = read_table(args.var_base, "_BASE_HH_", [v for _, _, v in MET.values()] + ["P"], start, end)
     ton, var = ton.reindex(d.index), var.reindex(d.index)
 
@@ -212,10 +205,6 @@ def main(argv=None):
 
     for col in [c for c in d.columns if c in FLUXES or c.startswith(SOIL_PREFIXES)]:
         out[col] = d[col]
-    for name, col in UNDERSTORY.items():
-        out[name] = ton[col]
-    out["NEE_UNDER_QC"] = pd.Series(np.where(out["NEE_UNDER"] == out["FC_UNDER"], 0.0, 1.0),
-                                    index=out.index).where(out["NEE_UNDER"].notna())
 
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     out.to_csv(args.out, index=False, na_rep=str(MISSING), float_format="%.6g")

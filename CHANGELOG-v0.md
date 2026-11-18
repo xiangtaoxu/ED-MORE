@@ -227,9 +227,9 @@ This file covers every 0.x release; version 1.0 starts `CHANGELOG-v1.md`. The fo
   and a patch's grass of one PFT fuses into one cohort. It runs in a frozen stand only
   (`demography_on = false`) until its growth in number, mortality and recruitment are written. (#TBD)
 - Example 04's Tonzi Ranch site (prototype): the blue-oak savanna tower AmeriFlux US-Ton, 2010–2019, the
-  oaks imputed from the site survey's stand averages over a C3 annual grass, against the tower, the
-  understory's eddy covariance and the clip LAI. Vaira Ranch's longwave, pressure and rain stand in where
-  US-Ton has none. (#TBD)
+  oaks imputed from the site survey's stand averages over a C3 annual grass, against the tower, MODIS
+  leaf area and the clip LAI, with ten April days at hourly resolution under the oaks and in the open.
+  Vaira Ranch's longwave, pressure and rain stand in where US-Ton has none. (#TBD)
 - `calibrate_phenology` fits the WATER cue, the turgor-loss point derived from the leaf's pressure-volume
   curve as in the model, and when its fits do not settle it keeps the values whose own coupled run scored
   best. Example 02's part 3 fits the Tonzi stand's oaks and grass. (#TBD)

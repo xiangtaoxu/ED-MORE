@@ -37,16 +37,5 @@ mean_growth_resp_py      = "D"     # growth respiration (the stand's; a frozen c
 mean_soil_temp_layer_si  = "F"     # soil temperature, all layers  <-> TS (2-46 cm)
 mean_heat_gain_soil_py   = "F"     # heat into the soil column      <-> G
 mean_lai_pft_py          = "D"     # the oaks' and the grass's LAI
-mean_gpp_pft_py          = "D"     # the oaks' and the grass's GPP   <-> the understory eddy covariance
-mean_transp_py           = "F D"   # transpiration
-mean_ground_evap_py      = "F D"   # ground evaporation             (the understory LE: grass transpiration + this)
-mean_storage_carbon_py   = "D"     # the stand's storage: does the grass carry it through the dry summer?
-# Each cohort, daily: its leaves, storage and predawn leaf water potential (the grass's phenology cue).
-pft_co                   = "D"
-mean_height_co           = "D"
-mean_lai_co              = "D"
-mean_storage_carbon_co   = "D"
-mean_dmax_psi_leaf_co    = "D"
-mean_gpp_co              = "D"
 mean_rhet_py             = "F"     # heterotrophic respiration
 mean_raut_py             = "F"     # autotrophic respiration
