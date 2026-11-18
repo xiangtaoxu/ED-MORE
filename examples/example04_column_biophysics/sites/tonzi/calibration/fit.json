@@ -1,0 +1,3536 @@
+{
+ "variant": null,
+ "config": "examples/example04_column_biophysics/sites/tonzi/calibration.toml",
+ "windows": {
+  "cal1_2018": [
+   "2018-02-06 00:00:00",
+   "cal",
+   10
+  ],
+  "val1_2014": [
+   "2014-01-28 00:00:00",
+   "val",
+   10
+  ],
+  "cal2_2018": [
+   "2018-02-16 00:00:00",
+   "cal",
+   10
+  ],
+  "val2_2014": [
+   "2014-02-16 00:00:00",
+   "val",
+   10
+  ],
+  "cal3_2019": [
+   "2019-04-06 00:00:00",
+   "cal",
+   10
+  ],
+  "val3_2018": [
+   "2018-04-20 00:00:00",
+   "val",
+   10
+  ],
+  "cal5_2014": [
+   "2014-07-14 00:00:00",
+   "cal",
+   10
+  ],
+  "val5_2017": [
+   "2017-08-07 00:00:00",
+   "val",
+   10
+  ],
+  "cal6_2014": [
+   "2014-08-22 00:00:00",
+   "cal",
+   10
+  ],
+  "val6_2019": [
+   "2019-08-20 00:00:00",
+   "val",
+   10
+  ],
+  "seasonal_2019": [
+   "2019-08-27 00:00:00",
+   "seasonal",
+   90
+  ],
+  "seasonal_2020": [
+   "2019-10-03 00:00:00",
+   "seasonal",
+   90
+  ]
+ },
+ "registry": {
+  "leaf_reflect_nir": {
+   "state": "fixed",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "held at the PFT file's value with the albedo target off (owner, 2026-10-04): at realistic leaf optics the model's canopy reflects too much NIR, and the albedo pushed the leaf's reflectance to 0.32 (prior z -3.1; reflectance + transmittance 0.57 against ~0.70 for tropical leaves) to make up for it. Revisit with the canopy's structure (clumping, wood optics)"
+  },
+  "leaf_transmit_nir": {
+   "state": "optional",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "the albedo sees the leaf's NIR reflectance and transmittance only as their sum: fit one of the two"
+  },
+  "leaf_reflect_vis": {
+   "state": "optional",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "a tower barely sees the visible optics: the leaf absorbs most of the PAR at any value in the range"
+  },
+  "leaf_transmit_vis": {
+   "state": "optional",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "a tower barely sees the visible optics: the leaf absorbs most of the PAR at any value in the range"
+  },
+  "leaf_clumping": {
+   "state": "fixed",
+   "kind": "effective",
+   "scope": "site",
+   "reason": "held at the base value (0.80: ED2's tropical trees and lianas; FATES uses 0.85 for broadleaf evergreen tropical trees): the albedo cannot tell it from the leaf NIR reflectance (Jacobian correlation 0.986), and the fits sent it to either bound with the energy targets' treatment (owner, 2026-10-02)"
+  },
+  "leaf_angle_mean": {
+   "state": "fit",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": ""
+  },
+  "vcmax25": {
+   "state": "fit",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": ""
+  },
+  "theta_j": {
+   "state": "fixed",
+   "kind": "effective",
+   "scope": "plant_type",
+   "reason": "held at the PFT file's value (0.7 in the reference PFTs: the effective curvature of a mean-light cohort). A tower cannot tell it from the canopy's light distribution or from the error in its respiration; fit 3 drove it to its floor to absorb the GPP offset. Revisit with sunlit/shaded leaves (see docs/ROADMAP.md)"
+  },
+  "jmax_vcmax_ratio": {
+   "state": "fixed",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "fixed at Kattge & Knorr (2007) for the site's growth temperature (2.59 - 0.035 T), computed from the forcing; a shape key, never fitted beside kappa (best-practice plan \u00a73.5, \u00a74.3)"
+  },
+  "phi_psii": {
+   "state": "fixed",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "the electron yield of linear transport in low light (0.74: 0.37 electrons per absorbed photon, the measured maximum CO2 yield 0.093 of Long et al. 1993 at 4 electrons per CO2). A tower's dim-light GPP cannot tell it from the error in the tower's respiration, so the leaf measurements set it"
+  },
+  "ds_vcmax": {
+   "state": "fixed",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "fixed at Kattge & Knorr (2007) for the site's growth temperature (668.39 - 1.07 T), computed from the forcing (best-practice plan \u00a73.5)"
+  },
+  "ds_jmax": {
+   "state": "fixed",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "fixed at Kattge & Knorr (2007) for the site's growth temperature (659.70 - 0.75 T), computed from the forcing (best-practice plan \u00a73.5)"
+  },
+  "ea_vcmax": {
+   "state": "optional",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": ""
+  },
+  "ea_jmax": {
+   "state": "optional",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": ""
+  },
+  "capacity_low_temp": {
+   "state": "optional",
+   "kind": "effective",
+   "scope": "plant_type",
+   "reason": "it acts only in the cold: windows at leaf temperatures of about 5-15 C (an evergreen's spring) inform it, summer windows barely"
+  },
+  "stomatal_g1": {
+   "state": "fit",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": ""
+  },
+  "stomatal_g0": {
+   "state": "fit",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": ""
+  },
+  "z0m_ratio": {
+   "state": "fit",
+   "kind": "effective",
+   "scope": "site",
+   "reason": ""
+  },
+  "d_ratio": {
+   "state": "optional",
+   "kind": "effective",
+   "scope": "site",
+   "reason": "it moves the fluxes as z0m_ratio does: fit one of the two"
+  },
+  "leaf_width": {
+   "state": "optional",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "it sets only the leaves' boundary-layer conductance, which a tower's fluxes barely inform"
+  },
+  "dsl_dmax": {
+   "state": "optional",
+   "kind": "effective",
+   "scope": "site",
+   "reason": "it sets only soil evaporation, a small part of LE under a closed canopy"
+  },
+  "leaf_surf_water_max": {
+   "state": "fixed",
+   "kind": "effective",
+   "scope": "plant_type",
+   "reason": "the tower does not see the wet canopy: at BCI FLAG gap-fills every raining hour and 56 % of the three hours after (an open-path analyser's usual loss), so a fit tunes it on dry hours only (owner, 2026-10-02). A tower that measures through rain may fit it"
+  },
+  "wood_surf_water_max": {
+   "state": "fixed",
+   "kind": "effective",
+   "scope": "plant_type",
+   "reason": "as leaf_surf_water_max; the tower cannot tell the wood's surface water from the leaf's"
+  },
+  "intercept_k": {
+   "state": "optional",
+   "kind": "effective",
+   "scope": "site",
+   "reason": "it acts only through the wet canopy, which a tower that gap-fills its rain hours never samples, and its response can be rough"
+  },
+  "wstress_sref_stomata": {
+   "state": "fit",
+   "kind": "effective",
+   "scope": "plant_type",
+   "reason": ""
+  },
+  "stomata_psi_onset": {
+   "state": "fixed",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "held at half the PFT's turgor-loss point (owner, 2026-10-04): the BCI fit took it to its bound (-0.16 MPa, prior z +2.6), set by the ten-day windows' upwelling longwave and LE rather than the drought runs (test T6), and traded it against stomatal_g1 (correlation 0.91). wstress_sref_stomata carries the drought response"
+  },
+  "root_beta": {
+   "state": "optional",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": ""
+  },
+  "rd_vcmax_ratio": {
+   "state": "fixed",
+   "kind": "trait",
+   "scope": "plant_type",
+   "reason": "night NEE leaves the fast fit (owner, 2026-10-02); the target that informed it pulled it to its floor"
+  },
+  "kappa": {
+   "state": "fit",
+   "kind": "observation",
+   "scope": "observation",
+   "reason": ""
+  }
+ },
+ "keys": {
+  "leaf_angle_mean": {
+   "kind": "trait",
+   "scope": "plant_type",
+   "range": [
+    10.0,
+    80.0
+   ],
+   "default": 63.0,
+   "prior_centre": 63.0,
+   "prior_sd_u": 0.7769145394006657,
+   "prior_source": "the PFT file's value, +-10 degrees; spherical leaves average 57.3. The range is what a canopy can do"
+  },
+  "leaf_angle_mean_pft2": {
+   "kind": "trait",
+   "scope": "plant_type",
+   "range": [
+    10.0,
+    80.0
+   ],
+   "default": 63.24,
+   "prior_centre": 63.24,
+   "prior_sd_u": 0.7844874114425782,
+   "prior_source": "the PFT file's value, +-10 degrees; spherical leaves average 57.3. The range is what a canopy can do"
+  },
+  "vcmax25": {
+   "kind": "trait",
+   "scope": "plant_type",
+   "range": [
+    10.0,
+    150.0
+   ],
+   "default": 130.0,
+   "prior_centre": 113.26403934258785,
+   "prior_sd_u": 1.9859109562228519,
+   "prior_source": "EEO: the coordination of the Rubisco- and light-limited rates at the site's growing-season daytime climate, with ED-MORE's own leaf (priors.py; Wang et al. 2017, Smith et al. 2019)"
+  },
+  "vcmax25_pft2": {
+   "kind": "trait",
+   "scope": "plant_type",
+   "range": [
+    10.0,
+    150.0
+   ],
+   "default": 60.0,
+   "prior_centre": 113.26403934258785,
+   "prior_sd_u": 1.9859109562228519,
+   "prior_source": "EEO: the coordination of the Rubisco- and light-limited rates at the site's growing-season daytime climate, with ED-MORE's own leaf (priors.py; Wang et al. 2017, Smith et al. 2019)"
+  },
+  "stomatal_g1": {
+   "kind": "trait",
+   "scope": "plant_type",
+   "range": [
+    0.5,
+    15.0
+   ],
+   "default": 4.45,
+   "prior_centre": 1.919742034924382,
+   "prior_sd_u": 0.6148611101880281,
+   "prior_source": "EEO: the least-cost optimum at the site's growing-season daytime climate (priors.py; Prentice et al. 2014, Stocker et al. 2020, beta 146)"
+  },
+  "stomatal_g1_pft2": {
+   "kind": "trait",
+   "scope": "plant_type",
+   "range": [
+    0.5,
+    15.0
+   ],
+   "default": 5.25,
+   "prior_centre": 1.919742034924382,
+   "prior_sd_u": 0.6148611101880281,
+   "prior_source": "EEO: the least-cost optimum at the site's growing-season daytime climate (priors.py; Prentice et al. 2014, Stocker et al. 2020, beta 146)"
+  },
+  "stomatal_g0": {
+   "kind": "trait",
+   "scope": "plant_type",
+   "range": [
+    0.0001,
+    0.1
+   ],
+   "default": 0.01,
+   "prior_centre": 0.01,
+   "prior_sd_u": 0.6514417228548774,
+   "prior_source": "the PFT file's value, a factor e either way: the residual conductance is poorly known"
+  },
+  "stomatal_g0_pft2": {
+   "kind": "trait",
+   "scope": "plant_type",
+   "range": [
+    0.0001,
+    0.1
+   ],
+   "default": 0.01,
+   "prior_centre": 0.01,
+   "prior_sd_u": 0.6514417228548774,
+   "prior_source": "the PFT file's value, a factor e either way: the residual conductance is poorly known"
+  },
+  "z0m_ratio": {
+   "kind": "effective",
+   "scope": "site",
+   "range": [
+    0.02,
+    0.3
+   ],
+   "default": 0.13,
+   "prior_centre": 0.13,
+   "prior_sd_u": 0.5989304812834225,
+   "prior_source": "the base value (ED2 0.13), +-0.04: closed canopies give z0/h of about 0.06-0.15 (Raupach 1994). Effective: it carries the canopy-air scheme's errors"
+  },
+  "wstress_sref_stomata": {
+   "kind": "effective",
+   "scope": "plant_type",
+   "range": [
+    0.1,
+    10.0
+   ],
+   "default": 2.0,
+   "prior_centre": 2.0,
+   "prior_sd_u": 0.668600194678462,
+   "prior_source": "the PFT file's value, a factor 2 either way (Sabot et al. 2022 fit 0.5-5 across species)"
+  },
+  "wstress_sref_stomata_pft2": {
+   "kind": "effective",
+   "scope": "plant_type",
+   "range": [
+    0.1,
+    10.0
+   ],
+   "default": 2.0,
+   "prior_centre": 2.0,
+   "prior_sd_u": 0.668600194678462,
+   "prior_source": "the PFT file's value, a factor 2 either way (Sabot et al. 2022 fit 0.5-5 across species)"
+  },
+  "kappa": {
+   "kind": "observation",
+   "scope": "observation",
+   "range": [
+    0.5,
+    1.5
+   ],
+   "default": 1.0,
+   "prior_centre": 1.0,
+   "prior_sd_u": 0.2,
+   "prior_source": "the gap between the provider's night-time and daytime partitionings (RECO against RECO_DT)"
+  }
+ },
+ "climate_priors": {
+  "climate": {
+   "t_growth_c": 16.649640955303482,
+   "t_day_k": 292.47786007303745,
+   "vpd_day_pa": 1500.4899279388903,
+   "e_day_pa": 1004.2401458013651,
+   "p_day_pa": 99209.50427430205,
+   "par_day": 908.6956490366448,
+   "years": [
+    2010,
+    2011,
+    2012,
+    2013,
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020
+   ],
+   "leaf_on_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ]
+  },
+  "kattge_knorr": {
+   "jmax_vcmax_ratio": 2.007262566564378,
+   "jmax_vcmax_ratio_pft2": 2.007262566564378,
+   "ds_vcmax": 650.5748841778253,
+   "ds_jmax": 647.2127692835224
+  },
+  "co2_ppm": 400.6071818181818,
+  "eeo": {
+   "vcmax25": {
+    "eeo": 113.26403934258785
+   },
+   "vcmax25_pft2": {
+    "eeo": 113.26403934258785
+   },
+   "stomatal_g1": {
+    "eeo": 1.919742034924382,
+    "meta": {
+     "centre": 4.45,
+     "log_sd": 0.35,
+     "source": "CLM5 medlynslope (from Lin et al. 2015)"
+    },
+    "plant_type": "deciduous_broadleaf",
+    "meta_apart_sd": 2.402037931358175
+   },
+   "stomatal_g1_pft2": {
+    "eeo": 1.919742034924382,
+    "meta": {
+     "centre": 5.25,
+     "log_sd": 0.35,
+     "source": "CLM5 medlynslope (from Lin et al. 2015)"
+    },
+    "plant_type": "c3_grass",
+    "meta_apart_sd": 2.874392161144985
+   }
+  }
+ },
+ "kattge_knorr": [
+  [
+   "pft",
+   "pft.jmax_vcmax_ratio",
+   1,
+   2.007262566564378
+  ],
+  [
+   "pft",
+   "pft.jmax_vcmax_ratio",
+   2,
+   2.007262566564378
+  ],
+  [
+   "main",
+   "leaf_physiology.ds_vcmax",
+   null,
+   650.5748841778253
+  ],
+  [
+   "main",
+   "leaf_physiology.ds_jmax",
+   null,
+   647.2127692835224
+  ]
+ ],
+ "data": {
+  "filters": {
+   "lw_up": {
+    "counts": [
+     [
+      "measured",
+      103188
+     ],
+     [
+      "forcing observed",
+      97436
+     ]
+    ],
+    "diurnal": {
+     "0": [
+      364.44129874908015,
+      364.44129874908015,
+      4077,
+      4077
+     ],
+     "1": [
+      362.2910431565968,
+      362.2910431565968,
+      4055,
+      4055
+     ],
+     "2": [
+      360.640054532056,
+      360.640054532056,
+      4071,
+      4071
+     ],
+     "3": [
+      358.98447828232975,
+      358.98447828232975,
+      4052,
+      4052
+     ],
+     "4": [
+      357.50957454185243,
+      357.50957454185243,
+      4038,
+      4038
+     ],
+     "5": [
+      359.04929222720483,
+      359.04929222720483,
+      4014,
+      4014
+     ],
+     "6": [
+      368.0018650214052,
+      368.0018650214052,
+      3971,
+      3971
+     ],
+     "7": [
+      383.780510989011,
+      383.780510989011,
+      4004,
+      4004
+     ],
+     "8": [
+      403.0127280766397,
+      403.0127280766397,
+      4071,
+      4071
+     ],
+     "9": [
+      422.87969327111983,
+      422.87969327111983,
+      4072,
+      4072
+     ],
+     "10": [
+      440.1940147674132,
+      440.1940147674132,
+      4063,
+      4063
+     ],
+     "11": [
+      453.028552404439,
+      453.028552404439,
+      4055,
+      4055
+     ],
+     "12": [
+      458.91622253024195,
+      458.91622253024195,
+      3968,
+      3968
+     ],
+     "13": [
+      461.58660910440375,
+      461.58660910440375,
+      4042,
+      4042
+     ],
+     "14": [
+      456.61893740831295,
+      456.61893740831295,
+      4090,
+      4090
+     ],
+     "15": [
+      445.9212397159647,
+      445.9212397159647,
+      4084,
+      4084
+     ],
+     "16": [
+      431.17239544005884,
+      431.17239544005884,
+      4079,
+      4079
+     ],
+     "17": [
+      413.4779085142718,
+      413.4779085142718,
+      4099,
+      4099
+     ],
+     "18": [
+      397.8983794031312,
+      397.8983794031312,
+      4088,
+      4088
+     ],
+     "19": [
+      385.91901204819277,
+      385.91901204819277,
+      4067,
+      4067
+     ],
+     "20": [
+      378.30468651960786,
+      378.30468651960786,
+      4080,
+      4080
+     ],
+     "21": [
+      373.3014076885407,
+      373.3014076885407,
+      4084,
+      4084
+     ],
+     "22": [
+      369.6233188899708,
+      369.6233188899708,
+      4108,
+      4108
+     ],
+     "23": [
+      366.65339814814814,
+      366.65339814814814,
+      4104,
+      4104
+     ]
+    }
+   },
+   "le": {
+    "counts": [
+     [
+      "measured",
+      126316
+     ],
+     [
+      "forcing observed",
+      77088
+     ],
+     [
+      "daytime",
+      43589
+     ]
+    ],
+    "diurnal": {
+     "4": [
+      3.1459972077885046,
+      3.1459972077885046,
+      17,
+      17
+     ],
+     "5": [
+      4.21793358836075,
+      4.21793358836075,
+      1202,
+      1202
+     ],
+     "6": [
+      20.975042361313154,
+      20.975042361313154,
+      2356,
+      2356
+     ],
+     "7": [
+      37.414091286272765,
+      37.414091286272765,
+      3308,
+      3308
+     ],
+     "8": [
+      59.64276225007258,
+      59.64276225007258,
+      3597,
+      3597
+     ],
+     "9": [
+      81.58700434652877,
+      81.58700434652877,
+      3636,
+      3636
+     ],
+     "10": [
+      97.61074920882342,
+      97.61074920882342,
+      3627,
+      3627
+     ],
+     "11": [
+      104.53886322976496,
+      104.53886322976496,
+      3610,
+      3610
+     ],
+     "12": [
+      103.74782596336651,
+      103.74782596336651,
+      3560,
+      3560
+     ],
+     "13": [
+      101.73285572977389,
+      101.73285572977389,
+      3687,
+      3687
+     ],
+     "14": [
+      89.02582901078289,
+      89.02582901078289,
+      3738,
+      3738
+     ],
+     "15": [
+      71.54646676137388,
+      71.54646676137388,
+      3734,
+      3734
+     ],
+     "16": [
+      52.64105270339969,
+      52.64105270339969,
+      3407,
+      3407
+     ],
+     "17": [
+      37.93538859936792,
+      37.93538859936792,
+      2439,
+      2439
+     ],
+     "18": [
+      19.72499727688444,
+      19.72499727688444,
+      1443,
+      1443
+     ],
+     "19": [
+      5.320680475975746,
+      5.320680475975746,
+      228,
+      228
+     ]
+    }
+   },
+   "h": {
+    "counts": [
+     [
+      "measured",
+      159585
+     ],
+     [
+      "forcing observed",
+      95570
+     ],
+     [
+      "daytime",
+      46829
+     ],
+     [
+      "u* >= 0.4",
+      21476
+     ]
+    ],
+    "diurnal": {
+     "4": [
+      -19.3180599145916,
+      -17.347834210018053,
+      17,
+      1
+     ],
+     "5": [
+      -11.591705290951827,
+      -28.44331110650972,
+      1325,
+      21
+     ],
+     "6": [
+      11.925829247168672,
+      35.54712094953376,
+      2502,
+      119
+     ],
+     "7": [
+      59.051924555228496,
+      98.81880501828728,
+      3569,
+      409
+     ],
+     "8": [
+      120.13993071044003,
+      182.18971835527034,
+      3961,
+      887
+     ],
+     "9": [
+      185.18650142086955,
+      244.77988897386032,
+      3952,
+      1493
+     ],
+     "10": [
+      232.31020903606893,
+      283.62891702331405,
+      3938,
+      2015
+     ],
+     "11": [
+      255.91124114126407,
+      303.67835949720717,
+      3917,
+      2416
+     ],
+     "12": [
+      256.7029206954687,
+      300.6724144806569,
+      3825,
+      2495
+     ],
+     "13": [
+      243.26471038395857,
+      285.3506083458154,
+      3941,
+      2606
+     ],
+     "14": [
+      203.18494069872924,
+      249.44931811454722,
+      3992,
+      2569
+     ],
+     "15": [
+      141.58336911679567,
+      187.64049697335247,
+      3977,
+      2348
+     ],
+     "16": [
+      84.31228547118333,
+      127.56350846507843,
+      3623,
+      1937
+     ],
+     "17": [
+      39.51849285605039,
+      63.477905545067095,
+      2559,
+      1415
+     ],
+     "18": [
+      0.9352003152930553,
+      10.52019464992112,
+      1497,
+      692
+     ],
+     "19": [
+      -18.604082427430605,
+      -20.635134924106104,
+      234,
+      53
+     ]
+    }
+   },
+   "gpp": {
+    "counts": [
+     [
+      "measured",
+      65085
+     ],
+     [
+      "forcing observed",
+      38559
+     ],
+     [
+      "daytime",
+      31108
+     ],
+     [
+      "u* >= the provider's yearly threshold",
+      31096
+     ]
+    ],
+    "diurnal": {
+     "5": [
+      1.2825152248,
+      1.2825152248,
+      125,
+      125
+     ],
+     "6": [
+      4.485108939789916,
+      4.493737762821052,
+      476,
+      475
+     ],
+     "7": [
+      6.407811985906383,
+      6.410709210093777,
+      1175,
+      1173
+     ],
+     "8": [
+      7.305681787303973,
+      7.308529945169264,
+      1862,
+      1861
+     ],
+     "9": [
+      7.708881918060758,
+      7.711277088338194,
+      2403,
+      2401
+     ],
+     "10": [
+      7.313874781320754,
+      7.313874781320754,
+      2862,
+      2862
+     ],
+     "11": [
+      6.813030490677803,
+      6.813030490677803,
+      3113,
+      3113
+     ],
+     "12": [
+      6.370850250235164,
+      6.370850250235164,
+      3168,
+      3168
+     ],
+     "13": [
+      6.2011739964591435,
+      6.2011739964591435,
+      3341,
+      3341
+     ],
+     "14": [
+      5.73977122651497,
+      5.738591123069544,
+      3340,
+      3336
+     ],
+     "15": [
+      5.1450440600186855,
+      5.1450440600186855,
+      3211,
+      3211
+     ],
+     "16": [
+      4.439076110387777,
+      4.438477198238977,
+      2700,
+      2699
+     ],
+     "17": [
+      3.533603367789634,
+      3.5328203395068636,
+      1968,
+      1967
+     ],
+     "18": [
+      2.1097839371440608,
+      2.1097839371440608,
+      1187,
+      1187
+     ],
+     "19": [
+      0.820301778742857,
+      0.820301778742857,
+      175,
+      175
+     ]
+    }
+   },
+   "ustar": {
+    "counts": [
+     [
+      "measured",
+      167251
+     ],
+     [
+      "forcing observed",
+      97705
+     ],
+     [
+      "daytime",
+      47597
+     ]
+    ],
+    "diurnal": {
+     "4": [
+      0.15211764705882352,
+      0.15211764705882352,
+      17,
+      17
+     ],
+     "5": [
+      0.1517287753568745,
+      0.1517287753568745,
+      1331,
+      1331
+     ],
+     "6": [
+      0.21113916500994034,
+      0.21113916500994034,
+      2515,
+      2515
+     ],
+     "7": [
+      0.261377316735823,
+      0.261377316735823,
+      3615,
+      3615
+     ],
+     "8": [
+      0.3138040826487428,
+      0.3138040826487428,
+      4017,
+      4017
+     ],
+     "9": [
+      0.36968034610630407,
+      0.36968034610630407,
+      4045,
+      4045
+     ],
+     "10": [
+      0.419894449950446,
+      0.419894449950446,
+      4036,
+      4036
+     ],
+     "11": [
+      0.45891216720577255,
+      0.45891216720577255,
+      4019,
+      4019
+     ],
+     "12": [
+      0.47659827103991864,
+      0.47659827103991864,
+      3933,
+      3933
+     ],
+     "13": [
+      0.48295156482861396,
+      0.48295156482861396,
+      4026,
+      4026
+     ],
+     "14": [
+      0.4772125925925926,
+      0.4772125925925926,
+      4050,
+      4050
+     ],
+     "15": [
+      0.4528093346573982,
+      0.4528093346573982,
+      4028,
+      4028
+     ],
+     "16": [
+      0.418253682487725,
+      0.418253682487725,
+      3666,
+      3666
+     ],
+     "17": [
+      0.41449415432579895,
+      0.41449415432579895,
+      2566,
+      2566
+     ],
+     "18": [
+      0.375126751167445,
+      0.375126751167445,
+      1499,
+      1499
+     ],
+     "19": [
+      0.30835042735042734,
+      0.30835042735042734,
+      234,
+      234
+     ]
+    }
+   }
+  },
+  "ustar": {
+   "lw_up": {
+    "rule": null,
+    "diagnostic": null,
+    "reason": "no u* filter",
+    "ustar_min": null
+   },
+   "le": {
+    "rule": "diagnostic",
+    "diagnostic": {
+     "outcome": "flat",
+     "threshold": 0.0,
+     "records": 56835,
+     "driver": "rnet",
+     "by_driver_class": [
+      "rising",
+      "rising",
+      "flat",
+      "flat"
+     ],
+     "ratio": [
+      [
+       0.17849443938020132,
+       0.22809939687821174,
+       0.2694847853787446,
+       0.2876742516273595,
+       0.2999753723400621,
+       0.32731916017252266,
+       0.3463647542154844,
+       0.37640733715147523,
+       0.45637677642793195,
+       0.6606423080797854
+      ],
+      [
+       0.17880872058379196,
+       0.18118012621560242,
+       0.19082498061727174,
+       0.1897578801237125,
+       0.1951551830845728,
+       0.2098354071820056,
+       0.22643905619631757,
+       0.23045274796051118,
+       0.27220341417665445,
+       0.37754722506469096
+      ],
+      [
+       0.1903528887556311,
+       0.18259221890095065,
+       0.1836210661379505,
+       0.18790790924325554,
+       0.18711070935076213,
+       0.18423703796912486,
+       0.18341158451310272,
+       0.18250538042563222,
+       0.20509744071830552,
+       0.3062693291134755
+      ],
+      [
+       0.22572604490594553,
+       0.23329623148669154,
+       0.2222848867332326,
+       0.2162371106746237,
+       0.20279166622986164,
+       0.2016833797276349,
+       0.1859246310590865,
+       0.18004105682518814,
+       0.19050512772630807,
+       0.2892501223888871
+      ]
+     ],
+     "classes": [
+      0.0,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.5,
+      0.6,
+      0.8,
+      3.0
+     ],
+     "driver_class_edges": [
+      50.0,
+      195.394,
+      349.782,
+      534.529,
+      897.117
+     ],
+     "bootstrap": {
+      "n": 200,
+      "threshold_p05_p50_p95": [
+       0.0,
+       0.0,
+       0.075
+      ],
+      "outcome_share": {
+       "flat": 0.51,
+       "plateau": 0.095,
+       "rising": 0.395
+      }
+     }
+    },
+    "reason": "the ratio is flat: no filter",
+    "ustar_min": null
+   },
+   "h": {
+    "rule": "diagnostic",
+    "diagnostic": {
+     "outcome": "plateau",
+     "threshold": 0.4,
+     "records": 61212,
+     "driver": "rnet",
+     "by_driver_class": [
+      "plateau",
+      "plateau",
+      "plateau",
+      "plateau"
+     ],
+     "ratio": [
+      [
+       0.18951301032067644,
+       0.26499068486179506,
+       0.31787575875099205,
+       0.38160577527770745,
+       0.42709382955509695,
+       0.48971625250103556,
+       0.5496945297205275,
+       0.6113259330370784,
+       0.5405808618618864,
+       0.35596600916283583
+      ],
+      [
+       0.3410705613202908,
+       0.3663613013592766,
+       0.40734025923045075,
+       0.4391227248810413,
+       0.47066389041776446,
+       0.5009560451495854,
+       0.5400718237507115,
+       0.583613351868468,
+       0.5711827841357421,
+       0.4360909396220674
+      ],
+      [
+       0.35246524750952085,
+       0.3837274929972784,
+       0.4092470699161128,
+       0.43258869141232925,
+       0.4683098514840049,
+       0.4989974463636418,
+       0.5380747512481296,
+       0.5862584375061382,
+       0.5980924298587647,
+       0.46951279311510447
+      ],
+      [
+       0.31653440642356095,
+       0.33902724646833476,
+       0.34800897149417637,
+       0.3756649915412878,
+       0.41213742471137765,
+       0.4436886561213459,
+       0.49225714165092016,
+       0.5404540325428621,
+       0.5667202568410462,
+       0.422395602892552
+      ]
+     ],
+     "classes": [
+      0.0,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.5,
+      0.6,
+      0.8,
+      3.0
+     ],
+     "driver_class_edges": [
+      50.0,
+      187.193,
+      342.156,
+      529.493,
+      897.117
+     ],
+     "bootstrap": {
+      "n": 200,
+      "threshold_p05_p50_p95": [
+       0.375,
+       0.4,
+       0.4
+      ],
+      "outcome_share": {
+       "plateau": 1.0
+      }
+     }
+    },
+    "reason": "a plateau: filtered at it",
+    "ustar_min": 0.4
+   },
+   "gpp": {
+    "rule": "provider",
+    "diagnostic": {
+     "outcome": "flat",
+     "threshold": 0.0,
+     "records": 50631,
+     "driver": "par",
+     "by_driver_class": [
+      "flat",
+      "flat",
+      "flat",
+      "flat"
+     ],
+     "ratio": [
+      [
+       null,
+       null,
+       0.010191603133206242,
+       0.01020975589180053,
+       0.00973201735811385,
+       0.00967447852458325,
+       0.009234885151913137,
+       0.00908686228611918,
+       0.009851750695152024,
+       0.011060416104700724
+      ],
+      [
+       null,
+       null,
+       0.006537727759900258,
+       0.006505201695480548,
+       0.00653880125696078,
+       0.006418690372864891,
+       0.006130805449415964,
+       0.005786050261913298,
+       0.006155941513240888,
+       0.006632170263468482
+      ],
+      [
+       null,
+       null,
+       0.00520686254756925,
+       0.005441070769267109,
+       0.005016162116595597,
+       0.004803660889539947,
+       0.004650590819426641,
+       0.004227623600542855,
+       0.004396903816078608,
+       0.005233899461737209
+      ],
+      [
+       null,
+       null,
+       0.004899913990571035,
+       0.004585332865522386,
+       0.004459578109934346,
+       0.004086981137313849,
+       0.003720226243761014,
+       0.0035623920912252627,
+       0.0035305525097273013,
+       0.004905376722822122
+      ]
+     ],
+     "classes": [
+      0.0,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.5,
+      0.6,
+      0.8,
+      3.0
+     ],
+     "driver_class_edges": [
+      100.0,
+      731.201,
+      1243.8,
+      1761.63,
+      2534.88
+     ],
+     "bootstrap": {
+      "n": 200,
+      "threshold_p05_p50_p95": [
+       0.0,
+       0.0,
+       0.0
+      ],
+      "outcome_share": {
+       "flat": 1.0
+      }
+     }
+    },
+    "reason": "the provider's CO2 threshold",
+    "ustar_min": {
+     "2001": 0.172,
+     "2002": 0.186,
+     "2003": 0.208,
+     "2004": 0.208,
+     "2005": 0.202,
+     "2006": 0.198,
+     "2007": 0.207,
+     "2008": 0.219,
+     "2009": 0.224,
+     "2010": 0.225,
+     "2011": 0.229,
+     "2012": 0.224,
+     "2013": 0.233,
+     "2014": 0.222,
+     "2015": 0.23,
+     "2016": 0.229,
+     "2017": 0.232,
+     "2018": 0.231,
+     "2019": 0.229,
+     "2020": 0.232,
+     "2021": 0.241,
+     "2022": 0.252,
+     "2023": 0.254,
+     "2024": 0.241,
+     "2025": 0.229
+    }
+   },
+   "ustar": {
+    "rule": null,
+    "diagnostic": null,
+    "reason": "no u* filter",
+    "ustar_min": null
+   }
+  },
+  "windows": {
+   "slots": {
+    "1": {
+     "cal": [
+      "2018-02-06",
+      0.653
+     ],
+     "val": [
+      "2014-01-28",
+      0.567
+     ]
+    },
+    "2": {
+     "cal": [
+      "2018-02-16",
+      0.781
+     ],
+     "val": [
+      "2014-02-16",
+      0.624
+     ]
+    },
+    "3": {
+     "cal": [
+      "2019-04-06",
+      0.741
+     ],
+     "val": [
+      "2018-04-20",
+      0.727
+     ]
+    },
+    "4": {
+     "note": "no window covers 0.5 or more"
+    },
+    "5": {
+     "cal": [
+      "2014-07-14",
+      0.829
+     ],
+     "val": [
+      "2017-08-07",
+      0.807
+     ]
+    },
+    "6": {
+     "cal": [
+      "2014-08-22",
+      0.793
+     ],
+     "val": [
+      "2019-08-20",
+      0.79
+     ]
+    },
+    "7": {
+     "note": "no window covers 0.5 or more"
+    },
+    "8": {
+     "note": "no window covers 0.5 or more"
+    }
+   },
+   "source": "the rule (data_rules.select_windows)"
+  },
+  "seasonal": {
+   "years": [
+    {
+     "year": 2010,
+     "end": "2010-10-22",
+     "deficit_mm": 870.1658363540058,
+     "coverage": 0.0,
+     "usable": false,
+     "why_not": [
+      "starts before the chains' lead",
+      "coverage 0.00 under 0.5"
+     ]
+    },
+    {
+     "year": 2011,
+     "end": "2011-10-04",
+     "deficit_mm": 1101.2964691338823,
+     "coverage": 0.0,
+     "usable": false,
+     "why_not": [
+      "coverage 0.00 under 0.5"
+     ]
+    },
+    {
+     "year": 2012,
+     "end": "2012-10-20",
+     "deficit_mm": 1801.9143926676873,
+     "coverage": 0.0,
+     "usable": false,
+     "why_not": [
+      "coverage 0.00 under 0.5"
+     ]
+    },
+    {
+     "year": 2013,
+     "end": "2013-11-19",
+     "deficit_mm": 2592.2672541480943,
+     "coverage": 0.0,
+     "usable": false,
+     "why_not": [
+      "coverage 0.00 under 0.5"
+     ]
+    },
+    {
+     "year": 2014,
+     "end": "2014-10-30",
+     "deficit_mm": 3318.8370731516056,
+     "coverage": 0.953,
+     "usable": true,
+     "why_not": []
+    },
+    {
+     "year": 2015,
+     "end": "2015-10-31",
+     "deficit_mm": 4030.002041681328,
+     "coverage": 0.861,
+     "usable": true,
+     "why_not": []
+    },
+    {
+     "year": 2016,
+     "end": "2016-10-13",
+     "deficit_mm": 4578.30757781119,
+     "coverage": 0.882,
+     "usable": true,
+     "why_not": []
+    },
+    {
+     "year": 2017,
+     "end": "2017-11-07",
+     "deficit_mm": 4711.302729332857,
+     "coverage": 0.951,
+     "usable": true,
+     "why_not": []
+    },
+    {
+     "year": 2018,
+     "end": "2018-11-20",
+     "deficit_mm": 5282.6424368512,
+     "coverage": 0.967,
+     "usable": true,
+     "why_not": []
+    },
+    {
+     "year": 2019,
+     "end": "2019-11-25",
+     "deficit_mm": 5602.71499069635,
+     "coverage": 0.972,
+     "usable": true,
+     "why_not": []
+    },
+    {
+     "year": 2020,
+     "end": "2020-01-01",
+     "deficit_mm": 5462.154657293862,
+     "coverage": 0.91,
+     "usable": true,
+     "why_not": []
+    }
+   ],
+   "runs": [
+    [
+     "seasonal_2019",
+     "2019-08-27",
+     90
+    ],
+    [
+     "seasonal_2020",
+     "2019-10-03",
+     90
+    ]
+   ]
+  },
+  "range_coverage": {
+   "sw_in": {
+    "record": [
+     13.082,
+     997.0
+    ],
+    "kept": [
+     0.0,
+     1000.4
+    ],
+    "share": 1.0
+   },
+   "tair": {
+    "record": [
+     277.4204,
+     310.10999999999996
+    ],
+    "kept": [
+     271.726,
+     312.42999999999995
+    ],
+    "share": 1.0
+   },
+   "vpd": {
+    "record": [
+     25.70438405003483,
+     5265.119363865197
+    ],
+    "kept": [
+     4.343396241114586,
+     6187.985781589488
+    ],
+    "share": 1.0
+   },
+   "deficit_mm": {
+    "record": [
+     -5581.828599787451,
+     -2.1771842522566227
+    ],
+    "kept": [
+     -5602.71499069635,
+     -2913.956460348517
+    ],
+    "share": 0.478143156400575
+   }
+  },
+  "closure": {
+   "valid_days": 2664,
+   "days": 3652,
+   "daily_closure_median": 0.8700431790102163,
+   "f_median": 1.16033660755046,
+   "f_p10_p90": [
+    0.963321151773967,
+    1.2987634909239099
+   ],
+   "attribution": {
+    "rises_by_vpd_class": {
+     "h": [
+      0.3394796232299526,
+      0.23255633575779577,
+      0.32552426690445535,
+      0.2889739762639163
+     ],
+     "le": [
+      0.5099515778412553,
+      0.4198445310753023,
+      0.011834676605010808,
+      -0.06539468508063861
+     ]
+    },
+    "rises": {
+     "h": 0.3072491215841858,
+     "le": 0.21583960384015655
+    },
+    "records": 56243
+   },
+   "shares": {
+    "h": null,
+    "le": null
+   },
+   "reason": "both rise with u* (H +31%, LE +22%): Bowen"
+  },
+  "sigma": {
+   "le": {
+    "source": "provider",
+    "flux": "le",
+    "sigma_abs": 7.066136186700411,
+    "sigma_rel": 0.22386197729271826,
+    "estimate": {
+     "records": 128828,
+     "bin_level": [
+      0.36793627260731193,
+      1.3136172475355117,
+      2.709741675075681,
+      4.983982923232166,
+      9.290124970891872,
+      17.716164014592877,
+      31.98715027555694,
+      53.02851261352169,
+      87.94063887595094,
+      186.97992974693372
+     ],
+     "bin_sigma": [
+      4.7631,
+      5.03303,
+      5.35619,
+      5.8196,
+      7.12744,
+      12.2763,
+      19.4784,
+      24.3395,
+      30.2311,
+      44.95715
+     ]
+    }
+   },
+   "h": {
+    "source": "provider",
+    "flux": "h",
+    "sigma_abs": 12.051737735814061,
+    "sigma_rel": 0.14720722776643855,
+    "estimate": {
+     "records": 163953,
+     "bin_level": [
+      1.1459090631861428,
+      4.1561480848987555,
+      8.334432971456453,
+      13.79709240622141,
+      20.891084172003655,
+      31.308940469655383,
+      52.747618054284835,
+      112.18148929551693,
+      202.51274144556265,
+      351.0767624885636
+     ],
+     "bin_sigma": [
+      11.486650000000001,
+      11.91305,
+      12.3491,
+      12.9981,
+      13.9169,
+      15.7028,
+      21.0536,
+      33.5899,
+      44.1393,
+      60.8619
+     ]
+    }
+   },
+   "gpp": {
+    "source": "provider",
+    "flux": "nee",
+    "sigma_abs": 1.292205,
+    "sigma_rel": 0.16292360521968713,
+    "estimate": {
+     "records": 64919,
+     "bin_level": [
+      0.22757290440788663,
+      0.6573632241219963,
+      1.1052721250770179,
+      1.5969799229821315,
+      2.16781463185459,
+      2.8616314109673446,
+      3.749801048983364,
+      4.990542917436846,
+      7.005594865988909,
+      12.353038958558002
+     ],
+     "bin_sigma": [
+      1.292205,
+      1.30289,
+      1.36402,
+      1.4730150000000002,
+      1.5787,
+      1.7090200000000002,
+      1.859215,
+      2.05362,
+      2.327645,
+      3.23842
+     ]
+    }
+   }
+  },
+  "tower_checks": {
+   "V1_axis": {
+    "records": 175296,
+    "first": "2010-01-01T00:00:00",
+    "last": "2019-12-31T23:30:00"
+   },
+   "V4_bounds": {
+    "Tair": {
+     "present": 173664,
+     "out_of_bounds": 0
+    },
+    "RH": {
+     "present": 173727,
+     "out_of_bounds": 0
+    },
+    "PSurf": {
+     "present": 175252,
+     "out_of_bounds": 0
+    },
+    "Rainf": {
+     "present": 175296,
+     "out_of_bounds": 0
+    },
+    "SWdown": {
+     "present": 174203,
+     "out_of_bounds": 0
+    },
+    "LWdown": {
+     "present": 172607,
+     "out_of_bounds": 0
+    },
+    "Wind": {
+     "present": 175296,
+     "out_of_bounds": 0
+    },
+    "PAR": {
+     "present": 172969,
+     "out_of_bounds": 0
+    }
+   },
+   "V4_flux_bounds": {
+    "SW_out": {
+     "present": 103548,
+     "out_of_bounds": 0
+    },
+    "LW_out": {
+     "present": 103188,
+     "out_of_bounds": 0
+    },
+    "Rnet": {
+     "present": 167675,
+     "out_of_bounds": 0
+    },
+    "LE": {
+     "present": 175296,
+     "out_of_bounds": 0
+    },
+    "H": {
+     "present": 175296,
+     "out_of_bounds": 0
+    },
+    "NEE": {
+     "present": 175296,
+     "out_of_bounds": 0
+    },
+    "GPP": {
+     "present": 175296,
+     "out_of_bounds": 86
+    },
+    "RECO": {
+     "present": 175296,
+     "out_of_bounds": 0
+    },
+    "USTAR": {
+     "present": 167259,
+     "out_of_bounds": 8
+    }
+   },
+   "fluxes": {
+    "F1_rnet_components": {
+     "records": 101168,
+     "median_abs_residual": 7.7270000000000465,
+     "p95_abs_residual": 60.52499999999998
+    },
+    "F2_longwave_at_night": {
+     "records": 50510,
+     "median_lw_out_minus_lw_in": 69.64699999999999,
+     "lw_out_over_sigma_t4": 0.9376791073235832,
+     "lw_in_over_sigma_t4": 0.7518354942822667
+    },
+    "F3_sw_out": {
+     "records": 35458,
+     "median_albedo": 0.1436029963059251,
+     "fraction_above_sw_in": 0.0
+    },
+    "F3_lw_out": {
+     "records": 103188,
+     "fraction_outside_band": 8.721944412140947e-05
+    },
+    "failures": []
+   }
+  }
+ },
+ "process_coverage": {
+  "wet_canopy": 18,
+  "night": 0,
+  "snow": 0,
+  "drought": 3599
+ },
+ "fixed_by_coverage": {},
+ "weights_start": {
+  "cal1_2018/lw_up": 0.019090130639322554,
+  "cal1_2018/le": 0.3377473517719608,
+  "cal1_2018/h": 0.41986506183505123,
+  "cal1_2018/gpp": 0.5532285113556827,
+  "cal1_2018/ustar": 0.3656817347364707,
+  "cal2_2018/lw_up": 0.02067761335867346,
+  "cal2_2018/le": 0.39267015309875203,
+  "cal2_2018/h": 0.1785308462792954,
+  "cal2_2018/gpp": 0.3115851104258644,
+  "cal2_2018/ustar": 0.5115102035706194,
+  "cal3_2019/lw_up": 0.02496281376392811,
+  "cal3_2019/le": 0.3724552321534051,
+  "cal3_2019/h": 0.24554042226186049,
+  "cal3_2019/gpp": 0.5209431092112115,
+  "cal3_2019/ustar": 0.3359111784971165,
+  "cal5_2014/lw_up": 0.036016564478955515,
+  "cal5_2014/le": 0.5823248117528027,
+  "cal5_2014/h": 0.3246858791983861,
+  "cal5_2014/gpp": 0.2814760717133192,
+  "cal5_2014/ustar": 0.562858635811921,
+  "cal6_2014/lw_up": 0.016849272998376155,
+  "cal6_2014/le": 0.4323271613359822,
+  "cal6_2014/h": 0.6049773928878632,
+  "cal6_2014/gpp": 0.2738172207981929,
+  "cal6_2014/ustar": 0.5984814166635177,
+  "seasonal_2019/le": 0.26992804854453994,
+  "seasonal_2020/le": 0.1305923256724003
+ },
+ "screening": {
+  "keys": [
+   "leaf_angle_mean",
+   "leaf_angle_mean_pft2",
+   "vcmax25",
+   "vcmax25_pft2",
+   "stomatal_g1",
+   "stomatal_g1_pft2",
+   "stomatal_g0",
+   "stomatal_g0_pft2",
+   "z0m_ratio",
+   "wstress_sref_stomata",
+   "wstress_sref_stomata_pft2",
+   "kappa"
+  ],
+  "sigma_ratio": {
+   "leaf_angle_mean": 0.7179971009229329,
+   "leaf_angle_mean_pft2": 0.7917190585089314,
+   "vcmax25": 0.09536239821965468,
+   "vcmax25_pft2": 0.06727078855544887,
+   "stomatal_g1": 0.11272901487484026,
+   "stomatal_g1_pft2": 0.21205118870408485,
+   "stomatal_g0": 0.12824485770330077,
+   "stomatal_g0_pft2": 0.6962943367574941,
+   "z0m_ratio": 0.2536119383223798,
+   "wstress_sref_stomata": 1.0,
+   "wstress_sref_stomata_pft2": 1.0,
+   "kappa": 0.7147104635072596
+  },
+  "smoothness": {
+   "leaf_angle_mean": 0.9508225305399567,
+   "leaf_angle_mean_pft2": 0.9319691040496365,
+   "vcmax25": 0.9621703546763347,
+   "vcmax25_pft2": 0.9663018503419463,
+   "stomatal_g1": 1.0131661284850868,
+   "stomatal_g1_pft2": 1.0128266346643013,
+   "stomatal_g0": 1.0189038440395355,
+   "stomatal_g0_pft2": 1.03867934286441,
+   "z0m_ratio": 0.985294500038759,
+   "wstress_sref_stomata": 1.0,
+   "wstress_sref_stomata_pft2": 1.0,
+   "kappa": 0.9780301270771639
+  },
+  "sensitivity": {
+   "leaf_angle_mean": {
+    "lw_up": 0.004507228619875365,
+    "le": 0.011975425149668406,
+    "h": 0.01729505988975603,
+    "gpp": 0.009955060920434043,
+    "ustar": 0.003583856721125071
+   },
+   "leaf_angle_mean_pft2": {
+    "lw_up": 0.004284003220921553,
+    "le": 0.004200236758460663,
+    "h": 0.017812023094239404,
+    "gpp": 0.016882922717595752,
+    "ustar": 0.0019622635814926276
+   },
+   "vcmax25": {
+    "lw_up": 0.016750752447743215,
+    "le": 0.30207913612947324,
+    "h": 0.10410813425662886,
+    "gpp": 0.465961569188853,
+    "ustar": 0.02078520719239894
+   },
+   "vcmax25_pft2": {
+    "lw_up": 0.014749956317069563,
+    "le": 0.09389751245875202,
+    "h": 0.131829718498713,
+    "gpp": 0.7541386314336487,
+    "ustar": 0.011985928412687068
+   },
+   "stomatal_g1": {
+    "lw_up": 0.019872396740650854,
+    "le": 0.3735323927179964,
+    "h": 0.1432277691480167,
+    "gpp": 0.20922215120456467,
+    "ustar": 0.02950942191769297
+   },
+   "stomatal_g1_pft2": {
+    "lw_up": 0.01606657172422153,
+    "le": 0.10752304219464637,
+    "h": 0.1605459580923095,
+    "gpp": 0.13734374307327205,
+    "ustar": 0.014681486344632205
+   },
+   "stomatal_g0": {
+    "lw_up": 0.011622930305575091,
+    "le": 0.19611167406443278,
+    "h": 0.0890736384674677,
+    "gpp": 0.09505092661638012,
+    "ustar": 0.01950971367940218
+   },
+   "stomatal_g0_pft2": {
+    "lw_up": 0.004331169466631628,
+    "le": 0.028169897290181847,
+    "h": 0.03745871402144955,
+    "gpp": 0.0278260883091312,
+    "ustar": 0.004489681440881088
+   },
+   "z0m_ratio": {
+    "lw_up": 0.007831152172571973,
+    "le": 0.0344106265502031,
+    "h": 0.02481439924958545,
+    "gpp": 0.01322959423662837,
+    "ustar": 0.08987969786100841
+   },
+   "wstress_sref_stomata": {
+    "lw_up": 0.0,
+    "le": 0.0,
+    "h": 0.0,
+    "gpp": 0.0,
+    "ustar": 0.0
+   },
+   "wstress_sref_stomata_pft2": {
+    "lw_up": 0.0,
+    "le": 0.0,
+    "h": 0.0,
+    "gpp": 0.0,
+    "ustar": 0.0
+   },
+   "kappa": {
+    "lw_up": 0.0,
+    "le": 0.0,
+    "h": 0.0,
+    "gpp": 0.05403048463123305,
+    "ustar": 0.0
+   }
+  },
+  "collinear": [],
+  "singular_values": [
+   37.96904110335924,
+   25.014276791007475,
+   9.800678147493967,
+   7.645824430285041,
+   6.2458768473461515,
+   3.7767547971488713,
+   1.0963527153036374,
+   0.9776020917752662,
+   0.8809221799833998,
+   0.7473951706985864,
+   2.342404788142891e-21,
+   1.7234852599519125e-38
+  ],
+  "fitted": [
+   "leaf_angle_mean",
+   "leaf_angle_mean_pft2",
+   "vcmax25",
+   "vcmax25_pft2",
+   "stomatal_g1",
+   "stomatal_g1_pft2",
+   "stomatal_g0",
+   "stomatal_g0_pft2",
+   "z0m_ratio",
+   "kappa"
+  ],
+  "fixed": {
+   "wstress_sref_stomata": "dead: its gradient column is zero (a key the windows never use)",
+   "wstress_sref_stomata_pft2": "dead: its gradient column is zero (a key the windows never use)"
+  }
+ },
+ "cost_start": 12356.121066809967,
+ "scores_cal_start": {
+  "lw_up": {
+   "nrmse": 3.231352448460793,
+   "n": 2321,
+   "share": 0.03090955283402424
+  },
+  "le": {
+   "nrmse": 3.1012622692919773,
+   "n": 4780,
+   "share": 0.643732187994471
+  },
+  "h": {
+   "nrmse": 2.809601188649344,
+   "n": 677,
+   "share": 0.12522651777997051
+  },
+  "gpp": {
+   "nrmse": 3.1695022812006144,
+   "n": 941,
+   "share": 0.1807377071103715
+  },
+  "ustar": {
+   "nrmse": 0.6446909217244112,
+   "n": 1208,
+   "share": 0.019394034281162837
+  }
+ },
+ "lm": {
+  "first": {
+   "cost": 6580.635294454587,
+   "iterations": 8,
+   "history": [
+    {
+     "iter": 0,
+     "cost": 12356.121066809967,
+     "lambda": 0.01,
+     "u": [
+      1.1370785694959056,
+      1.155814898472974,
+      2.156420459630393,
+      2.156420459630393,
+      -0.4240486675845829,
+      -0.4240486675845829,
+      0.6931471805599452,
+      0.6931471805599452,
+      -0.43531807125784533,
+      0.0
+     ]
+    },
+    {
+     "iter": 1,
+     "cost": 8940.40511856472,
+     "lambda": 0.1,
+     "u": [
+      -0.8629214305040944,
+      0.8489103368303403,
+      1.3130153557574413,
+      1.8919615265597818,
+      -0.7289657785221826,
+      -0.21531097004759692,
+      0.5916443192584744,
+      0.5966760983178079,
+      -0.013729837367779829,
+      -0.41894825416385567
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 2,
+     "cost": 8113.413195801559,
+     "lambda": 1.0,
+     "u": [
+      -2.8629214305040946,
+      0.1858112660099187,
+      1.1176919184775234,
+      1.837348622946656,
+      -0.8028428996465276,
+      -0.16493819724380696,
+      0.47322779638123025,
+      0.5735252120938013,
+      0.24162284401191825,
+      -0.5327214340101164
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 3,
+     "cost": 7738.048181378794,
+     "lambda": 1.0,
+     "u": [
+      -4.862921430504095,
+      -0.020986102813924407,
+      1.00320658788936,
+      1.7975304778676018,
+      -0.8473773475419107,
+      -0.1232459739176072,
+      0.4000588812332089,
+      0.5679329475810818,
+      0.4104841107618423,
+      -0.6026466462419842
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 4,
+     "cost": 7062.650339595762,
+     "lambda": 1.0,
+     "u": [
+      -2.8629214305040946,
+      -0.3780953782193236,
+      0.8227689194710777,
+      1.7206130868981773,
+      -1.0159720915496668,
+      -0.06157568896922596,
+      0.23480769861637232,
+      0.654183813215373,
+      0.5660945706586573,
+      -0.7395876128857002
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 5,
+     "cost": 6891.219413161113,
+     "lambda": 1.0,
+     "u": [
+      -0.8629214305040946,
+      -0.6220559380089092,
+      0.7555841791636891,
+      1.6897451360297673,
+      -1.0865332158514036,
+      -0.021867744841869027,
+      0.1650277459704951,
+      0.7106087506770001,
+      0.6329276615241779,
+      -0.7831932183777637
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 6,
+     "cost": 6739.985942040237,
+     "lambda": 1.0,
+     "u": [
+      1.1370785694959054,
+      -0.974223326857723,
+      0.6663418303445704,
+      1.6350967789905106,
+      -1.1894315176771642,
+      0.048010455080436484,
+      0.07055526232077851,
+      0.7775068026720591,
+      0.7085341824029159,
+      -0.8471466894769754
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 7,
+     "cost": 6584.883117406332,
+     "lambda": 0.1,
+     "u": [
+      -0.29595155902395254,
+      -2.1722624447708956,
+      0.6007341296658247,
+      1.443693287700912,
+      -1.4824205412077625,
+      0.3191209570474029,
+      -0.02584225214841722,
+      0.5249518700314579,
+      0.7301542462179585,
+      -0.7479255805834117
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 8,
+     "cost": 6580.635294454587,
+     "lambda": 1.0,
+     "u": [
+      -0.8481295667906263,
+      -2.807616894572705,
+      0.5918061520591228,
+      1.4397705244918086,
+      -1.5207700566150972,
+      0.3408588690328626,
+      -0.046643551423435514,
+      0.4354881161078102,
+      0.7499459001555153,
+      -0.7197155744262912
+     ],
+     "accepted": true
+    }
+   ]
+  },
+  "after_refresh": {
+   "cost": 2919.421709914729,
+   "iterations": 3,
+   "history": [
+    {
+     "iter": 0,
+     "cost": 2985.5984464775056,
+     "lambda": 0.01,
+     "u": [
+      -0.8481295667906263,
+      -2.807616894572705,
+      0.5918061520591225,
+      1.4397705244918102,
+      -1.5207700566150972,
+      0.3408588690328629,
+      -0.046643551423435264,
+      0.4354881161078101,
+      0.7499459001555151,
+      -0.719715574426291
+     ]
+    },
+    {
+     "iter": 1,
+     "cost": 2929.872276758455,
+     "lambda": 0.001,
+     "u": [
+      -0.2410002911251622,
+      -0.8076168945727051,
+      0.6486263116838321,
+      1.2067672161708185,
+      -1.7438966306927515,
+      0.4290966273795654,
+      -0.063974738216729,
+      0.28795650897763914,
+      0.6419449964445724,
+      -0.6770486492859347
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 2,
+     "cost": 2919.6098085261574,
+     "lambda": 0.01,
+     "u": [
+      0.16042867654582826,
+      0.23457815398591975,
+      0.6891883333986067,
+      1.0722327079054832,
+      -1.9273887714339382,
+      0.4910253845982744,
+      -0.08831877013493059,
+      0.13857134800066262,
+      0.5510751926097359,
+      -0.6657090267590746
+     ],
+     "accepted": true
+    },
+    {
+     "iter": 3,
+     "cost": 2919.421709914729,
+     "lambda": 0.1,
+     "u": [
+      0.148201512649829,
+      0.1493232715045485,
+      0.6918620714756519,
+      1.0800177518591105,
+      -1.9505625695089104,
+      0.4934261423627856,
+      -0.09372313554943991,
+      0.12920141949073055,
+      0.5501651817793711,
+      -0.6635143658041427
+     ],
+     "accepted": true
+    }
+   ]
+  }
+ },
+ "values_refresh": {
+  "leaf_angle_mean": 30.987775949938477,
+  "leaf_angle_mean_pft2": 13.983977090561137,
+  "vcmax25": 57.166734891867705,
+  "vcmax25_pft2": 89.28420847083844,
+  "stomatal_g1": 0.9202142888694693,
+  "stomatal_g1_pft2": 3.649206093814488,
+  "stomatal_g0": 0.0029175860746811096,
+  "stomatal_g0_pft2": 0.006630560570493042,
+  "z0m_ratio": 0.21016673507323794,
+  "wstress_sref_stomata": 2.0,
+  "wstress_sref_stomata_pft2": 2.0,
+  "kappa": 0.8274556184572837
+ },
+ "weights_refresh": {
+  "cal1_2018/lw_up": 0.017505717564302786,
+  "cal1_2018/le": 0.33518065086188015,
+  "cal1_2018/h": 0.4529326390139646,
+  "cal1_2018/gpp": 0.513917034510396,
+  "cal1_2018/ustar": 0.3510393595056575,
+  "cal2_2018/lw_up": 0.018025115742053847,
+  "cal2_2018/le": 0.3626376319790347,
+  "cal2_2018/h": 0.16564154197038608,
+  "cal2_2018/gpp": 0.32387534334689083,
+  "cal2_2018/ustar": 0.4894629309723212,
+  "cal3_2019/lw_up": 0.020482256608173224,
+  "cal3_2019/le": 0.4284648621272496,
+  "cal3_2019/h": 0.26649426958504685,
+  "cal3_2019/gpp": 0.6096820101409798,
+  "cal3_2019/ustar": 0.3457816478006114,
+  "cal5_2014/lw_up": 0.03694185689608407,
+  "cal5_2014/le": 0.6527716595645734,
+  "cal5_2014/h": 0.3449263451190249,
+  "cal5_2014/gpp": 0.5779004512894657,
+  "cal5_2014/ustar": 0.4578000057344976,
+  "cal6_2014/lw_up": 0.018657556367752386,
+  "cal6_2014/le": 0.6790853933566214,
+  "cal6_2014/h": 0.5859848120654445,
+  "cal6_2014/gpp": 0.7823845643069086,
+  "cal6_2014/ustar": 0.5306633217886934,
+  "seasonal_2019/le": 0.4519944300578367,
+  "seasonal_2020/le": 0.306742285669429
+ },
+ "sigma_scale_refresh": {
+  "lw_up": 3.0,
+  "le": 1.97046705032226,
+  "h": 2.551524991880337,
+  "gpp": 1.5287204772394476,
+  "ustar": 1.0
+ },
+ "chi2_per_row": {
+  "lw_up": 1.1283818074698453,
+  "le": 1.0054799675926163,
+  "h": 1.006296471273742,
+  "gpp": 0.9020055897900565,
+  "ustar": 0.3259847612097097
+ },
+ "fitted": [
+  "leaf_angle_mean",
+  "leaf_angle_mean_pft2",
+  "vcmax25",
+  "vcmax25_pft2",
+  "stomatal_g1",
+  "stomatal_g1_pft2",
+  "stomatal_g0",
+  "stomatal_g0_pft2",
+  "z0m_ratio",
+  "kappa"
+ ],
+ "smoothness_map": {
+  "leaf_angle_mean": 0.9728228630115078,
+  "leaf_angle_mean_pft2": 0.9825366255108976,
+  "vcmax25": 1.001576524852704,
+  "vcmax25_pft2": 0.9867264123963283,
+  "stomatal_g1": 1.0414044331170669,
+  "stomatal_g1_pft2": 0.984138776183417,
+  "stomatal_g0": 1.0428385029704863,
+  "stomatal_g0_pft2": 0.7589720267027954,
+  "z0m_ratio": 0.9673430901133327,
+  "kappa": 0.9914946566620093
+ },
+ "covariance": [
+  [
+   137.15340425441894,
+   2.9942484293205776,
+   -8.452507412317312,
+   -0.6357474202980047,
+   0.09722302006735951,
+   -0.008026466414379017,
+   -0.0003794318900414032,
+   0.0004176564831551195,
+   -0.005688771974273097,
+   0.0015231883189869417
+  ],
+  [
+   2.9942484293205935,
+   121.86347919099133,
+   2.7966183035291694,
+   3.7003438170188367,
+   -0.02752640325495959,
+   -0.2971744699535042,
+   -2.4705150572390545e-06,
+   -0.0003240962074461129,
+   -0.002898865260383293,
+   -0.03917698224219202
+  ],
+  [
+   -8.452507412317063,
+   2.7966183035291787,
+   47.975981858399976,
+   0.9376929600376811,
+   -0.6220212036298848,
+   -0.07097537219749758,
+   3.795215866324878e-05,
+   0.0010216627212816167,
+   0.0006051697165171273,
+   -0.06313262462425981
+  ],
+  [
+   -0.6357474202980071,
+   3.700343817018837,
+   0.9376929600376883,
+   9.652927825216562,
+   -0.019473828846978746,
+   -0.5184362401674663,
+   0.00020192943834925807,
+   0.00026098654255916545,
+   -0.000979691372035951,
+   -0.06995481337336266
+  ],
+  [
+   0.09722302006736086,
+   -0.027526403254959548,
+   -0.6220212036298853,
+   -0.01947382884697861,
+   0.012331169828769821,
+   -0.000194362480482348,
+   -3.478297563168431e-05,
+   3.1420126148061153e-06,
+   4.390621037055035e-06,
+   0.000752231010767215
+  ],
+  [
+   -0.008026466414379176,
+   -0.29717446995350427,
+   -0.0709753721974978,
+   -0.5184362401674663,
+   -0.00019436248048234248,
+   0.13770043573464918,
+   1.691851701911902e-07,
+   -0.00045442322577914074,
+   0.0006313117624396337,
+   0.002993313382380277
+  ],
+  [
+   -0.000379431890041388,
+   -2.4705150572387326e-06,
+   3.795215866325552e-05,
+   0.00020192943834925799,
+   -3.478297563168442e-05,
+   1.691851701912063e-07,
+   3.966380133215621e-07,
+   -1.2359655668897816e-07,
+   2.1065601303350507e-07,
+   -1.8987234930768302e-06
+  ],
+  [
+   0.00041765648315511837,
+   -0.00032409620744611265,
+   0.0010216627212816152,
+   0.00026098654255916594,
+   3.1420126148061496e-06,
+   -0.0004544232257791409,
+   -1.2359655668897824e-07,
+   1.6023009529783333e-05,
+   6.300180978702376e-07,
+   -2.189318235441308e-06
+  ],
+  [
+   -0.0056887719742731045,
+   -0.002898865260383292,
+   0.0006051697165171454,
+   -0.00097969137203595,
+   4.390621037054694e-06,
+   0.0006313117624396337,
+   2.1065601303350592e-07,
+   6.300180978702375e-07,
+   0.00015047828472143055,
+   -1.1013225474201922e-06
+  ],
+  [
+   0.0015231883189863842,
+   -0.039176982242192036,
+   -0.06313262462425986,
+   -0.06995481337336265,
+   0.0007522310107672159,
+   0.0029933133823802772,
+   -1.8987234930768235e-06,
+   -2.1893182354413073e-06,
+   -1.101322547420161e-06,
+   0.0011024658421172652
+  ]
+ ],
+ "correlation": [
+  [
+   0.9999999999999999,
+   0.023160490250380746,
+   -0.10420062615021528,
+   -0.017472368528731165,
+   0.07475903249323271,
+   -0.001846942775418213,
+   -0.05144383851476636,
+   0.008909306213422596,
+   -0.039598461628498234,
+   0.003917127731687653
+  ],
+  [
+   0.02316049025038087,
+   0.9999999999999999,
+   0.03657501167365533,
+   0.10788865087071259,
+   -0.02245486983211273,
+   -0.07254492782868893,
+   -0.00035534773499925183,
+   -0.007334408872141821,
+   -0.0214069269564161,
+   -0.10688373508777414
+  ],
+  [
+   -0.10420062615021224,
+   0.03657501167365545,
+   1.0,
+   0.043573173373453414,
+   -0.8087068355424376,
+   -0.02761392147944215,
+   0.008700162815156369,
+   0.03684881835332235,
+   0.007122432389991806,
+   -0.27451073817792465
+  ],
+  [
+   -0.017472368528731234,
+   0.10788865087071262,
+   0.04357317337345375,
+   1.0,
+   -0.05644424648651826,
+   -0.4496744017948922,
+   0.10319839447949139,
+   0.02098536556787328,
+   -0.025705309528658335,
+   -0.6781183576981523
+  ],
+  [
+   0.07475903249323375,
+   -0.022454869832112697,
+   -0.8087068355424384,
+   -0.05644424648651786,
+   1.0,
+   -0.0047167475895184986,
+   -0.4973560737129723,
+   0.007068605419318324,
+   0.0032231973576892854,
+   0.20401707768210559
+  ],
+  [
+   -0.0018469427754182496,
+   -0.07254492782868895,
+   -0.027613921479442236,
+   -0.4496744017948922,
+   -0.004716747589518365,
+   1.0,
+   0.0007239314900340767,
+   -0.3059291200256417,
+   0.13868813490318974,
+   0.2429416399296056
+  ],
+  [
+   -0.05144383851476429,
+   -0.00035534773499920554,
+   0.008700162815157914,
+   0.10319839447949135,
+   -0.49735607371297397,
+   0.0007239314900341457,
+   1.0,
+   -0.049027207713968415,
+   0.027267151877174583,
+   -0.09079919237666267
+  ],
+  [
+   0.008909306213422572,
+   -0.007334408872141816,
+   0.036848818353322293,
+   0.02098536556787332,
+   0.007068605419318402,
+   -0.30592912002564177,
+   -0.04902720771396844,
+   0.9999999999999999,
+   0.012830514257566816,
+   -0.016472301306812605
+  ],
+  [
+   -0.03959846162849829,
+   -0.021406926956416092,
+   0.007122432389992019,
+   -0.025705309528658307,
+   0.003223197357689035,
+   0.13868813490318974,
+   0.027267151877174694,
+   0.012830514257566815,
+   1.0,
+   -0.002703927503529137
+  ],
+  [
+   0.003917127731686219,
+   -0.10688373508777417,
+   -0.27451073817792493,
+   -0.6781183576981521,
+   0.20401707768210584,
+   0.24294163992960566,
+   -0.09079919237666235,
+   -0.016472301306812598,
+   -0.00270392750352906,
+   0.9999999999999999
+  ]
+ ],
+ "intervals": {
+  "leaf_angle_mean": {
+   "map": 47.588789923709975,
+   "sd_u": 0.6728956877274617,
+   "i68": [
+    36.02286647216461,
+    58.61284369520534
+   ],
+   "i95": [
+    26.571321958484997,
+    66.88288949404313
+   ],
+   "sigma_ratio": 0.8661128780606331,
+   "prior_centre": 63.0,
+   "range": [
+    10.0,
+    80.0
+   ],
+   "kind": "trait"
+  },
+  "leaf_angle_mean_pft2": {
+   "map": 47.60831249398728,
+   "sd_u": 0.6343331465958172,
+   "i68": [
+    36.67488712709701,
+    58.052733415346665
+   ],
+   "i95": [
+    27.56100472654255,
+    66.07067076343264
+   ],
+   "sigma_ratio": 0.808595698724285,
+   "prior_centre": 63.24,
+   "range": [
+    10.0,
+    80.0
+   ],
+   "kind": "trait"
+  },
+  "vcmax25": {
+   "map": 60.77499049049697,
+   "sd_u": 0.18930276608743576,
+   "i68": [
+    54.04756247761174,
+    67.85334402563586
+   ],
+   "i95": [
+    48.03697855132474,
+    74.83799962777222
+   ],
+   "sigma_ratio": 0.09532288720914478,
+   "prior_centre": 113.26403934258785,
+   "range": [
+    10.0,
+    150.0
+   ],
+   "kind": "trait"
+  },
+  "vcmax25_pft2": {
+   "map": 75.50035604021215,
+   "sd_u": 0.08029953616978476,
+   "i68": [
+    72.39797882912374,
+    78.60760248620053
+   ],
+   "i95": [
+    69.43601950869655,
+    81.58351421941563
+   ],
+   "sigma_ratio": 0.04043461058420881,
+   "prior_centre": 113.26403934258785,
+   "range": [
+    10.0,
+    150.0
+   ],
+   "kind": "trait"
+  },
+  "stomatal_g1": {
+   "map": 0.763589285625266,
+   "sd_u": 0.39229143742638695,
+   "i68": [
+    0.6736249960539255,
+    0.903303744193374
+   ],
+   "i95": [
+    0.6170324606070218,
+    1.111032852613428
+   ],
+   "sigma_ratio": 0.6380163437339889,
+   "prior_centre": 1.919742034924382,
+   "range": [
+    0.5,
+    15.0
+   ],
+   "kind": "trait"
+  },
+  "stomatal_g1_pft2": {
+   "map": 4.131750666857631,
+   "sd_u": 0.11218432142836186,
+   "i68": [
+    3.772549538726093,
+    4.514161745633876
+   ],
+   "i95": [
+    3.4508029582490627,
+    4.901315998273601
+   ],
+   "sigma_ratio": 0.18245473582490074,
+   "prior_centre": 1.919742034924382,
+   "range": [
+    0.5,
+    15.0
+   ],
+   "kind": "trait"
+  },
+  "stomatal_g0": {
+   "map": 0.002690041978813904,
+   "sd_u": 0.1358671677481495,
+   "i68": [
+    0.002130883407635008,
+    0.003400974272962529
+   ],
+   "i95": [
+    0.0017094726289355346,
+    0.004257082847745877
+   ],
+   "sigma_ratio": 0.20856381005614036,
+   "prior_centre": 0.01,
+   "range": [
+    0.0001,
+    0.1
+   ],
+   "kind": "trait"
+  },
+  "stomatal_g0_pft2": {
+   "map": 0.003951540993975356,
+   "sd_u": 0.5890331847757204,
+   "i68": [
+    0.0014490294218749953,
+    0.010390930486725354
+   ],
+   "i95": [
+    0.0006194222795550039,
+    0.022348074629784043
+   ],
+   "sigma_ratio": 0.9041993536955878,
+   "prior_centre": 0.01,
+   "range": [
+    0.0001,
+    0.1
+   ],
+   "kind": "trait"
+  },
+  "z0m_ratio": {
+   "map": 0.19756869580714453,
+   "sd_u": 0.18884080370655054,
+   "i68": [
+    0.18502107742292584,
+    0.2094979672324518
+   ],
+   "i95": [
+    0.17256867333360998,
+    0.2202285137170088
+   ],
+   "sigma_ratio": 0.31529669904575847,
+   "prior_centre": 0.13,
+   "range": [
+    0.02,
+    0.3
+   ],
+   "kind": "effective"
+  },
+  "kappa": {
+   "map": 0.8399506004406505,
+   "sd_u": 0.14797567113258261,
+   "i68": [
+    0.8075730687813338,
+    0.8738960264382661
+   ],
+   "i95": [
+    0.7781721154021697,
+    0.9076999041498938
+   ],
+   "sigma_ratio": 0.739878355662913,
+   "prior_centre": 1.0,
+   "range": [
+    0.5,
+    1.5
+   ],
+   "kind": "observation"
+  }
+ },
+ "sigma_ratio": {
+  "leaf_angle_mean": 0.8661128780606331,
+  "leaf_angle_mean_pft2": 0.808595698724285,
+  "vcmax25": 0.09532288720914478,
+  "vcmax25_pft2": 0.04043461058420881,
+  "stomatal_g1": 0.6380163437339889,
+  "stomatal_g1_pft2": 0.18245473582490074,
+  "stomatal_g0": 0.20856381005614036,
+  "stomatal_g0_pft2": 0.9041993536955878,
+  "z0m_ratio": 0.31529669904575847,
+  "kappa": 0.739878355662913
+ },
+ "unconverged_sd": {
+  "leaf_angle_mean": 0.640217499685792,
+  "leaf_angle_mean_pft2": -0.30035551488253986,
+  "vcmax25": -0.2296567974920875,
+  "vcmax25_pft2": -0.6037975427763088,
+  "stomatal_g1": 0.45449226206462606,
+  "stomatal_g1_pft2": 0.0669446477032395,
+  "stomatal_g0": -0.8127740343784005,
+  "stomatal_g0_pft2": 0.5130159558661422,
+  "z0m_ratio": 0.31316163349575515,
+  "kappa": 0.42398958511402024
+ },
+ "linearity": [
+  {
+   "direction": 9,
+   "sd_u": 0.6757619805385651,
+   "predicted": 1.000000000000001,
+   "delta_cost_plus": 1.905890767440269,
+   "delta_cost_minus": -0.4139299734006272,
+   "curvature_ratio": 0.74598039701982,
+   "slope_ratio": 1.1599103704204468,
+   "local_only": false,
+   "loadings": {
+    "leaf_angle_mean": -0.9819046213385523,
+    "leaf_angle_mean_pft2": -0.16807251966060208,
+    "vcmax25": 0.0389456757857869,
+    "vcmax25_pft2": 0.00026581725702654675,
+    "stomatal_g1": -0.07007244392169269,
+    "stomatal_g1_pft2": 0.0036059979225193774,
+    "stomatal_g0": 0.015079881795947067,
+    "stomatal_g0_pft2": -0.028037456201823248,
+    "z0m_ratio": 0.012698285757984025,
+    "kappa": 0.00045556897338636305
+   }
+  },
+  {
+   "direction": 8,
+   "sd_u": 0.6337936630235333,
+   "predicted": 1.0000000000000007,
+   "delta_cost_plus": 1.0856361924311386,
+   "delta_cost_minus": -0.6488754835854706,
+   "curvature_ratio": 0.21838035442283388,
+   "slope_ratio": 0.8672558380083041,
+   "local_only": true,
+   "loadings": {
+    "leaf_angle_mean": -0.1626722437184627,
+    "leaf_angle_mean_pft2": 0.9832763542842754,
+    "vcmax25": 0.024881671468435507,
+    "vcmax25_pft2": 0.014866295943784651,
+    "stomatal_g1": -0.043577982940496966,
+    "stomatal_g1_pft2": -0.010641661389176318,
+    "stomatal_g0": 0.005676155552777893,
+    "stomatal_g0_pft2": -0.054753743034408796,
+    "z0m_ratio": -0.0049614194315547745,
+    "kappa": -0.028251646742751126
+   }
+  },
+  {
+   "direction": 7,
+   "sd_u": 0.5899689540221289,
+   "predicted": 1.0000000000000002,
+   "delta_cost_plus": 0.13584863549340298,
+   "delta_cost_minus": 2.221987824826556,
+   "curvature_ratio": 1.1789182301599792,
+   "slope_ratio": -1.0430695946665762,
+   "local_only": false,
+   "loadings": {
+    "leaf_angle_mean": -0.036380220794105196,
+    "leaf_angle_mean_pft2": 0.04818391648436727,
+    "vcmax25": 0.015710949822628145,
+    "vcmax25_pft2": 0.004650292908317365,
+    "stomatal_g1": -0.00043604151281081537,
+    "stomatal_g1_pft2": -0.06088310781467661,
+    "stomatal_g0": -0.011235205257413314,
+    "stomatal_g0_pft2": 0.9960850760761906,
+    "z0m_ratio": 0.00415161311525691,
+    "kappa": -0.007102330534262629
+   }
+  }
+ ],
+ "local_only": true,
+ "key_table": {
+  "leaf_angle_mean": {
+   "z": -1.2728260403118787,
+   "kind": "trait",
+   "scope": "plant_type",
+   "prior_centre": 63.0,
+   "prior_source": "the PFT file's value, +-10 degrees; spherical leaves average 57.3. The range is what a canopy can do",
+   "pushed_by": "h",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    10.0,
+    80.0
+   ]
+  },
+  "leaf_angle_mean_pft2": {
+   "z": -1.2829927061769009,
+   "kind": "trait",
+   "scope": "plant_type",
+   "prior_centre": 63.24,
+   "prior_source": "the PFT file's value, +-10 degrees; spherical leaves average 57.3. The range is what a canopy can do",
+   "pushed_by": "le",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    10.0,
+    80.0
+   ]
+  },
+  "vcmax25": {
+   "z": -0.7374743482659922,
+   "kind": "trait",
+   "scope": "plant_type",
+   "prior_centre": 113.26403934258785,
+   "prior_source": "EEO: the coordination of the Rubisco- and light-limited rates at the site's growing-season daytime climate, with ED-MORE's own leaf (priors.py; Wang et al. 2017, Smith et al. 2019)",
+   "pushed_by": "gpp",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    10.0,
+    150.0
+   ]
+  },
+  "vcmax25_pft2": {
+   "z": -0.5420196229837878,
+   "kind": "trait",
+   "scope": "plant_type",
+   "prior_centre": 113.26403934258785,
+   "prior_source": "EEO: the coordination of the Rubisco- and light-limited rates at the site's growing-season daytime climate, with ED-MORE's own leaf (priors.py; Wang et al. 2017, Smith et al. 2019)",
+   "pushed_by": "gpp",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    10.0,
+    150.0
+   ]
+  },
+  "stomatal_g1": {
+   "z": -2.4826971109906597,
+   "kind": "trait",
+   "scope": "plant_type",
+   "prior_centre": 1.919742034924382,
+   "prior_source": "EEO: the least-cost optimum at the site's growing-season daytime climate (priors.py; Prentice et al. 2014, Stocker et al. 2020, beta 146)",
+   "pushed_by": "gpp",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    0.5,
+    15.0
+   ]
+  },
+  "stomatal_g1_pft2": {
+   "z": 1.4921659456829193,
+   "kind": "trait",
+   "scope": "plant_type",
+   "prior_centre": 1.919742034924382,
+   "prior_source": "EEO: the least-cost optimum at the site's growing-season daytime climate (priors.py; Prentice et al. 2014, Stocker et al. 2020, beta 146)",
+   "pushed_by": "le",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    0.5,
+    15.0
+   ]
+  },
+  "stomatal_g0": {
+   "z": -1.2078905733286553,
+   "kind": "trait",
+   "scope": "plant_type",
+   "prior_centre": 0.01,
+   "prior_source": "the PFT file's value, a factor e either way: the residual conductance is poorly known",
+   "pushed_by": "gpp",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    0.0001,
+    0.1
+   ]
+  },
+  "stomatal_g0_pft2": {
+   "z": -0.8656887351301029,
+   "kind": "trait",
+   "scope": "plant_type",
+   "prior_centre": 0.01,
+   "prior_source": "the PFT file's value, a factor e either way: the residual conductance is poorly known",
+   "pushed_by": "gpp",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    0.0001,
+    0.1
+   ]
+  },
+  "z0m_ratio": {
+   "z": 1.645405074267495,
+   "kind": "effective",
+   "scope": "site",
+   "prior_centre": 0.13,
+   "prior_source": "the base value (ED2 0.13), +-0.04: closed canopies give z0/h of about 0.06-0.15 (Raupach 1994). Effective: it carries the canopy-air scheme's errors",
+   "pushed_by": "ustar",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    0.02,
+    0.3
+   ]
+  },
+  "kappa": {
+   "z": -3.3175718290207143,
+   "kind": "observation",
+   "scope": "observation",
+   "prior_centre": 1.0,
+   "prior_source": "the gap between the provider's night-time and daytime partitionings (RECO against RECO_DT)",
+   "pushed_by": "gpp",
+   "near_bound": null,
+   "bound_pushed_by": null,
+   "range": [
+    0.5,
+    1.5
+   ]
+  }
+ },
+ "cost": {
+  "start": 12356.121066809967,
+  "map": 2919.421709914729
+ },
+ "scores_cal": {
+  "start": {
+   "lw_up": {
+    "nrmse": 3.231352448460793,
+    "n": 2321,
+    "share": 0.03090955283402424
+   },
+   "le": {
+    "nrmse": 3.1012622692919773,
+    "n": 4780,
+    "share": 0.643732187994471
+   },
+   "h": {
+    "nrmse": 2.809601188649344,
+    "n": 677,
+    "share": 0.12522651777997051
+   },
+   "gpp": {
+    "nrmse": 3.1695022812006144,
+    "n": 941,
+    "share": 0.1807377071103715
+   },
+   "ustar": {
+    "nrmse": 0.6446909217244112,
+    "n": 1208,
+    "share": 0.019394034281162837
+   }
+  },
+  "map": {
+   "lw_up": {
+    "nrmse": 1.0622531748457358,
+    "n": 2321,
+    "share": 0.0181524320860268
+   },
+   "le": {
+    "nrmse": 1.0027362402908435,
+    "n": 4780,
+    "share": 0.6837099068221761
+   },
+   "h": {
+    "nrmse": 1.0031432954836224,
+    "n": 677,
+    "share": 0.08835637585083843
+   },
+   "gpp": {
+    "nrmse": 0.9497397484522044,
+    "n": 941,
+    "share": 0.15099767578359152
+   },
+   "ustar": {
+    "nrmse": 0.5709507520003014,
+    "n": 1208,
+    "share": 0.05878360945736703
+   }
+  }
+ },
+ "alternatives": {
+  "gpp_ustar": {
+   "note": "the fit did not use the provider's threshold, or GPP's diagnostic finds no plateau"
+  },
+  "closure": {
+   "note": "the fit already used Bowen"
+  },
+  "partitioning": {
+   "what": "the provider's daytime partitioning (GPP_DT, RECO_DT)",
+   "keys": {
+    "leaf_angle_mean": {
+     "map": 47.588789923709975,
+     "linear": 53.84849421739315,
+     "shift_sd": 0.5478294801734023,
+     "refit": 63.871788462939854,
+     "refit_shift_sd": 1.5720644885287458
+    },
+    "leaf_angle_mean_pft2": {
+     "map": 47.60831249398728,
+     "linear": 34.219639790004024,
+     "shift_sd": -1.239119527182491,
+     "refit": 27.056739743677355,
+     "refit_shift_sd": -2.0210178811701454
+    },
+    "vcmax25": {
+     "map": 60.77499049049697,
+     "linear": 49.742668452587736,
+     "shift_sd": -1.679435890897576,
+     "refit": 48.66383144388433,
+     "refit_shift_sd": -1.8560465201862393
+    },
+    "vcmax25_pft2": {
+     "map": 75.50035604021215,
+     "linear": 59.84842131828351,
+     "shift_sd": -5.15031161477958,
+     "refit": 58.86437875042491,
+     "refit_shift_sd": -5.488943698992407
+    },
+    "stomatal_g1": {
+     "map": 0.763589285625266,
+     "linear": 0.9104567042722724,
+     "shift_sd": 1.040935908881589,
+     "refit": 0.958290145213183,
+     "refit_shift_sd": 1.2969309259528732
+    },
+    "stomatal_g1_pft2": {
+     "map": 4.131750666857631,
+     "linear": 4.998534344054691,
+     "shift_sd": 2.194284522891899,
+     "refit": 5.1689928910254395,
+     "refit_shift_sd": 2.599424588470418
+    },
+    "stomatal_g0": {
+     "map": 0.002690041978813904,
+     "linear": 0.002624639869379622,
+     "shift_sd": -0.10516735492756826,
+     "refit": 0.0020739258961292935,
+     "refit_shift_sd": -1.1171073696487674
+    },
+    "stomatal_g0_pft2": {
+     "map": 0.003951540993975356,
+     "linear": 0.0030028682739520977,
+     "shift_sd": -0.270197482351817,
+     "refit": 0.005832384832244528,
+     "refit_shift_sd": 0.3888456602553398
+    },
+    "z0m_ratio": {
+     "map": 0.19756869580714453,
+     "linear": 0.19807852850794957,
+     "shift_sd": 0.04160548476817315,
+     "refit": 0.2022319357392423,
+     "refit_shift_sd": 0.3840117301513593
+    },
+    "kappa": {
+     "map": 0.8399506004406505,
+     "linear": 0.9160528811206965,
+     "shift_sd": 2.1930382522833254,
+     "refit": 0.9393009408898076,
+     "refit_shift_sd": 2.835025043647928
+    }
+   },
+   "refit": {
+    "cost": 2647.898683239415,
+    "iterations": 2
+   },
+   "worst_shift_sd": 5.15031161477958
+  }
+ },
+ "ratios": {
+  "lw_up": {
+   "overall": 1.0291794813222261,
+   "by_local_hour": {
+    "0": 1.0455352931644322,
+    "1": 1.0458268728585725,
+    "2": 1.0437282018092295,
+    "3": 1.0420888992930293,
+    "4": 1.0414856623510644,
+    "5": 1.0377249206406522,
+    "6": 1.0245095068421344,
+    "7": 1.016225800505432,
+    "8": 1.0038228024258227,
+    "9": 0.9942831171546357,
+    "10": 0.9898260823435644,
+    "11": 0.9919750493973492,
+    "12": 0.9961740634516446,
+    "13": 1.0065629686272355,
+    "14": 1.0163622321059844,
+    "15": 1.0287426518704295,
+    "16": 1.0399508164052995,
+    "17": 1.0501122551974311,
+    "18": 1.0572711459855741,
+    "19": 1.0562224037727674,
+    "20": 1.05474202432976,
+    "21": 1.0541826427896237,
+    "22": 1.0516911836179155,
+    "23": 1.0482875458226195
+   },
+   "by_light": {
+    "SW quartile 2": 1.05048924087878,
+    "SW quartile 3": 1.022716314225132,
+    "SW quartile 4": 1.0014112449226893
+   }
+  },
+  "le": {
+   "overall": 0.7378963127473049,
+   "by_local_hour": {
+    "5": -49.03408155368427,
+    "6": 1.080800222475438,
+    "7": 0.6386363123047298,
+    "8": 0.5103281653286859,
+    "9": 0.5544728787335111,
+    "10": 0.5688660570415621,
+    "11": 0.6166588343099783,
+    "12": 0.6812955523673343,
+    "13": 0.7542578060862527,
+    "14": 0.8719083810267697,
+    "15": 1.1589585386993053,
+    "16": 1.3947234973968312,
+    "17": 1.8062622171007752,
+    "18": 1.362353155761796
+   },
+   "by_light": {
+    "SW quartile 1": 1.0647295395713687,
+    "SW quartile 2": 0.7099047727085098,
+    "SW quartile 3": 0.7821640426938453,
+    "SW quartile 4": 0.6677335395871483
+   }
+  },
+  "h": {
+   "overall": 0.7499320028518066,
+   "by_local_hour": {
+    "8": 0.4165136151848251,
+    "9": 0.544476228286677,
+    "10": 0.6411039945879269,
+    "11": 0.7068411050567585,
+    "12": 0.7560761916669714,
+    "13": 0.7656902356720805,
+    "14": 0.7977940871446988,
+    "15": 0.8683719453639556,
+    "16": 0.967609043730878,
+    "17": 1.2431823418493018,
+    "18": 3.4525412878294715
+   },
+   "by_light": {
+    "SW quartile 1": 1.2475176086584145,
+    "SW quartile 2": 0.7067873390581371,
+    "SW quartile 3": 0.7010996343285603,
+    "SW quartile 4": 0.7336201465190401
+   }
+  },
+  "gpp": {
+   "overall": 0.9928020197058238,
+   "by_local_hour": {
+    "6": 1.0733274545306954,
+    "7": 0.8787057012804688,
+    "8": 0.8798133593875743,
+    "9": 0.8172427396898188,
+    "10": 0.915478250807798,
+    "11": 0.9585592346907531,
+    "12": 1.0045413425460692,
+    "13": 1.0559810198346815,
+    "14": 1.0951621029161207,
+    "15": 1.0887972854067305,
+    "16": 1.1425759085981309,
+    "17": 1.1283581773966733,
+    "18": 1.218117734676769
+   },
+   "by_light": {
+    "SW quartile 1": 1.0116390656385899,
+    "SW quartile 2": 0.9304980803766362,
+    "SW quartile 3": 0.9683949638612349,
+    "SW quartile 4": 1.0972088282723083
+   }
+  },
+  "ustar": {
+   "overall": 0.8988820131584536,
+   "by_local_hour": {
+    "5": 1.1414386027043701,
+    "6": 0.7248533481536115,
+    "7": 0.7133697337887072,
+    "8": 0.6975667417920781,
+    "9": 0.7914814921412336,
+    "10": 0.8600257071128743,
+    "11": 0.8985274358960085,
+    "12": 0.934689040257683,
+    "13": 0.92398897253274,
+    "14": 0.9412880831273853,
+    "15": 0.9514771677788603,
+    "16": 0.9486224301490215,
+    "17": 1.0141120504764998,
+    "18": 1.1493136326497246
+   },
+   "by_light": {
+    "SW quartile 1": 0.9949880127732135,
+    "SW quartile 2": 0.8262285745025282,
+    "SW quartile 3": 0.8793454531339482,
+    "SW quartile 4": 0.9196209231440947
+   }
+  }
+ },
+ "kappa": {
+  "kappa": 0.8399506004406505,
+  "records": 65085,
+  "reco_tower": 2.8793085453791196,
+  "reco_implied": 3.4279498626092915,
+  "gpp_tower": 4.9620288968071895,
+  "gpp_implied": 5.418821850935861,
+  "gpp_tower_kgc_yr": 1.8807991643208435,
+  "gpp_implied_kgc_yr": 2.0539412044539964,
+  "note": "means over the records with GPP and its respiration measured, day and night; GPP gains the scaled respiration by day only"
+ },
+ "map": {
+  "leaf_angle_mean": 47.588789923709975,
+  "leaf_angle_mean_pft2": 47.60831249398728,
+  "vcmax25": 60.77499049049697,
+  "vcmax25_pft2": 75.50035604021215,
+  "stomatal_g1": 0.763589285625266,
+  "stomatal_g1_pft2": 4.131750666857631,
+  "stomatal_g0": 0.002690041978813904,
+  "stomatal_g0_pft2": 0.003951540993975356,
+  "z0m_ratio": 0.19756869580714453,
+  "wstress_sref_stomata": 2.0,
+  "wstress_sref_stomata_pft2": 2.0,
+  "kappa": 0.8399506004406505
+ },
+ "default": {
+  "leaf_angle_mean": 63.0,
+  "leaf_angle_mean_pft2": 63.24,
+  "vcmax25": 130.0,
+  "vcmax25_pft2": 60.0,
+  "stomatal_g1": 4.45,
+  "stomatal_g1_pft2": 5.25,
+  "stomatal_g0": 0.01,
+  "stomatal_g0_pft2": 0.01,
+  "z0m_ratio": 0.13,
+  "wstress_sref_stomata": 2.0,
+  "wstress_sref_stomata_pft2": 2.0,
+  "kappa": 1.0
+ },
+ "start": {
+  "leaf_angle_mean": 63.0,
+  "leaf_angle_mean_pft2": 63.24,
+  "vcmax25": 113.26403934258785,
+  "vcmax25_pft2": 113.26403934258785,
+  "stomatal_g1": 1.919742034924382,
+  "stomatal_g1_pft2": 1.919742034924382,
+  "stomatal_g0": 0.01,
+  "stomatal_g0_pft2": 0.01,
+  "z0m_ratio": 0.13,
+  "wstress_sref_stomata": 2.0,
+  "wstress_sref_stomata_pft2": 2.0,
+  "kappa": 1.0
+ },
+ "scores_val": {
+  "default": {
+   "lw_up": {
+    "nrmse": 2.9090244892018307,
+    "n": 2388,
+    "share": 0.4496558242770678
+   },
+   "le": {
+    "nrmse": 3.585593244713709,
+    "n": 1137,
+    "share": 0.2400090941247749
+   },
+   "h": {
+    "nrmse": 3.0914072418411918,
+    "n": 551,
+    "share": 0.1086734704760958
+   },
+   "gpp": {
+    "nrmse": 3.226027139077359,
+    "n": 869,
+    "share": 0.1876937689641716
+   },
+   "ustar": {
+    "nrmse": 0.6440712935092008,
+    "n": 1186,
+    "share": 0.013967842157889954
+   }
+  },
+  "map": {
+   "lw_up": {
+    "nrmse": 2.9132515965421284,
+    "n": 2388,
+    "share": 0.5884857010830822
+   },
+   "le": {
+    "nrmse": 2.406378782662461,
+    "n": 1137,
+    "share": 0.16829037630160357
+   },
+   "h": {
+    "nrmse": 2.6579592943182786,
+    "n": 551,
+    "share": 0.10138990139748065
+   },
+   "gpp": {
+    "nrmse": 2.25001907890552,
+    "n": 869,
+    "share": 0.12842758145460126
+   },
+   "ustar": {
+    "nrmse": 0.5498608714478522,
+    "n": 1186,
+    "share": 0.01340643976323236
+   }
+  }
+ },
+ "cost_val": {
+  "default": 35222.749666706084,
+  "map": 26747.017415752147
+ },
+ "validation": {
+  "pass": true,
+  "nrmse_change": {
+   "lw_up": 0.0014531013251997127,
+   "le": -0.3288756926876133,
+   "h": -0.14021056225020634,
+   "gpp": -0.3025418008265661,
+   "ustar": -0.1462732821828563
+  },
+  "rule": "the calibrated cost below the default's, and no target's RMSE more than 10% worse"
+ },
+ "trials": {
+  "run": 815,
+  "median_s": 1.7750062942504883,
+  "wall_s": 386.5820565223694
+ }
+}

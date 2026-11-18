@@ -144,6 +144,16 @@ This file covers every 0.x release; version 1.0 starts `CHANGELOG-v1.md`. The fo
   0.07–0.15 MPa, and GPP, LE and H move by under 0.1 %. At Harvard Forest the broadleaves' midday potential
   falls by 0.13–0.24 MPa in the August 2022 drought and their assimilation by up to 1.6 µmol m⁻² s⁻¹ on
   1–4 September; the six-year means move by under 0.1 %. (#93)
+- The cull removes a cohort whose carbon in all four pools, not its aboveground biomass, is below
+  `min_cohort_carbon`, so a dying cohort leaves a little later. Frozen stands are bit for bit (example
+  04's BCI and Harvard runs, Palo Verde's inventory). Example 03 first moves in 1990 (from the census) and
+  in year 138 (from bare ground), its biomass by at most 0.03 % and 0.3 % and its stems by 0.9 % and 1.4 %.
+  (#TBD)
+- A dormant canopy (flush rate at most 10⁻⁶ day⁻¹) does not flush: a bare canopy stays bare until its
+  flush starts, instead of growing leaves too few to count, whose temperature a leafless grass ran to a
+  NaN. Harvard's means move in the fifth digit and its LAI by at most 1.4·10⁻⁴; BCI is bit for bit. With the
+  cull, Palo Verde's 150-year regrowth ends with 1.6 % more biomass and 2.1 % more LAI (7.57 to 7.69 kgC
+  m⁻², 4.85 to 4.95). (#TBD)
 
 ### Added
 
@@ -216,6 +226,13 @@ This file covers every 0.x release; version 1.0 starts `CHANGELOG-v1.md`. The fo
   through its leaves alone. A census gives its rows dbh 0. Its cohorts are not split at the LAI cap,
   and a patch's grass of one PFT fuses into one cohort. It runs in a frozen stand only
   (`demography_on = false`) until its growth in number, mortality and recruitment are written. (#TBD)
+- Example 04's Tonzi Ranch site (prototype): the blue-oak savanna tower AmeriFlux US-Ton, 2010–2019, the
+  oaks imputed from the site survey's stand averages over a C3 annual grass, against the tower, the
+  understory's eddy covariance and the clip LAI. Vaira Ranch's longwave, pressure and rain stand in where
+  US-Ton has none. (#TBD)
+- `calibrate_phenology` fits the WATER cue, the turgor-loss point derived from the leaf's pressure-volume
+  curve as in the model, and when its fits do not settle it keeps the values whose own coupled run scored
+  best. Example 02's part 3 fits the Tonzi stand's oaks and grass. (#TBD)
 
 ### Changed
 
