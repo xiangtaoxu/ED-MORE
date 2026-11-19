@@ -109,31 +109,40 @@ doi:10.17190/AMF/1245984.
 ## 2. The calibration
 
 [`calibration.toml`](calibration.toml) fits both plant types' capacity, stomata and leaf angles on the
-grass's months (January–February), the oaks' (July–August) and April. **It fails its own validation**:
-on the windows it held out its cost is 2 % above the default's (27,819 against 27,233), and LE's RMSE 5 %
-([`calibration/report.md`](calibration/report.md)). The default run is the site's reference; the
-calibrated one is kept for the diagnosis.
+grass's months (January–February), the oaks' (July–August) and April. Two of its choices differ from the
+tool's defaults:
+
+- **H and LE are scored as measured.** The tower's net radiometer, a metre off the tower, saw a mix of
+  open canopy, tower and trees, and its soil heat flux plates were too few to stand for the fluxes'
+  footprint (Baldocchi, Xu & Kiang 2004, §2.4); in summer its net radiation is 15 W m⁻² above its own
+  four components'. Sharing its closure gap between H and LE raised both targets by a sixth.
+- **The oaks' Medlyn g1 takes the meta-analysis prior** for deciduous broadleaf trees, 4.45 (CLM5's, from
+  Lin et al. 2015). The tool's least-cost centre comes from the site's leaf-on months, here the whole year
+  with the grass's winter: 1.92, where the oaks' own April–October give 2.33. From 1.92 the fit took g1
+  to 0.93 and halved the summer LE.
+
+**It passes its own validation**: on the windows it held out its cost falls by 1 %, LE's and H's RMSE by
+6–7 %, and GPP's rises by 7 % ([`calibration/report.md`](calibration/report.md)). It takes the oaks' g1 to
+1.54 (2.9 prior sd below the centre, pushed by LE) and their Vcmax to 40, and over the full record it
+shares the summer's missing energy between LE and H: dry-season bias −8.1 and −8.5 W m⁻², against +0.1
+and −14.6 for the default. The default run stays the site's reference (§4 and §5 use it): it holds the
+wet summers' LE.
+
+| June–August, 9–16 h | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 |
+|---|---|---|---|---|---|---|---|---|---|
+| LE [W m⁻²]: tower | 118 | 74 | 42 | 44 | 53 | 66 | 85 | 67 | 117 |
+| default | 110 | 48 | 42 | 39 | 45 | 64 | 69 | 70 | 103 |
+| calibrated | 76 | 45 | 38 | 38 | 43 | 43 | 42 | 43 | 73 |
+| GPP [µmol m⁻² s⁻¹]: tower | 6.6 | 5.3 | 3.8 | 3.1 | 2.7 | 3.5 | 4.5 | 4.3 | 7.0 |
+| default | 7.9 | 3.1 | 2.7 | 2.6 | 3.0 | 4.1 | 4.4 | 4.7 | 7.0 |
+| calibrated | 6.8 | 3.4 | 2.9 | 3.0 | 3.5 | 3.1 | 3.2 | 3.3 | 5.8 |
 
 - **Both of the oaks' calibration windows fell in the 2014 drought** (14 July and 22 August): a window
   needs the longwave measured at Tonzi, from 2014 on, and of those summers 2014's were the best covered.
-  By late August 2014 the oaks had nearly closed: from 9 to 16 h the tower's GPP was 1.5 µmol m⁻² s⁻¹
-  and its LE 16 W m⁻², against the default's 2.4 and 34.
-- **The fit can only scale the oaks down**: Medlyn g1 0.93 (prior 1.92) and Vcmax 49 (prior 113). Over
-  the full record that halves their summer LE (dry-season bias −19.6 W m⁻², against −5.0 for the default):
-
-  | June–August, 9–16 h | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 |
-  |---|---|---|---|---|---|---|---|---|---|
-  | LE [W m⁻²]: tower | 118 | 74 | 42 | 44 | 53 | 66 | 85 | 67 | 117 |
-  | default | 110 | 48 | 42 | 39 | 45 | 64 | 69 | 70 | 103 |
-  | calibrated | 67 | 31 | 26 | 28 | 29 | 29 | 27 | 28 | 59 |
-  | GPP [µmol m⁻² s⁻¹]: tower | 6.6 | 5.3 | 3.8 | 3.1 | 2.7 | 3.5 | 4.5 | 4.3 | 7.0 |
-  | default | 7.9 | 3.1 | 2.7 | 2.6 | 3.0 | 4.1 | 4.4 | 4.7 | 7.0 |
-  | calibrated | 6.0 | 2.7 | 2.4 | 2.6 | 2.7 | 2.4 | 2.4 | 2.5 | 4.9 |
-
-- **The drought windows ask for a drier late summer, not a smaller g1.** The real oaks were near closure
-  in August 2014, at predawn potentials that reached −3.7 to −5.2 MPa in the dry summers of 2007–2008; the
-  model's stay near −3 MPa on the water table (§1) and keep transpiring, so the fit lowers g1 and Vcmax
-  for every summer. Until the late summer dries (Open), the default is the better run.
+  By late August 2014 the oaks had nearly closed: from 9 to 16 h the tower's LE was 16 W m⁻², against the
+  default's 34; the model's oaks stay near −3 MPa before dawn on the water table (§1). With the April
+  window, where the oaks leaf out over the grass at its peak and LE is 10 W m⁻² high, it lowers g1 for
+  every summer, and the wet summers lose a third of their LE.
 
 ## 3. Against the tower
 
@@ -141,13 +150,13 @@ calibrated one is kept for the diagnosis.
 
 Means over the tower's measured hours ([`plot_evaluation.py`](plot_evaluation.py)), every hour of the day
 weighted alike, 2011–2019. The bias in the panels is against the tower as the calibration scores it
-(GPP with the tower's respiration over the fitted kappa, H and LE with the energy-closure gap shared);
-the tower closes its energy balance to 0.87 of the available energy (the daily median).
+(GPP with the tower's respiration over the fitted kappa; H and LE as measured, §2); the tower closes its
+energy balance to 0.87 of the available energy (the daily median).
 
 | run | GPP [µmol m⁻² s⁻¹] tower / model | LE [W m⁻²] | H [W m⁻²] | net radiation [W m⁻²] |
 |---|---|---|---|---|
 | default | 2.85 / 3.23 | 31.9 / 35.9 | 57.8 / 46.5 | 103.3 / 78.9 |
-| calibrated | 2.85 / 3.32 | 31.9 / 27.4 | 57.8 / 52.8 | 103.3 / 78.0 |
+| calibrated | 2.85 / 3.61 | 31.9 / 29.1 | 57.8 / 51.3 | 103.3 / 78.0 |
 
 - **The grass's season is right in timing, and its spring too productive.** From December to February
   the monthly GPP and LE are within 0.8 µmol m⁻² s⁻¹ and 4 W m⁻² of the tower's. In April and May, with
@@ -169,9 +178,13 @@ the tower closes its energy balance to 0.87 of the available energy (the daily m
   | default | 5.7 | 4.7 | 3.3 | 2.3 | 2.0 | 1.9 | 1.9 |
 
   Wet summers are 2011, 2017 and 2019, drought summers 2012–2015.
-- **Net radiation is 39–46 W m⁻² short in summer**: from June to August the stand reflects 0.19 of the
-  shortwave against the tower's 0.15, and the ground, bare under the dead grass, is hotter: 11 W m⁻² more
-  longwave. The ground's albedo is the repository's default.
+- **The summer's energy is short at midday, and goes into the ground.** From June to August the model's
+  net radiation is 42 W m⁻² below the tower's, but the tower's radiometer reads 15 W m⁻² above its own four
+  components and sees mostly the oaks by the tower (§2): it reflects 0.14 at midday, where Vaira's open
+  grassland reflects 0.21–0.24 in summer and the model's stand 0.19. At midday the model puts 145 W m⁻²
+  into the ground, against the tower's plates' 41 and Vaira's 53 (a tenth of its net radiation, under the
+  dead grass): bare soil stands where a mat of dead grass insulates it, and H is 50 W m⁻² short at midday
+  (307 against 360).
 
 ## 4. Leaf area
 
@@ -231,8 +244,9 @@ open (60 %, LAI 1.7), the grass alone.
   the tower's well (2–9 m) as the column's bottom, and the oaks' loss of capacity over the summer (blue
   oak's Vcmax falls by more than 60 %, Xu & Baldocchi 2003, Osuna et al. 2015), are the next steps; the
   calibration's drought windows need them.
-- **The ground's albedo and temperature** under the dead grass: the summer net radiation. MODIS's
-  MCD43A3 albedo over the tower is the check.
+- **The summer ground**: the mat of dead grass, which insulates the soil and returns the sun's heat as H.
+  The model's bare soil takes three times the measured ground heat flux at midday. MODIS's MCD43A3
+  albedo over the tower's pixels will tell the landscape's albedo from what the tower's radiometer sees.
 - **The grass's germination** is its weakest timing (example 02, part 3), and its leaves are one big
   leaf at the bottom of the canopy; standing dead grass is not represented.
 - **The fitted water path**: the oaks' leaf conductance and stomatal closure, and the weathered rock's

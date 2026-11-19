@@ -282,6 +282,9 @@ This file covers every 0.x release; version 1.0 starts `CHANGELOG-v1.md`. The fo
 
 ### Fixed
 
+- `calibrate_fast` with `[closure].shares = "none"` no longer stops at the closure alternative: with H and LE
+  scored as measured there is no closure factor, and the alternative is skipped with that reason. (#TBD)
+
 - Cohort output under daily growth: the stand is re-sorted every day, so a monthly cohort record could
   average two cohorts in one slot. Every record of a month is now written in the month's end order,
   keyed by cohort id, and a fast-loop row reduced to a coarser axis pairs each cohort with the weight

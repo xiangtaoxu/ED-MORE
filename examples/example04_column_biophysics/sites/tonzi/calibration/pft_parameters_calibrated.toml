@@ -3,15 +3,15 @@
 # Every line is the base file's, comments included, except these keys the fit set
 # (calibrated value, the base file's value; EFFECTIVE: its value belongs to this model structure;
 # KATTGE & KNORR: fixed at the growth temperature's value, not fitted):
-#   pft.leaf_angle_mean            58.7988  (63)
-#   pft.leaf_angle_mean (PFT 2)    51.7347  (63.24)
-#   pft.vcmax25                    49.3061  (130)
-#   pft.vcmax25 (PFT 2)            87.0103  (60)
-#   pft.stomatal_g1                0.927291  (4.45)
-#   pft.stomatal_g1 (PFT 2)        3.42979  (5.25)
-#   pft.stomatal_g0                0.00256231  (0.01)
-#   pft.stomatal_g0 (PFT 2)        0.010828  (0.01)
-#   pft.wstress_sref_stomata       0.641586  (0.6)  EFFECTIVE
+#   pft.leaf_angle_mean            41.8561  (63)
+#   pft.leaf_angle_mean (PFT 2)    46.4457  (63.24)
+#   pft.vcmax25                    39.9679  (130)
+#   pft.vcmax25 (PFT 2)            89.9462  (60)
+#   pft.stomatal_g1                1.54237  (4.45)
+#   pft.stomatal_g1 (PFT 2)        2.92961  (5.25)
+#   pft.stomatal_g0                0.0065414  (0.01)
+#   pft.stomatal_g0 (PFT 2)        0.00510112  (0.01)
+#   pft.wstress_sref_stomata       0.629766  (0.6)  EFFECTIVE
 #   pft.jmax_vcmax_ratio           2.00726  (1.5)  KATTGE & KNORR
 #   pft.jmax_vcmax_ratio (PFT 2)   2.00726  (1.8)  KATTGE & KNORR
 # The Tonzi site's two PFTs: 1 blue oak (Quercus douglasii), cold- and drought-deciduous; 2 the C3 annual
@@ -55,7 +55,7 @@ include_pft        = [1, 1]
 min_cohort_height  = 2.0              # [m]
 min_repro_height   = [13.9, 0.3]      # [m] the grass sets seed at its height
 photosynthetic_pathway = [1, 1]
-vcmax25            = [49.3061, 87.0103]    # [umol/m2/s] blue oak at Tonzi, the largest of 2006-08 (O15, p. 8: Vcmax and Jmax
+vcmax25            = [39.9679, 89.9462]    # [umol/m2/s] blue oak at Tonzi, the largest of 2006-08 (O15, p. 8: Vcmax and Jmax
                                       #   130 and 195 at 25 C, DOY 127 2008); the grass: no leaf value was found, the
                                       #   repository's PFT 1
 jmax_vcmax_ratio   = [2.00726, 2.00726]       # the oak: O15's 195 / 130; the grass: the repository's
@@ -64,8 +64,8 @@ rd_vcmax_ratio     = [0.004, 0.015]   # the oak: mature blue oak leaves respire 
                                       #   127 (Xu & Baldocchi 2003, Tree Physiol. 23:865, doi:10.1093/treephys/23.13.865);
                                       #   the grass: the repository's
 kp25               = [1.0e-9, 1.0e-9]
-stomatal_g0        = [0.00256231, 0.010828]
-stomatal_g1        = [0.927291, 3.42979]     # Medlyn [kPa^0.5]: deciduous broadleaf and C3 grassland (DK15, Table 1)
+stomatal_g0        = [0.0065414, 0.00510112]
+stomatal_g1        = [1.54237, 2.92961]     # Medlyn [kPa^0.5]: deciduous broadleaf and C3 grassland (DK15, Table 1)
 stomatal_d0        = [1500.0, 1500.0]
 quantum_yield_c4   = [0.0, 0.0]
 theta_j            = [0.70, 0.70]
@@ -81,7 +81,7 @@ wstress_lambda_exp = [1.0, 1.0]
 # light is about half its spring value at a predawn -2.5 MPa and a quarter at -5 (XB03, Fig. 4, read off
 # the figure), slopes of 0.8 and 0.4 per MPa from the onset, half the turgor-loss point. The grass keeps
 # the repository's.
-wstress_sref_stomata = [0.641586, 2.0]     # [1/MPa]
+wstress_sref_stomata = [0.629766, 2.0]     # [1/MPa]
 # The oaks' leaves lose their capacity, and with it their stomata close, as they dry through the day: from
 # -2.0 MPa to nothing at -4.5 MPa, between blue oak's leaf and stem P50 (-3.88 and -4.47 MPa, S19); its
 # stomata close near the leaf's (A25). The start is fitted by hand with the oaks' leaf_kmax ([hydraulics])
@@ -106,7 +106,7 @@ wood_transmit_nir  = [0.001, 0.001]
 wood_emissivity    = [0.90, 0.90]
 leaf_clumping      = [0.80, 0.80]
 wood_clumping      = [0.50, 0.50]
-leaf_angle_mean    = [58.7988, 51.7347]    # [deg] blue oak at Tonzi, 1200 leaves, "overall erectophile... The mean angle was
+leaf_angle_mean    = [41.8561, 46.4457]    # [deg] blue oak at Tonzi, 1200 leaves, "overall erectophile... The mean angle was
                                       #   63" (R10, p. 14); the grass: de Wit's (1965) erectophile distribution
 leaf_angle_std     = [21.6, 18.5]     # [deg] the oak's G is "close to that of the spherical orientation" (R10), whose
                                       #   spread this is; the erectophile distribution's
