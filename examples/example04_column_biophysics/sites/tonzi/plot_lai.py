@@ -7,15 +7,15 @@
   around the tower, good retrievals only (raw value at most 100, i.e. LAI 0-10, and QC bit 0 clear: the
   main radiative-transfer algorithm, not the back-up). A 500 m pixel holds oaks, the grass between them
   and the grass beneath them.
-* The clip LAI of the AmeriFlux BADM (direct harvests): the Tonzi understory (LAI_U) and Vaira Ranch's
-  open grassland 2.4 km away (LAI_TOT), both of the grass. They are read with example 02's Tonzi reader.
+* The clip LAI of the AmeriFlux BADM (direct harvests) of the Tonzi understory (LAI_U), the grass beneath
+  and between the oaks, read with example 02's Tonzi reader.
 
 The figure is the mean seasonal cycle over the scored years (2011 on: 2010 starts from the census, in
 leaf); the observations are each record of those years, on its day of the year.
 
 Usage: python plot_lai.py --modis <folder> --badm <folder> [--model output/eval] [--out lai.png]
   --modis: the folder of us_california_tonzi_ranch_mcd15a3h_{Lai_500m,FparLai_QC}.csv
-  --badm:  the folder of AMF_US-Ton_BASE-BADM_27-5.zip and AMF_US-Var_BASE-BADM_27-5.zip
+  --badm:  the folder of AMF_US-Ton_BASE-BADM_27-5.zip
 """
 import argparse
 import json
@@ -67,7 +67,7 @@ def read_clips(folder):
     """The BADM's clip LAI: {label: series}."""
     import prepare_observations as po                   # example 02's BADM reader
     out = {}
-    for site, var, label in (("US-Ton", "LAI_U", "Tonzi understory"), ("US-Var", "LAI_TOT", "Vaira grassland")):
+    for site, var, label in (("US-Ton", "LAI_U", "Tonzi understory"),):
         groups = po.badm(os.path.join(folder, f"AMF_{site}_BASE-BADM_27-5.zip"))
         rows = [(pd.Timestamp(v["LAI_DATE"][:8]), float(v[var])) for kind, v in groups.values()
                 if kind == "GRP_LAI" and var in v and len(v.get("LAI_DATE", "")) >= 8]
@@ -112,9 +112,9 @@ def main(argv=None):
     ax.plot(clim_o.index, clim_o.values + clim_g.values, color=ev.MODEL, lw=1.6, label="ED-MORE, total")
     ax.plot(modis.index.dayofyear, modis.values, ls="none", marker="o", ms=2.6, color=ev.MUTED,
             label="MODIS MCD15A3H (3 × 3 median)")
-    for (label, s), style in zip(clips.items(), ({"mfc": ev.INK}, {"mfc": "white"})):
-        ax.plot(s.index.dayofyear, s.values, ls="none", marker="s", ms=4, mec=ev.INK, label=f"clips, {label} (BADM)",
-                **style)
+    for label, s in clips.items():
+        ax.plot(s.index.dayofyear, s.values, ls="none", marker="s", ms=4, mec=ev.INK, mfc=ev.INK,
+                label=f"clips, {label} (BADM)")
     ticks = pd.date_range("2021-01-01", periods=12, freq="MS")
     ax.set(xlim=(1, 366), xticks=ticks.dayofyear, xticklabels=list(ev.MONTHS), ylim=(0, None),
            xlabel="month", ylabel="leaf area index [m² m⁻²]")
