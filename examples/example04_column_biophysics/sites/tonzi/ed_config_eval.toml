@@ -53,7 +53,7 @@ init_mode    = 1                  # a census: one patch per 10 m cell, fused by 
 census_file  = "data/tonzi_census_ed.csv"   # run_site.py builds it (make_tonzi_census.py)
 pft_config   = "pft_parameters.toml"
 soil_temp    = 284.3              # [K] the tower's soil, 2-50 cm, 1-2 January 2010 (11.1-11.4 degC)
-soil_theta   = 0.23               # [m3/m3] the tower's 0.20-0.27 at its three working depths, 1-2 January 2010
+                                  # each layer starts at its field capacity ([soil], a texture per layer)
 
 [output]
 state_write       = false
@@ -157,20 +157,27 @@ soil_rough = 0.085                   # [m]
 
 # Tonzi's soil is an Auburn very rocky silt loam, about 1 m over fractured greenstone (Baldocchi, Xu & Kiang
 # 2004, Agric. For. Meteorol. 123:13-39, p. 18); below it lie 4-8 m of saprolite and the water table, 7-12 m
-# down (Miller 2009, PhD dissertation, UC Berkeley, pp. 79-80), which the oaks draw on in summer. One curve for
-# the column, to a water table at 9 m: the loam class's (Carsel & Parrish 1988, Water Resour. Res. 24:755,
-# Table 3; the repository's default soil), for the texture under and between the oaks, 37.5-48 % sand,
-# 42-45 % silt and 10-17.5 % clay, with the porosity of its bulk density, 1.58-1.64 g/cm3 (Baldocchi et al.
-# 2004, Table 1: 1 - 1.61 / 2.65). The column holds more water at depth than the saprolite, whose specific
-# yield is about 0.04 (Miller 2009, p. 99).
+# down (Miller 2009, PhD dissertation, UC Berkeley, pp. 79-80), which the oaks draw on in summer. The column
+# runs to a water table at 9 m, on the default layers, with a texture per layer:
+#   - the top 1 m, the loam class's curve (Carsel & Parrish 1988, Water Resour. Res. 24:755, Table 3; the
+#     repository's default soil), for the texture under and between the oaks, 37.5-48 % sand, 42-45 % silt
+#     and 10-17.5 % clay, with the porosity of its bulk density, 1.58-1.64 g/cm3 (Baldocchi et al. 2004,
+#     Table 1: 1 - 1.61 / 2.65);
+#   - 1-9 m, the weathered rock: the loam's curve with a fifth of its water (porosity 0.15), between the
+#     loam and fractured rock, whose specific yield is about 0.04 (Miller 2009, p. 99), fitted by hand to
+#     the tower's summer LE; and the conductivity of the slug tests in the tower's well, 2.2-2.6e-6 m/s
+#     (Miller 2009, Table 3.5).
+# One loam to 9 m held five times the water at depth, and the oaks transpired 30-50 W/m2 too much in the
+# wet summers.
 [soil]
 depth           = 9.0              # [m]
 water_bottom_bc = "aquifer"        # the water table under the oaks' roots
-theta_sat       = 0.39             # [m3/m3]
-theta_res       = 0.078
+layer_bottoms   = [0.05, 0.15, 0.30, 0.60, 1.00, 1.50, 2.00, 3.00, 4.50, 6.50, 9.00]   # [m]
+theta_sat       = [0.39, 0.39, 0.39, 0.39, 0.39, 0.15, 0.15, 0.15, 0.15, 0.15, 0.15]   # [m3/m3]
+theta_res       = [0.078, 0.078, 0.078, 0.078, 0.078, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]
 curve_par_a     = 3.6              # [1/m]
 curve_par_n     = 1.56
-ksat            = 2.89e-6          # [m/s]
+ksat            = [2.89e-6, 2.89e-6, 2.89e-6, 2.89e-6, 2.89e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6]   # [m/s]
 thermal_bottom_bc = "dirichlet"
 deep_temp  = 290.65                # [K] the tower's deepest soil sensor, mean of 2010-2019 (17.5 degC; air 16.7)
 deep_depth = 9.145                 # [m] the bottom node (7.75 m) + 1.973 / sqrt(2), the default's rule
