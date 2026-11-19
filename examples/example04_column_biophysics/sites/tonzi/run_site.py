@@ -8,7 +8,7 @@ Steps (the tower file, the forcing and the census file are kept once made; --for
      pressure and rain where US-Ton has none (US-Var's BASE file)
      (prepare_tower.py)
   2. the forcing file data/tonzi_forcing.nc (scripts/prepare_input/flux_tower/make_tower_forcing.py)
-  3. the census file: the oaks imputed from the site survey's stand averages, and the grass
+  3. the census file: the oaks at the field survey's size distributions, and the grass
      (make_tonzi_census.py)
   4. the ten tower years from the census, with hourly output (ed_config_eval.toml)
   5. with --calibrate: the fast parameters fitted to the tower (calibration.toml, scripts/calibrate_fast)

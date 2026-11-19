@@ -3,15 +3,16 @@
 # Every line is the base file's, comments included, except these keys the fit set
 # (calibrated value, the base file's value; EFFECTIVE: its value belongs to this model structure;
 # KATTGE & KNORR: fixed at the growth temperature's value, not fitted):
-#   aerodynamics.z0m_ratio         0.194583  (0.13)  EFFECTIVE
+#   aerodynamics.z0m_ratio         0.152543  (0.13)  EFFECTIVE
 #   leaf_physiology.ds_vcmax       650.575  (650)  KATTGE & KNORR
 #   leaf_physiology.ds_jmax        647.213  (640)  KATTGE & KNORR
 # and these settings of the calibration (calibration.toml [overrides], the variant, [calibrated]):
 #   init.pft_config                "calibration/pft_parameters_calibrated.toml"
 #   output.prefix                  "cal"
 # ED-MORE example 04, the Tonzi Ranch site: the blue-oak savanna tower AmeriFlux US-Ton over ten years,
-# 2010-01-02 to 2020-01-01 UTC, started from the imputed oak census and its grass (make_tonzi_census.py),
-# with hourly output to compare with the tower's fluxes. The first year spins up the leaves and the
+# 2010-01-02 to 2020-01-01 UTC, started from an oak census at the field survey's size distributions and its
+# grass (make_tonzi_census.py), with hourly output to compare with the tower's fluxes. The first year spins
+# up the leaves and the
 # soil water; the scores start in 2011. Every output stamp is UTC.
 
 [run]
@@ -153,10 +154,10 @@ soil_carbon_on = true
 # Steady state with the stand's litter (make_tonzi_census.py's summary): the oaks' and the grass's leaf
 # fall and fine-root turnover from the PFTs, the oaks' wood from their background mortality.
 spinup_steady      = true
-spinup_labile_grnd = 1.126509e-04     # [kgC/m2/day]
-spinup_labile_soil = 2.037125e-04
-spinup_struct_grnd = 1.195152e-04
-spinup_struct_soil = 1.178352e-04
+spinup_labile_grnd = 9.535965e-05     # [kgC/m2/day]
+spinup_labile_soil = 1.742153e-04
+spinup_struct_grnd = 7.813881e-05
+spinup_struct_soil = 9.063672e-05
 
 [aerodynamics]
 # The grass sward's momentum roughness is the landscape's, not the grass's: at Vaira's 2 m sonic, in
@@ -179,7 +180,7 @@ soil_rough = 0.085                   # [m]
 #     (Miller 2009, Table 3.5).
 # One loam to 9 m held five times the water at depth, and the oaks transpired 30-50 W/m2 too much in the
 # wet summers.
-z0m_ratio = 0.194583   # set by calibrate_fast
+z0m_ratio = 0.152543   # set by calibrate_fast
 [soil]
 depth           = 9.0              # [m]
 water_bottom_bc = "aquifer"        # the water table under the oaks' roots

@@ -184,7 +184,7 @@ refill). The tool's README explains each.
 Two canopies that take turns: blue oaks, in leaf from April to October, over a C3 annual grass, green
 from the first big autumn rain to May. The grass has one cue, WATER: its predawn leaf water potential
 summed above its turgor-loss point sets it growing, and summed below it kills it. The fit is example
-04's Tonzi stand (the imputed oak census and its grass, frozen; the tower's forcing, 2010–2019).
+04's Tonzi stand (the oak census at the field survey's size distributions and its grass, frozen; the tower's forcing, 2010–2019).
 
 ### Run
 

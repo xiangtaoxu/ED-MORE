@@ -22,7 +22,7 @@ Each site is a folder in [`sites/`](sites), with its own README, data, configura
 | [Barro Colorado Island](sites/bci/README.md), Panama | moist tropical forest | PA-Bar (Zenodo 6456527), 41 m | 2012–2017 | the 50-ha plot's 2010 census, one evergreen PFT | calibrated |
 | [Harvard Forest](sites/harvard/README.md), Massachusetts | temperate broadleaf and conifer forest | NEON HARV (AmeriFlux US-xHA), 39 m | 2019–2024 (scored from 2020) | the ForestGEO plot's 2019 census within 200 m of the tower, frozen; a deciduous and a conifer PFT, their phenology fitted with each cohort's own cues | calibrated (both PFTs' capacity and stomata) |
 | Guánica, Puerto Rico | tropical dry forest | NEON GUAN (PR-xGU) | 2019–2024 | NEON's vegetation structure | planned |
-| [Tonzi Ranch](sites/tonzi/README.md), California | oak savanna | AmeriFlux US-Ton, 23.5 m | 2010–2019 (scored from 2011) | oaks imputed from the survey's stand averages over a C3 annual grass, frozen; their phenology fitted with each cohort's own cues | prototype; the oaks' water path fitted to their measured leaf potential; calibrated with H and LE as measured (its README) |
+| [Tonzi Ranch](sites/tonzi/README.md), California | oak savanna | AmeriFlux US-Ton, 23.5 m | 2010–2019 (scored from 2011) | oaks at the field survey's size distributions over a C3 annual grass, frozen; their phenology fitted with each cohort's own cues | prototype; the oaks' water path fitted to their measured leaf potential; calibrated with H and LE as measured (its README) |
 | Toolik, Alaska | tussock tundra | NEON TOOL (US-xTL) | 2019–2024 | NEON's plant cover | planned (organic soil) |
 
 ## Results at a glance
@@ -38,8 +38,8 @@ is u\*-filtered), and a plain mean over its measured hours would be mostly a mea
 | BCI, calibrated | 7.64 / 8.93 | 76.7 / 66.5 | 35.1 / 86.3 | 136.0 / 139.1 |
 | Harvard, default | 4.56 / 4.87 | 41.1 / 50.3 | 25.2 / 47.5 | 87.3 / 88.0 |
 | Harvard, calibrated | 4.56 / 5.22 | 41.1 / 45.0 | 25.2 / 51.3 | 87.3 / 87.3 |
-| Tonzi, default | 2.85 / 3.21 | 31.9 / 35.9 | 57.8 / 50.4 | 103.3 / 82.9 |
-| Tonzi, calibrated | 2.85 / 3.07 | 31.9 / 31.2 | 57.8 / 54.2 | 103.3 / 83.0 |
+| Tonzi, default | 2.85 / 3.22 | 31.9 / 35.9 | 57.8 / 49.2 | 103.3 / 81.6 |
+| Tonzi, calibrated | 2.85 / 3.14 | 31.9 / 30.3 | 57.8 / 53.4 | 103.3 / 81.4 |
 
 BCI's and Harvard's towers close their energy balance to about 0.75 of the net radiation, and at both the
 calibration's attribution test gives the gap to H: most of the model's higher H is the tower's missing H.

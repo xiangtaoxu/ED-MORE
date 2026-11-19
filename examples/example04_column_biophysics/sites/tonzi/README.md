@@ -9,7 +9,7 @@ only its leaf area ([`docs/science/plant_carbon_allocation.md`](../../../../docs
 The example:
 
 1. builds the forcing from the tower's meteorology, with Vaira Ranch's where Tonzi measured nothing;
-2. starts a frozen stand: oaks imputed from the site survey's stand averages, and the grass beneath and
+2. starts a frozen stand: oaks at the field survey's size distributions, and the grass beneath and
    between them; its leaves follow the phenology fitted in example 02, part 3;
 3. calibrates the fast parameters of both plant types against the tower;
 4. compares the default and the calibrated runs with the tower, and each plant type's leaf area with
@@ -40,7 +40,7 @@ cores.
 | Meteorology and fluxes | AmeriFlux US-Ton FLUXNET (ONEFlux v1.3_r1), CC-BY-4.0. Measured values only: [`prepare_tower.py`](prepare_tower.py) blanks the product's fills, and [`make_tower_forcing.py`](../../../../scripts/prepare_input/flux_tower/make_tower_forcing.py) fills the gaps by its own rules |
 | Rain and pressure | US-Ton's BASE file (BASE-BADM 27-5; the FLUXNET product has none before 2021). Where Tonzi has none, or its file holds Vaira's readings, Vaira Ranch's (US-Var, 2.4 km away, 48 m lower) |
 | Longwave | measured at Tonzi from 2014. Before, Vaira's less its mean excess over Tonzi's where both measure (10.4 W m⁻² over 2014–2019): half-hourly RMSE 12.1 W m⁻², against 21.8 for the forcing tool's own fill |
-| Stand | an oak census imputed from the survey's stand averages (Kiang 2002, via Baldocchi, Xu & Kiang 2004, Agric. For. Meteorol. 123:13–39): 194 stems ha⁻¹ and 18 m² ha⁻¹ on 40 of 100 cells of 10 m. **Not measured trees** ([`make_tonzi_census.py`](make_tonzi_census.py)) |
+| Stand | an oak census at the field survey's size distributions (a figure of Miriam Johnston's PhD dissertation: the oaks' basal area by 10 cm DBH class and the density of their DBH and height; the gray pines left out): 285 stems ha⁻¹, 10.5 m² ha⁻¹, on the 40 of 100 cells of 10 m the oaks cover (Baldocchi, Xu & Kiang 2004, Agric. For. Meteorol. 123:13–39). **Not measured trees** ([`make_tonzi_census.py`](make_tonzi_census.py)) |
 | Traits | the oaks' and the grass's from the site literature, each value's source in [`pft_parameters.toml`](pft_parameters.toml) |
 | Leaf area and phenology | the BADM's clip LAI (US-Ton understory, US-Var grassland), its oak and grass dates, PhenoCam's `tonzi_GR_1000` greenness (example 02, part 3) |
 | The oaks' water | their leaf water potential, predawn and midday, in the dry summers of 2007–2008 (Osuna et al. 2015, Tree Physiol. 35:485; Miller et al. 2010, Water Resour. Res. 46:W10503), their sapwood area (Miller 2009, PhD dissertation, UC Berkeley, Fig. 5.4) and the water table at the tower's well (US-Ton's BASE file) |
@@ -54,11 +54,15 @@ doi:10.17190/AMF/1245984.
 
 [`ed_config_eval.toml`](ed_config_eval.toml) runs 2010–2019; the scoring starts in 2011.
 - **The stand is frozen** (`demography_on = false`): only the leaves change. The census's 100 cells
-  restructure to 10 patches and 63 cohorts.
-  - **The oaks** are 194 stems at the site's basal area. Their diameters are drawn with the spread of blue
-    oak at NEON's San Joaquin Experimental Range: the survey's mean diameter (19.9 cm) does not fit its
-    stem count and basal area. Their height curve passes through the survey's mean and tallest (7.1 and
-    13.0 m), and their leaf area gives the trees' LAI, 0.65.
+  restructure to 11 patches and 84 cohorts.
+  - **The oaks** are 285 stems ha⁻¹ at the field survey's basal area in each 10 cm DBH class, 10.5 m² ha⁻¹
+    in all, spread within each class by the survey's DBH density (Johnston's dissertation): a quadratic
+    mean DBH of 21.6 cm and a mean of 17.1. Their height curve, H = 0.84 D^0.74, matches the survey's DBH
+    and height distributions quantile by quantile and stops at its heights' 99th percentile, 16.6 m; their
+    mean height is 6.5 m. Their leaf area gives the trees' LAI, 0.65. The stand averages of Baldocchi et
+    al. (2004), 194 stems and 18 m² ha⁻¹ at a mean DBH of 19.9 cm, did not fit together; the survey's mean
+    DBH agrees with theirs at 10.5 m² ha⁻¹. The stand holds 2.7 kgC m⁻² above ground, where the BADM's
+    tree carbon is 4.24 (2001–2003).
   - **The grass** is one row per cell, with dbh 0, of tillers 0.3 m tall. A cell in the open carries
     Vaira's open-grassland peak LAI (2.55, the median over 2002–2014 of each year's largest clip), a cell
     under the oaks the Tonzi understory's (1.31). The tiller count, 2,000 m⁻² in the open, is a choice: no
@@ -80,10 +84,10 @@ doi:10.17190/AMF/1245984.
 
   | oak leaf water potential [MPa], predawn / midday | measured | ED-MORE |
   |---|---|---|
-  | May | −0.2 to −0.8 / −0.85 to −2.7 (Tonzi, 2007–2008) | −0.24 / −1.86 (2012–2015) |
-  | early July of a dry summer | −1.3 to −2.6 / −2.9 to −4.0 (Tonzi, 2007–2008) | −2.92 / −4.00 (2012–2015) |
-  | late August of a dry summer | −3.7 to −5.2 / −3.2 to −4.8 (Tonzi, 2007–2008) | −3.02 / −4.10 (2012–2015) |
-  | July of a wet summer | −0.45 to −1.8 / −3.7 to −4.3 (Sierra foothills, 1978) | −0.91 / −3.11 (2011, 2017, 2019) |
+  | May | −0.2 to −0.8 / −0.85 to −2.7 (Tonzi, 2007–2008) | −0.33 / −2.12 (2012–2015) |
+  | early July of a dry summer | −1.3 to −2.6 / −2.9 to −4.0 (Tonzi, 2007–2008) | −2.85 / −4.07 (2012–2015) |
+  | late August of a dry summer | −3.7 to −5.2 / −3.2 to −4.8 (Tonzi, 2007–2008) | −2.95 / −4.15 (2012–2015) |
+  | July of a wet summer | −0.45 to −1.8 / −3.7 to −4.3 (Sierra foothills, 1978) | −1.07 / −3.30 (2011, 2017, 2019) |
 
   Tonzi's are Osuna et al. (2015) and Miller et al. (2010), read off their figures; no wet summer was
   measured at Tonzi, and the wet summer's are blue oaks in Sequoia's foothills (Baker, Rundel & Parsons
@@ -129,31 +133,31 @@ defaults:
 - **The leaf angles stay at the PFT file's**: the oaks' was measured at Tonzi (63°, 1200 leaves). Fitted,
   both plant types' fell to 22–27°, flat leaves no blue oak or grass has, pushed by LE.
 
-**It passes its own validation**: on the windows it held out its cost falls by 3 %, GPP's RMSE by a third
-and LE's and H's by 5 % ([`calibration/report.md`](calibration/report.md)). It takes the oaks' g1 to 2.86
-(1.2 prior sd below 4.45) and their Vcmax to 63, and closes their stomata steeply as the predawn potential
-falls (`wstress_sref_stomata` 4.4, against the 0.6 of Xu & Baldocchi's conductances): in the 2014 drought
-windows the real oaks were near closure at predawn potentials the model's oaks do not reach (§1), and the
-steep slope closes them at the model's. Over the full record its summer LE and H are 1.3 and −6.5 W m⁻²
-from the tower's, the default's −0.1 and −6.4. The default run stays the site's reference (§4 and §5 use
+**It passes its own validation**: on the windows it held out its cost falls by 6 %, GPP's RMSE by two
+fifths and LE's and H's by 8 % ([`calibration/report.md`](calibration/report.md)). It takes the oaks' g1 to
+2.06 (2.1 prior sd below 4.45, pushed by LE) and their Vcmax to 58, and closes their stomata steeply as the
+predawn potential falls (`wstress_sref_stomata` 6.6, against the 0.6 of Xu & Baldocchi's conductances): in
+the 2014 drought windows the real oaks were near closure at predawn potentials the model's oaks do not
+reach (§1), and the steep slope closes them at the model's. Over the full record its summer LE and H are
+−2.2 and −5.6 W m⁻² from the tower's, the default's −0.6 and −7.4. The default run stays the site's reference (§4 and §5 use
 it).
 
 | June–August, 9–16 h | 2011 | 2012 | 2013 | 2014 | 2015 | 2016 | 2017 | 2018 | 2019 |
 |---|---|---|---|---|---|---|---|---|---|
 | LE [W m⁻²]: tower | 118 | 74 | 42 | 44 | 53 | 66 | 85 | 67 | 117 |
-| default | 110 | 48 | 42 | 39 | 45 | 64 | 69 | 71 | 102 |
-| calibrated | 102 | 63 | 49 | 50 | 59 | 68 | 67 | 69 | 97 |
+| default | 107 | 45 | 41 | 38 | 43 | 62 | 66 | 68 | 99 |
+| calibrated | 88 | 57 | 47 | 45 | 54 | 57 | 54 | 58 | 90 |
 | GPP [µmol m⁻² s⁻¹]: tower | 6.6 | 5.3 | 3.8 | 3.1 | 2.7 | 3.5 | 4.5 | 4.3 | 7.0 |
-| default | 7.9 | 3.1 | 2.7 | 2.6 | 3.0 | 4.1 | 4.5 | 4.8 | 7.0 |
-| calibrated | 7.9 | 4.6 | 3.8 | 3.9 | 4.6 | 4.8 | 4.7 | 5.0 | 6.8 |
+| default | 7.6 | 2.8 | 2.6 | 2.4 | 2.8 | 3.8 | 4.2 | 4.5 | 6.6 |
+| calibrated | 7.2 | 4.3 | 3.7 | 3.7 | 4.4 | 4.3 | 4.2 | 4.5 | 6.6 |
 
 - **Both of the oaks' calibration windows fell in the 2014 drought** (14 July and 22 August): a window
   needs the longwave measured at Tonzi, from 2014 on, and of those summers 2014's were the best covered.
   By late August 2014 the oaks had nearly closed: from 9 to 16 h the tower's LE was 16 W m⁻², the
-  default's 34 and the calibrated run's 25.
+  default's 34 and the calibrated run's 28.
 - **The calibrated oaks' day is flatter than the tower's**: in the drought summers they transpire into the
-  late afternoon (LE 51 against 33 W m⁻² at 16 h), and in the wet summers less at the late-morning peak
-  (94 against 119 at 11 h).
+  late afternoon (LE 47 against 33 W m⁻² at 16 h), and in the wet summers less at the late-morning peak
+  (83 against 119 at 11 h).
 
 ## 3. Against the tower
 
@@ -166,35 +170,35 @@ energy balance to 0.87 of the available energy (the daily median).
 
 | run | GPP [µmol m⁻² s⁻¹] tower / model | LE [W m⁻²] | H [W m⁻²] | net radiation [W m⁻²] |
 |---|---|---|---|---|
-| default | 2.85 / 3.21 | 31.9 / 35.9 | 57.8 / 50.4 | 103.3 / 82.9 |
-| calibrated | 2.85 / 3.07 | 31.9 / 31.2 | 57.8 / 54.2 | 103.3 / 83.0 |
+| default | 2.85 / 3.22 | 31.9 / 35.9 | 57.8 / 49.2 | 103.3 / 81.6 |
+| calibrated | 2.85 / 3.14 | 31.9 / 30.3 | 57.8 / 53.4 | 103.3 / 81.4 |
 
 - **The grass's season is right in timing, and its spring too productive.** From December to February
   the monthly GPP and LE are within 1.0 µmol m⁻² s⁻¹ and 5 W m⁻² of the tower's. In April and May, with
-  the oaks leafing out over the grass at its peak, GPP runs 2.5 µmol m⁻² s⁻¹ and LE 14–22 W m⁻² high.
+  the oaks leafing out over the grass at its peak, GPP runs 2.6–2.7 µmol m⁻² s⁻¹ and LE 15–23 W m⁻² high.
 - **The oaks' summer follows the tower.** From June to August the monthly GPP is within
-  0.9 µmol m⁻² s⁻¹ and LE within 4 W m⁻² of the tower's; in September and October LE runs 7–10 W m⁻² high.
+  0.8 µmol m⁻² s⁻¹ and LE within 5 W m⁻² of the tower's; in September and October LE runs 7–10 W m⁻² high.
   Their day closes through the afternoon, a little flatter than the tower's: lower at the peak, higher
   late in the afternoon.
 
   | June–August, local hour | 7 | 9 | 11 | 13 | 15 | 16 | 17 |
   |---|---|---|---|---|---|---|---|
   | LE [W m⁻²], wet summers: tower | 59 | 98 | 119 | 120 | 100 | 77 | 53 |
-  | default | 53 | 85 | 100 | 100 | 94 | 85 | 69 |
+  | default | 55 | 84 | 97 | 97 | 91 | 84 | 68 |
   | drought summers: tower | 31 | 55 | 61 | 57 | 43 | 33 | 22 |
-  | default | 34 | 47 | 48 | 43 | 38 | 35 | 32 |
+  | default | 35 | 47 | 46 | 41 | 36 | 34 | 30 |
   | GPP [µmol m⁻² s⁻¹], wet summers: tower | 7.5 | 7.5 | 6.6 | 5.6 | 5.3 | 5.0 | 4.0 |
-  | default | 8.7 | 8.5 | 7.1 | 6.0 | 5.4 | 5.1 | 4.4 |
+  | default | 8.9 | 8.3 | 6.8 | 5.7 | 5.1 | 5.0 | 4.3 |
   | drought summers: tower | 5.8 | 5.5 | 4.2 | 3.2 | 3.0 | 2.8 | 2.3 |
-  | default | 5.7 | 4.7 | 3.3 | 2.3 | 2.0 | 1.9 | 1.9 |
+  | default | 5.8 | 4.6 | 3.1 | 2.2 | 1.8 | 1.8 | 1.9 |
 
   Wet summers are 2011, 2017 and 2019, drought summers 2012–2015.
 - **The summer's energy is short at midday, and goes into the ground.** From June to August the model's
-  net radiation is 34 W m⁻² below the tower's, 15 of it the tower's radiometer reading above its own four
-  components (§2); the stand's albedo follows MODIS's (§1). At midday the model puts 151 W m⁻² into the
+  net radiation is 36 W m⁻² below the tower's, 15 of it the tower's radiometer reading above its own four
+  components (§2); the stand's albedo follows MODIS's (§1). At midday the model puts 150 W m⁻² into the
   ground, against the tower's plates' 41 and Vaira's 53 (a tenth of its net radiation, under the dead
   grass): bare soil stands where a mat of dead grass insulates it, and H is 34 W m⁻² short at midday (326
-  against 360) and 6 over the day.
+  against 360) and 7 over the day.
 
 ## 4. Leaf area
 
@@ -207,15 +211,15 @@ oaks, the grass between them and the grass beneath them; the clips are of the gr
 
 | months | ED-MORE, oaks + grass | MODIS | clips, Tonzi understory | clips, Vaira grassland |
 |---|---|---|---|---|
-| March–April (the grass at its peak) | 0.26 + 1.25 = 1.51 | 1.65 | 1.01 | 1.52 |
-| July–August (the oaks alone) | 0.65 + 0.05 = 0.70 | 0.92 | – | – |
-| December–January (the grass filling) | 0.01 + 0.42 = 0.43 | 0.62 | 0.71 | 0.96 |
+| March–April (the grass at its peak) | 0.26 + 1.25 = 1.52 | 1.65 | 1.01 | 1.52 |
+| July–August (the oaks alone) | 0.65 + 0.04 = 0.69 | 0.92 | – | – |
+| December–January (the grass filling) | 0.01 + 0.43 = 0.43 | 0.62 | 0.71 | 0.96 |
 
 - **The grass fills over the winter** after the first big rain and dies in May and June. Its peak follows
   the year's rain, from 1.34 in 2013 to 2.04 in 2017, and in March–April it sits between the understory's
   clips and Vaira's open grassland.
 - **The stand's spring is about two weeks late.** The mean cycle peaks on 5 May at 2.1, MODIS's on
-  20 April at 2.0, and it falls to half three weeks after MODIS's (19 June against 28 May): the model's
+  20 April at 2.0, and it falls to half three weeks after MODIS's (18 June against 28 May): the model's
   grass peaks and dies late.
 - **The summer and the winter are low against MODIS** by about 0.2: the oaks' 0.65 is the survey's LAI, and
   the 500 m pixel also holds standing dead grass and branches, which the retrieval does not tell from
@@ -229,16 +233,16 @@ oaks, the grass between them and the grass beneath them; the clips are of the gr
 restart from it with every patch's canopy air and soil and every cohort's leaves written each hour
 ([`output_window.toml`](output_window.toml), [`plot_window.py`](plot_window.py)). The restart continues
 the run exactly. The grass is near its peak and the oaks are in leaf; four warm, clear days, 13.5 mm of
-rain on the 22nd, a cooler week, and 31 mm on the 27th. Two patches: the largest under the oaks (14 % of
-the site, LAI 2.4) with its tallest oak cohort (10 m) and the grass beneath it, and the largest in the
+rain on the 22nd, a cooler week, and 31 mm on the 27th. Two patches: the largest under the oaks (8 % of
+the site, LAI 2.3) with its tallest oak cohort (12 m) and the grass beneath it, and the largest in the
 open (60 %, LAI 1.7), the grass alone.
 
 - **The open is the warmer.** At midday on the warm days its canopy air is 2.1 °C above the forcing's air
-  (0.6 under the oaks), and its soil 2.5 cm down reaches 39 °C (33 under the oaks).
-- **The light sets the assimilation:** at midday on the clear days 23 µmol m⁻² s⁻¹ for the canopy oak's
+  (0.4 under the oaks), and its soil 2.5 cm down reaches 39 °C (34 under the oaks).
+- **The light sets the assimilation:** at midday on the clear days 22 µmol m⁻² s⁻¹ for the canopy oak's
   leaves, 13 for the open grass's and 10 for the shaded grass's.
 - **The leaves' water potential** falls each afternoon and recovers each night: on the warm days to
-  −2.3 MPa for the canopy oak, −1.4 for the open grass, which draws on the drier topsoil, and −1.1 for
+  −2.5 MPa for the canopy oak, −1.4 for the open grass, which draws on the drier topsoil, and −1.1 for
   the shaded grass.
 - **The canopy air's CO₂** falls to 385–400 µmol mol⁻¹ by day (lower in brief dips at dawn and dusk) and
   rises to 400–420 at night; the swing is the wider in the open.
@@ -248,7 +252,8 @@ open (60 %, LAI 1.7), the grass alone.
 
 ## Open
 
-- **The census is imputed.** The survey's tree list (Kiang 2002) would replace it.
+- **The census carries the field survey's distributions, not its trees.** The survey's tree list would
+  replace it, and its 2.7 kgC m⁻² above ground is below the BADM's 4.24.
 - **The oaks' late summer in a drought** (§1, §2): their predawn potential stays near −3 MPa against
   −3.7 to −5.2 MPa measured, on roots that meet a water table held at 9 m. The water table measured at
   the tower's well (2–9 m) as the column's bottom, and the oaks' loss of capacity over the summer (blue
@@ -268,7 +273,7 @@ open (60 %, LAI 1.7), the grass alone.
 |---|---|
 | [`run_site.py`](run_site.py) | the steps above |
 | [`prepare_tower.py`](prepare_tower.py), [`tonzi_site.toml`](tonzi_site.toml) | the tower file and its declaration |
-| [`make_tonzi_census.py`](make_tonzi_census.py) | the imputed oaks, the grass, and the steady litter input for the soil carbon |
+| [`make_tonzi_census.py`](make_tonzi_census.py) | the oaks at the field survey's size distributions, the grass, and the steady litter input for the soil carbon |
 | [`ed_config_eval.toml`](ed_config_eval.toml), [`pft_parameters.toml`](pft_parameters.toml), [`output_variables.toml`](output_variables.toml) | the default run |
 | [`calibration.toml`](calibration.toml), [`calibration/`](calibration) | the calibration and its results |
 | [`output_window.toml`](output_window.toml) | the ten-day window's hourly variables |

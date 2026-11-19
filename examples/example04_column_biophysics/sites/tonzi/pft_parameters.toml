@@ -111,18 +111,19 @@ f_labile_stem          = [0.05, 0.05]
 struct_lignin_frac     = [0.25, 0.25]
 
 [allometry]
-# The oaks: a power law through Tonzi's mean and largest height (B04: 7.1 and 13.0 m) over the imputed stems,
-# and the leaf area scaled to the trees' LAI, 0.65 (B04, p. 16), both printed by make_tonzi_census.py.
+# The oaks: a power law fitted to the field survey's DBH and height distributions matched quantile by quantile
+# (Johnston's dissertation; make_tonzi_census.py), capped at the heights' 99th percentile, and the leaf area
+# scaled to the trees' LAI, 0.65 (B04, p. 16), all printed by make_tonzi_census.py.
 # The grass stands at Vaira's mean height at its peak LAI, 0.30 m on 18 April 2002 (AmeriFlux BADM US-Var,
 # height and clip LAI); one tiller's leaf area is the open grassland's peak LAI over the tillers per m2
 # (make_tonzi_census.py), with lai_b2 = 0.
 height_allometry = "power"
-hgt_max    = [13.0, 0.3]              # [m]
-b1Ht       = -0.50657
-b2Ht       = 0.71903
+hgt_max    = [16.6, 0.3]              # [m]
+b1Ht       = -0.17154
+b2Ht       = 0.74112
 agb_c1     = 0.03365
 agb_c2     = 0.976
-lai_b1     = [0.100645, 0.001275]
+lai_b1     = [0.126578, 0.001275]
 lai_b2     = [0.6410495, 0.0]
 wai_b1     = [0.0096, 0.0096]
 wai_b2     = [2.0947, 2.0947]
