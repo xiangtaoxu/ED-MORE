@@ -3,7 +3,7 @@
 # Every line is the base file's, comments included, except these keys the fit set
 # (calibrated value, the base file's value; EFFECTIVE: its value belongs to this model structure;
 # KATTGE & KNORR: fixed at the growth temperature's value, not fitted):
-#   aerodynamics.z0m_ratio         0.199441  (0.13)  EFFECTIVE
+#   aerodynamics.z0m_ratio         0.194583  (0.13)  EFFECTIVE
 #   leaf_physiology.ds_vcmax       650.575  (650)  KATTGE & KNORR
 #   leaf_physiology.ds_jmax        647.213  (640)  KATTGE & KNORR
 # and these settings of the calibration (calibration.toml [overrides], the variant, [calibrated]):
@@ -179,7 +179,7 @@ soil_rough = 0.085                   # [m]
 #     (Miller 2009, Table 3.5).
 # One loam to 9 m held five times the water at depth, and the oaks transpired 30-50 W/m2 too much in the
 # wet summers.
-z0m_ratio = 0.199441   # set by calibrate_fast
+z0m_ratio = 0.194583   # set by calibrate_fast
 [soil]
 depth           = 9.0              # [m]
 water_bottom_bc = "aquifer"        # the water table under the oaks' roots
@@ -189,6 +189,13 @@ theta_res       = [0.078, 0.078, 0.078, 0.078, 0.078, 0.03, 0.03, 0.03, 0.03, 0.
 curve_par_a     = 3.6              # [1/m]
 curve_par_n     = 1.56
 ksat            = [2.89e-6, 2.89e-6, 2.89e-6, 2.89e-6, 2.89e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6]   # [m/s]
+# The ground's albedo, under the dead grass and between the oaks: 0.08 in the visible, the landscape's in the
+# dry season (MODIS MCD43A blue-sky albedo, ORNL DAAC's subset, the 3 x 3 pixels around the tower, July-October
+# 2016-2019: 0.067-0.078; the tower's PAR albedo 0.063-0.078), and 0.25 in the near infrared, so that the stand's
+# midday albedo follows MODIS's shortwave and the tower's (0.14-0.16 against 0.13-0.165). The repository's 0.15
+# and 0.30 made it 0.15-0.19, and the summer's H 15 W/m2 short.
+ground_albedo_vis = 0.08
+ground_albedo_nir = 0.25
 thermal_bottom_bc = "dirichlet"
 deep_temp  = 290.65                # [K] the tower's deepest soil sensor, mean of 2010-2019 (17.5 degC; air 16.7)
 deep_depth = 9.145                 # [m] the bottom node (7.75 m) + 1.973 / sqrt(2), the default's rule

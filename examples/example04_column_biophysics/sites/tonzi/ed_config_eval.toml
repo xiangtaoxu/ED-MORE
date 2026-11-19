@@ -178,6 +178,13 @@ theta_res       = [0.078, 0.078, 0.078, 0.078, 0.078, 0.03, 0.03, 0.03, 0.03, 0.
 curve_par_a     = 3.6              # [1/m]
 curve_par_n     = 1.56
 ksat            = [2.89e-6, 2.89e-6, 2.89e-6, 2.89e-6, 2.89e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6, 2.5e-6]   # [m/s]
+# The ground's albedo, under the dead grass and between the oaks: 0.08 in the visible, the landscape's in the
+# dry season (MODIS MCD43A blue-sky albedo, ORNL DAAC's subset, the 3 x 3 pixels around the tower, July-October
+# 2016-2019: 0.067-0.078; the tower's PAR albedo 0.063-0.078), and 0.25 in the near infrared, so that the stand's
+# midday albedo follows MODIS's shortwave and the tower's (0.14-0.16 against 0.13-0.165). The repository's 0.15
+# and 0.30 made it 0.15-0.19, and the summer's H 15 W/m2 short.
+ground_albedo_vis = 0.08
+ground_albedo_nir = 0.25
 thermal_bottom_bc = "dirichlet"
 deep_temp  = 290.65                # [K] the tower's deepest soil sensor, mean of 2010-2019 (17.5 degC; air 16.7)
 deep_depth = 9.145                 # [m] the bottom node (7.75 m) + 1.973 / sqrt(2), the default's rule

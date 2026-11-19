@@ -21,6 +21,10 @@ site = "tonzi_site.toml"
 pfts            = [1, 2]
 plant_types     = ["deciduous_broadleaf", "c3_grass"]
 timeout_per_day = 30.0
+# The leaf angles stay at the PFT file's: the oaks' was measured at Tonzi (1200 leaves, 63 degrees), the grass's
+# is the erectophile distribution. Fitted, both fell to 22-27 degrees, flat leaves no grass or blue oak has,
+# pushed by LE.
+remove          = ["leaf_angle_mean"]
 
 # The windows: the grass's months (January-February) and the oaks' (July-August), which tell the two
 # PFTs' keys apart, and April, when both are in full leaf. Not March and May (the oaks' flush, the grass's
