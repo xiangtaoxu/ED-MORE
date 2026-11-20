@@ -158,9 +158,9 @@ spinup_struct_soil = 7.727116e-05
 # organic horizons Oe and Oa (6-21 cm in the pit), peat, then the gleyed silt loam with gravel, Bg and Cg
 # (21-73 cm), which the column carries to 18 m, where nothing deeper was measured. Each layer takes its
 # horizon's properties (toolik_traits.py):
-#   - Oe and Oa: the Imnavait Creek pit IMN-1's samples nearest each in organic matter (ORNL DAAC 2149,
-#     Bakian-Dogaheh et al. 2023), their porosity and the van Genuchten curve fitted to their paired water
-#     content and matric potential; peat's Ks by decomposition, hemic and sapric (Letts et al. 2000,
+#   - Oe and Oa: the Imnavait Creek pit IMN-1's sample nearest each in decomposition (ORNL DAAC 2149,
+#     Bakian-Dogaheh et al. 2023), the hemic IMN-1-2 and the sapric IMN-1-4: its porosity and the van
+#     Genuchten curve fitted to its paired water content and matric potential; peat's Ks by decomposition, hemic and sapric (Letts et al. 2000,
 #     Atmos.-Ocean 38:141); CLM5's thermal blend of the mineral soil with peat, by the organic fraction
 #     from the pit's carbon and IMN-1's bulk density (Lawrence & Slater 2008, Clim. Dyn. 30:145);
 #   - Bg and Cg: the model's texture formulas on the pit's texture, chemistry and bulk density.
@@ -173,21 +173,21 @@ depth           = 18.0             # [m]
 water_bottom_bc = "bedrock"
 layer_bottoms   = [0.05, 0.11, 0.15, 0.23, 0.31, 0.39, 0.48, 0.57, 0.67, 0.8, 1, 1.3, 1.7, 2.3, 3.2, 4.5, 6.5,
                    9.5, 13.5, 18]  # [m] 5-9 cm through the horizons and the active layer, then about 1.4-fold
-theta_sat   = [0.895, 0.895, 0.880, 0.454, 0.454, 0.454, 0.239, 0.239, 0.239, 0.239, 0.239, 0.239, 0.239, 0.239,
+theta_sat   = [0.900, 0.900, 0.880, 0.454, 0.454, 0.454, 0.239, 0.239, 0.239, 0.239, 0.239, 0.239, 0.239, 0.239,
                0.239, 0.239, 0.239, 0.239, 0.239, 0.239]                      # [m3/m3]
-theta_res   = [0.141, 0.141, 0.052, 0.150, 0.150, 0.150, 0.153, 0.153, 0.153, 0.153, 0.153, 0.153, 0.153, 0.153,
+theta_res   = [0.091, 0.091, 0.052, 0.150, 0.150, 0.150, 0.153, 0.153, 0.153, 0.153, 0.153, 0.153, 0.153, 0.153,
                0.153, 0.153, 0.153, 0.153, 0.153, 0.153]                      # [m3/m3]
-curve_par_a = [1.03, 1.03, 1.16, 2.03, 2.03, 2.03, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04,
+curve_par_a = [1.12, 1.12, 1.16, 2.03, 2.03, 2.03, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04, 2.04,
                2.04, 2.04, 2.04, 2.04]                                        # [1/m] van Genuchten alpha
-curve_par_n = [3.34, 3.34, 1.48, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34,
+curve_par_n = [2.18, 2.18, 1.48, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34, 1.34,
                1.34, 1.34, 1.34, 1.34]                                        # [-]   van Genuchten n
 ksat        = [2e-06, 2e-06, 1e-07, 5.44e-06, 5.44e-06, 5.44e-06, 4.83e-07, 4.83e-07, 4.83e-07, 4.83e-07, 4.83e-07,
                4.83e-07, 4.83e-07, 4.83e-07, 4.83e-07, 4.83e-07, 4.83e-07, 4.83e-07, 4.83e-07, 4.83e-07]   # [m/s]
-solid_conductivity = [1.35, 1.35, 1.81, 7.12, 7.12, 7.12, 7.03, 7.03, 7.03, 7.03, 7.03, 7.03, 7.03, 7.03, 7.03,
+solid_conductivity = [1.53, 1.53, 1.81, 7.12, 7.12, 7.12, 7.03, 7.03, 7.03, 7.03, 7.03, 7.03, 7.03, 7.03, 7.03,
                       7.03, 7.03, 7.03, 7.03, 7.03]                           # [W/m/K]
-dry_conductivity   = [0.0728, 0.0728, 0.0825, 0.202, 0.202, 0.202, 0.453, 0.453, 0.453, 0.453, 0.453, 0.453,
+dry_conductivity   = [0.0767, 0.0767, 0.0825, 0.202, 0.202, 0.202, 0.453, 0.453, 0.453, 0.453, 0.453, 0.453,
                       0.453, 0.453, 0.453, 0.453, 0.453, 0.453, 0.453, 0.453]  # [W/m/K]
-dry_heat_capacity  = [2.575e+05, 2.575e+05, 2.919e+05, 1.203e+06, 1.203e+06, 1.203e+06, 1.677e+06, 1.677e+06,
+dry_heat_capacity  = [2.444e+05, 2.444e+05, 2.919e+05, 1.203e+06, 1.203e+06, 1.203e+06, 1.677e+06, 1.677e+06,
                       1.677e+06, 1.677e+06, 1.677e+06, 1.677e+06, 1.677e+06, 1.677e+06, 1.677e+06, 1.677e+06,
                       1.677e+06, 1.677e+06, 1.677e+06, 1.677e+06]             # [J/m3/K]
 moss_depth  = 0.06                 # [m] the pit's Oi, live and dead moss over the soil ([surface_layer])

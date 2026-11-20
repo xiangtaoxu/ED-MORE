@@ -8,10 +8,11 @@ The soil column (soil_column) is the moist acidic tussock tundra's at NEON's TOO
 on the soil ([soil].moss_depth). The column's depths are the pit's less those 6 cm.
 
   * The organic horizons, Oe (6-17 cm in the pit, hemic) and Oa (17-21 cm, sapric), have no bulk density
-    or retention in the pit. Each takes the Imnavait Creek pit IMN-1's samples nearest its organic matter
+    or retention in the pit. Each takes the Imnavait Creek pit IMN-1's sample nearest it in decomposition
     (ORNL DAAC 2149, Bakian-Dogaheh et al. 2023; moist acidic tussock tundra 7 km south-east of the
-    tower): their bulk density and porosity, and one van Genuchten curve fitted to their paired water
-    content and matric potential with the porosity as theta_sat. Ks is peat's by its decomposition
+    tower): the hemic Oe IMN-1-2 (7.5-15 cm, fibre 0.39), the sapric Oa IMN-1-4 (22-29 cm, fibre 0.20,
+    organic matter 60 % against the Oa's 53 %); its bulk density and porosity, and the van Genuchten curve
+    fitted to its paired water content and matric potential with the porosity as theta_sat. Ks is peat's by its decomposition
     (Letts et al. 2000: hemic 2e-6, sapric 1e-7 m/s). The thermal properties are CLM5's blend of the
     mineral soil below (the Bg's texture) with peat, by the organic fraction from the pit's carbon and the
     samples' bulk density (Lawrence & Slater 2008).
@@ -45,10 +46,11 @@ PIT_SOIL_TOP = 0.06                     # [m] the pit's Oi, the moss layer: the 
 # (CALM's end-of-season thaw is 45-53 cm below the moss surface), then growing about 1.4-fold to 18 m.
 LAYER_BOTTOMS = [0.05, 0.11, 0.15, 0.23, 0.31, 0.39, 0.48, 0.57, 0.67, 0.80, 1.00, 1.30, 1.70, 2.30, 3.20,
                  4.50, 6.50, 9.50, 13.5, 18.0]
-# The organic horizons: the IMN-1 samples nearest each in organic matter (the pit's carbon / 0.58: Oe 70 %,
-# Oa 53 %; IMN-1-2 and -3, 7.5-22 cm, 64 and 73 %; IMN-1-4, 22-29 cm, 60 %), and peat's Ks by
-# decomposition (Letts et al. 2000).
-ORGANIC = {"Oe": dict(samples=[2, 3], ksat=2.0e-6),
+# The organic horizons: the IMN-1 sample nearest each in decomposition, the hemic Oe IMN-1-2 (fibre 0.39),
+# the sapric Oa IMN-1-4 (fibre 0.20; organic matter 60 %, the Oa's 53 %), and peat's Ks by decomposition
+# (Letts et al. 2000). IMN-1-3 (15-22 cm, fibre 0.33) fits a curve too steep for the frozen and the drying
+# peat (n 3.7: its pores near saturation almost to residual).
+ORGANIC = {"Oe": dict(samples=[2], ksat=2.0e-6),
            "Oa": dict(samples=[4], ksat=1.0e-7)}
 MINERAL = ["Bg", "Cg"]
 # The deep temperature: the nearest borehole of the northern foothills, Galbraith Lake (25 km south),
