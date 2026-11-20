@@ -144,6 +144,16 @@ co2_const      = 418.0
 recycle        = false             # the six tower years cover the run; the spin-up recycles them
 start_clamp    = "error"
 
+[soil_carbon]
+soil_carbon_on = true
+# The spin-up starts in steady state with the stand's litter (make_toolik_census.py's summary): the leaf fall
+# and fine-root turnover of the three PFTs, the shrubs' wood from their background mortality.
+spinup_steady      = true
+spinup_labile_grnd = 2.064832e-05     # [kgC/m2/day]
+spinup_labile_soil = 1.633816e-04
+spinup_struct_grnd = 1.127072e-05
+spinup_struct_soil = 7.727116e-05
+
 # Toolik's soil at NEON's megapit, below its Oi (0-6 cm), which is the moss on the soil (moss_depth): the
 # organic horizons Oe and Oa (6-21 cm in the pit), peat, then the gleyed silt loam with gravel, Bg and Cg
 # (21-73 cm), which the column carries to 18 m, where nothing deeper was measured. Each layer takes its
