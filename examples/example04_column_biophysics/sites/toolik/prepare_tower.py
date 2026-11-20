@@ -37,7 +37,6 @@ import glob
 import os
 import zipfile
 
-import numpy as np
 import pandas as pd
 
 MISSING = -9999
