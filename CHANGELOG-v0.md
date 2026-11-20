@@ -84,6 +84,18 @@ This file covers every 0.x release; version 1.0 starts `CHANGELOG-v1.md`. The fo
 
 ### Answer changes
 
+- The top soil layer's evaporation is limited by its supply: the whole demand until its water above residual, ice
+  included, falls to 10⁻⁴ of its span to saturation, then a smooth step to nothing at residual. A steep retention
+  curve keeps its pore air near saturation almost to residual (a peat of n 3.3 above half saturation down to
+  S_e = 10⁻⁹), so the layer evaporated until the solver could not represent what was left, and its water step failed.
+  The water network's Newton also keeps every soil layer's unknown above 10⁻¹² (docs/science/soil_biophysics.md, "The
+  soil water column"; soil_plant_water.md §3). Example 04's sites never reach the limit: their fluxes move by
+  round-off, at most 0.15 W/m² in an hour (Tonzi with ifx; gfortran's Tonzi is bit for bit). (#TBD)
+- A frozen soil layer's roots take up no water: each layer's soil-to-root conductance is multiplied by its roots'
+  contact, one at and above the triple point and none a kelvin below it, as CLM5 drops frozen layers from root water
+  uptake. A frozen layer just below the triple point, whose ice now supplies the water drawn from it, would otherwise
+  feed the roots by melting (docs/science/plant_hydraulics.md eq. (14)). In example 04's first year BCI is bit for
+  bit, and Harvard's and Tonzi's fluxes move by under 0.002 W/m² in any hour. (#TBD)
 - A frozen soil layer's ice supplies the water drawn out of it. Water a frozen layer loses below the liquid it
   starts a step with (sublimation, drainage, root uptake) melts its ice, its liquid staying at the freezing curve's
   potential, where it used to come from the liquid alone. A steep retention curve, a peat's, holds too little liquid

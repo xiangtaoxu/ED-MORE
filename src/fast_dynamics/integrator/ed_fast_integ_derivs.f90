@@ -33,7 +33,7 @@ module ed_fast_integ_derivs
    use ed_plant_hydr_lib,   only : tissue_water_relations, tissue_water_to_rwc, tissue_rwc_to_unknown,            &
                                    tissue_psi_to_rwc
    use ed_plant_hydraulics,   only : supply_limited_transpiration, root_water_uptake_profile, xylem_sapflow
-   use ed_soil_water, only : soil_water_flux, ground_evaporation_rate, bottom_flux
+   use ed_soil_water, only : soil_water_flux, ground_evaporation_rate, bottom_flux, evaporation_supply
    use ed_linear_algebra, only : arrowhead_system_t
    use ed_soil_params, only : soil_profile_t, soil_params_t
    use ed_pft_params, only : hydraulics_table_t
@@ -353,7 +353,7 @@ contains
       logical,                   intent(in)    :: with_jacobian
       integer(ik) :: k, i, ca, cb, c, nsl, nsoil
       real(wp) :: q, dq_pa, dq_pb, dq_ka, dq_kb, dqa, dqb, u, s, ds_w, ds_l
-      real(wp) :: e, de_dtheta, de_dpsi, de, qbot, dqbot_dpsi, dqbot_dk, theta1
+      real(wp) :: e, de_dtheta, de_dpsi, de, qbot, dqbot_dpsi, dqbot_dk, theta1, span, supply, dsupply
       real(wp) :: psi_w, dpsi_w, u_sum, dqb_sum, du_dpsi(profile%n_active), du_dk(profile%n_active)
 
       nsl   = profile%n_active
@@ -431,6 +431,13 @@ contains
       c = 2_ik
       theta1 = ev%water_soil(c) / (rho_h2o * profile%dz(1)) - (1.0_wp - soil%dsl_theta_init) * drive%ice(1)%theta_ice
       call ground_evaporation_rate(theta1, ev%psi_soil(c), drive%ground, soil, e, de_dtheta, de_dpsi)
+      !--- The layer supplies it while it holds water above residual, ice included.
+      span = profile%theta_sat(1) - profile%theta_res(1)
+      call evaporation_supply((ev%water_soil(c) / (rho_h2o * profile%dz(1)) - profile%theta_res(1)) / span,     &
+                              supply, dsupply)
+      de_dtheta = supply * de_dtheta + e * dsupply / span
+      de_dpsi   = supply * de_dpsi
+      e         = supply * e
       ev%evap = e
       ev%inflow_soil(c) = ev%inflow_soil(c) - e
       if (with_jacobian) sys%a(c, c) = sys%a(c, c)                                                              &
@@ -446,14 +453,16 @@ contains
 
       !---~---
       !   Each cohort: uptake from its layers, sapflow to its leaves, and transpiration. The
-      ! cohort's uptake comes from its whole root profile at once; its own sums are kept in
+      ! cohort's uptake comes from its whole root profile at once, each layer's conductance
+      ! times its roots' contact with it (none once it freezes); its own sums are kept in
       ! scalars over its layers and written once.
       !---~---
       do i = 1_ik, static%n
          psi_w = ev%psi_coh(WOOD, i)
          dpsi_w = ev%dpsi_coh(WOOD, i)
-         call root_water_uptake_profile(nsl, static%g_rhizo(1:nsl, i), ev%k_soil(2:nsoil), ev%psi_soil(2:nsoil), &
-                                        profile%z_node(1:nsl), psi_w, ev%uptake(1:nsl, i), du_dpsi, du_dk)
+         call root_water_uptake_profile(nsl, static%g_rhizo(1:nsl, i) * drive%root_contact(1:nsl),                  &
+                                        ev%k_soil(2:nsoil), ev%psi_soil(2:nsoil), profile%z_node(1:nsl), psi_w,       &
+                                        ev%uptake(1:nsl, i), du_dpsi, du_dk)
          u_sum = 0.0_wp
          dqb_sum = 0.0_wp
          do k = 1_ik, nsl
