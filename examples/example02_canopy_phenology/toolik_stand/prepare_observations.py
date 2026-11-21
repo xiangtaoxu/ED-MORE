@@ -16,7 +16,9 @@
     leaf buds" is seen. Their old leaves stay: no share of their canopy is recorded.
 * PhenoCam's daily green chromatic coordinate of the tundra in the tower-top camera's view (NEON.D18.TOOL.
   DP1.00033, ROI TN_1000, gcc_90; Seyednasrollah et al. 2019, PhenoCam V2.0): a 7-day running median,
-  scaled in each calendar year between its least and most, as the fit scales the stand's leaf area.
+  scaled in each calendar year between its least and most, as the fit scales the stand's leaf area, and
+  kept from June to September (SNOW_FREE): under the snow the camera reads a fifth of its range, where the
+  stand's leaf area is at its least.
 
 Usage:
   python prepare_observations.py --neon <toolik data>/neon --phenocam <toolik data>/phenocam
@@ -33,6 +35,7 @@ OUT = os.path.join(HERE, "..", "data", "toolik_stand")
 CLASS_MIDDLE = {"< 5%": 0.025, "5-24%": 0.145, "25-49%": 0.37, "50-74%": 0.62, "75-94%": 0.845, ">= 95%": 0.975}
 MIN_PLANTS = 5                       # a day's mean needs this many plants seen
 FIRST_YEAR = 2018                    # NEON's first full season at TOOL (its first began on 13 July 2017)
+SNOW_FREE = (6, 7, 8, 9)             # the months the camera's view is clear of snow
 
 
 def read_neon(folder):
@@ -87,13 +90,13 @@ def first_budbreak(status, forms):
 
 
 def gcc(path):
-    """The camera's daily gcc_90, a 7-day running median, scaled in each calendar year to 0-1."""
+    """The camera's daily gcc_90, a 7-day running median, scaled in each calendar year to 0-1, in SNOW_FREE."""
     d = pd.read_csv(path, comment="#", usecols=["date", "gcc_90"], na_values=["NA"])
     s = d.set_index(pd.to_datetime(d["date"]))["gcc_90"].asfreq("D").rolling(7, center=True, min_periods=4).median()
     year = s.index.year
     lo, hi = s.groupby(year).transform("min"), s.groupby(year).transform("max")
     full = s.groupby(year).transform("count") >= 120                   # the snow-free season the camera sees
-    x = ((s - lo) / (hi - lo)).where(full).dropna()
+    x = ((s - lo) / (hi - lo)).where(full & s.index.month.isin(SNOW_FREE)).dropna()
     return pd.DataFrame({"date": x.index.strftime("%Y-%m-%d"), "value": x.round(4).values})
 
 

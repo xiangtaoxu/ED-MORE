@@ -175,30 +175,32 @@ specific_root_length = 20000.0
 fine_root_radius     = 0.00025
 
 # Leaf phenology (docs/science/plant_phenology.md): every PFT flushes on warmth and long days and sheds on cold
-# and short days, as Harvard's broadleaves do (example 02, part 2). The starting values put the cues on the
-# deciduous shrubs' dates at NEON TOOL (half green about day 175, bare by day 245): the warmth above 5 C summed
-# from 1 January reaches 108 K day by day 175, and the cold below 10 C summed from midsummer 123 K day by day 235
-# (the tower's air, 2019-2024). Example 02's part 4 fits them. The evergreens keep half their leaves through
-# the winter: R. tomentosum's leaves live about two years (Shaver 1981, Oecologia 49:362); the sedge keeps a
-# tenth green, as NEON's graminoids are at the season's end.
+# and short days, as Harvard's broadleaves do (example 02, part 2), fitted in example 02, part 4
+# (toolik_stand/phenology.toml) to NEON's tagged plants at TOOL and the tower camera, 2019-2024: for the sedge and
+# the deciduous shrubs, the warmth and the day length that flush them and how fast, and the cold, the day length
+# and the rate that end their season; for the evergreens, the warmth that breaks their buds and how fast the
+# shoots fill. The flush runs until the hours of light fall below about 21 (early August); the cold the shed
+# needs is summed below about 20 C, every day at Toolik, so it counts the days from midsummer. The evergreens
+# keep half their leaves through the winter: R. tomentosum's leaves live about two years (Shaver 1981, Oecologia
+# 49:362), their shed not fitted; the sedge keeps a tenth green, as NEON's graminoids are at the season's end.
 [phenology]
 flush_cue_mask        = [3, 3, 3]
 shed_cue_mask         = [3, 3, 3]
 flush_cue_timescale   = [5.0, 5.0, 5.0]
 shed_cue_timescale    = [5.0, 5.0, 5.0]
-flush_rate_max        = [0.117051, 0.06667, 0.117051]
-shed_rate_max         = [0.244309, 0.05, 0.244309]
+flush_rate_max        = [0.045773, 0.263052, 0.055505]
+shed_rate_max         = [0.240605, 0.05, 0.318429]
 min_leaf_cover        = [0.1, 0.5, 0.0]
 bare_leaf_cover       = [0.02, 0.02, 0.02]
 flush_base_temp       = [278.15, 278.15, 278.15]
-flush_degree_days     = [108.0, 108.0, 108.0]
+flush_degree_days     = [8.3169, 109.29, 5.891]
 flush_temp_sharpness  = [0.04, 0.04, 0.04]
-shed_base_temp        = [283.15, 283.15, 283.15]
-shed_degree_days      = [123.0, 123.0, 123.0]
+shed_base_temp        = [292.82, 283.15, 293.09]
+shed_degree_days      = [391.55, 123.0, 460.22]
 shed_temp_sharpness   = [0.1, 0.1, 0.1]
 par_min               = [2.0, 2.0, 2.0]
-flush_light_hours     = [16.0, 16.0, 16.0]
+flush_light_hours     = [21.388, 16.0, 21.437]
 flush_light_sharpness = [4.0, 4.0, 4.0]
-shed_light_hours      = [16.0, 16.0, 16.0]
+shed_light_hours      = [17.545, 16.0, 20.425]
 shed_light_sharpness  = [-1.0, -1.0, -1.0]
 light_window          = [10.0, 10.0, 10.0]

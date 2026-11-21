@@ -4,7 +4,8 @@ The coupled column in moist acidic tussock tundra on the northern foothills of t
 NEON's TOOL tower (AmeriFlux US-xTL, 8.9 m), 2019–2024. It is ED-MORE's first site over permafrost: an 18 m
 soil column whose base is the permafrost's temperature, peat over mineral soil, a moss layer on the ground,
 snow that buries the plants, and dwarf shrubs, woody plants sized by their stems' diameter at the ground.
-**Status: prototype.** The calibration and the phenology fit (example 02's part 4) are not run yet.
+**Status: prototype.** Its phenology is fitted in example 02's part 4; the fast-parameter calibration is
+not run yet.
 
 The example:
 
@@ -13,7 +14,8 @@ The example:
 2. builds the soil column from NEON's soil pit and Imnavait Creek's peat, and a frozen stand from the site's
    harvest and plant cover, each plant type on its own land-cover patch;
 3. spins the permafrost column up for 30 years on the six tower years;
-4. compares the six tower years with the tower's fluxes, and the soil's temperature with NEON's sensors.
+4. compares the six tower years with the tower's fluxes, and draws the soil column day by day, its
+   temperature against NEON's sensors and its liquid water.
 
 ## Run
 
@@ -21,7 +23,8 @@ The example:
 cd examples/example04_column_biophysics/sites/toolik
 python run_site.py --data <toolik> --ameriflux AMF_US-xTL_FLUXNET_2019-2024_v1.3_r1.zip
 python run_site.py ... --forcing-only          # the tower file and the forcing only
-python plot_evaluation.py                      # the figure and output/evaluation_stats.json
+python plot_evaluation.py                      # evaluation.png and output/evaluation_stats.json
+python plot_soil.py                            # soil.png: the soil column, day by day
 ```
 
 `<toolik>` holds:
@@ -34,7 +37,7 @@ python plot_evaluation.py                      # the figure and output/evaluatio
   `1-s2.0-S0378112714006094-mmc1.csv`).
 
 The FLUXNET zip needs an AmeriFlux account. [`toolik_traits.py`](toolik_traits.py) prints the soil
-column's values in [`ed_config_eval.toml`](ed_config_eval.toml). Every step takes about 9 minutes on 4
+column's values in [`ed_config_eval.toml`](ed_config_eval.toml). Every step takes about 10 minutes on 4
 threads with the dev build: the spin-up's 30.5 years and the six tower years.
 
 ## The data
@@ -49,6 +52,7 @@ threads with the dev build: the spin-up's 30.5 years and the six tower years.
 | Stand | the ARC LTER MAT06 control plots' harvest (2012, 10 km away; knb-lter-arc.20158.2), split among the plant types by NEON's cover (DP1.10058.001, 2019–2024). **Not measured plants** ([`make_toolik_census.py`](make_toolik_census.py)) |
 | Shrub allometry | the dwarf birch harvested by Berner et al. (2015, Appendix A); the shrubs' heights from Walker & Barry's Toolik Lake plots (ORNL DAAC 1333) and the Tundra Trait Team (Bjorkman et al. 2018) |
 | Traits | from the site literature, each value's source in [`pft_parameters.toml`](pft_parameters.toml) |
+| Phenology | fitted in [example 02, part 4](../../../example02_canopy_phenology/README.md#part-4--a-tundra-toolik) to NEON's tagged plants at TOOL (DP1.10055.001) and the tower camera's greenness (PhenoCam, NEON.D18.TOOL.DP1.00033) |
 
 ## 1. The model
 
@@ -74,9 +78,11 @@ threads with the dev build: the spin-up's 30.5 years and the six tower years.
   birch's new growth is 0.37 of its wood, as MAT06's deciduous new leaves and stems are 0.40 of their old
   stems. The evergreens stand at Ledum palustre's median height north of 60° N (Tundra Trait Team, 190
   plants), Ledum holding three quarters of their stems.
-- **The phenology** has starting values, not a fit: every type flushes on warmth and long days and sheds on
-  cold and short days, the cues set on the deciduous shrubs' dates at NEON TOOL (half green about day 175,
-  bare by day 245). The evergreens keep half their leaves through the winter, the sedge a tenth.
+- **The phenology** is fitted in [example 02, part 4](../../../example02_canopy_phenology/README.md#part-4--a-tundra-toolik):
+  every type flushes on warmth and long days and sheds on cold and short days. The flush runs until the
+  hours of light fall below about 21 (late July), and the season ends in August, as NEON's tagged plants'
+  does. The deciduous shrubs break bud about 9 days late: their crowns are under the snow until it melts.
+  The evergreens keep half their leaves through the winter, the sedge a tenth.
 - **The roots** reach Alaska's maximum rooting depths for the species (Chapin et al. 1996): 34 cm for the
   sedge, 14 for the deciduous shrubs, 9.5 for the evergreens, below the moss.
 - **The soil** is 18 m in 20 layers, 5–9 cm thick through the horizons and the active layer. The Oe and Oa
@@ -110,41 +116,51 @@ Means over the tower's measured hours, 2019–2024, every hour of the day weight
 
 | | tower | ED-MORE | June–August bias | December–February bias |
 |---|---|---|---|---|
-| GPP [µmol m⁻² s⁻¹] | 0.59 | 0.97 | +1.21 | −0.05 |
-| NEE [µmol m⁻² s⁻¹] | −0.09 | −0.43 | −1.05 | +0.02 |
-| LE [W m⁻²] | 13.3 | 30.4 | +38.2 | +4.1 |
-| H [W m⁻²] | −1.6 | −10.8 | −3.0 | −16.0 |
-| net radiation [W m⁻²] | 17.2 | 21.5 | +7.8 | +0.3 |
+| GPP [µmol m⁻² s⁻¹] | 0.59 | 0.97 | +1.39 | −0.05 |
+| NEE [µmol m⁻² s⁻¹] | −0.09 | −0.45 | −1.18 | 0.00 |
+| LE [W m⁻²] | 13.3 | 30.8 | +39.0 | +4.0 |
+| H [W m⁻²] | −1.6 | −10.8 | −2.7 | −16.1 |
+| net radiation [W m⁻²] | 17.2 | 21.7 | +8.0 | +0.4 |
 
 - **The net radiation follows the tower** through the year, the snow's albedo and the polar night included.
-- **The summer's LE is twice the tower's,** 81–87 against 41–42 W m⁻² in June and July, while H follows it.
+- **The summer's LE is twice the tower's,** 81–88 against 41–42 W m⁻² in June and July, while H follows it.
   About half of the excess is the tower's: over the summer hours it measured all four fluxes, its H + LE
   close to 0.71 of its net radiation less its ground heat flux, 24 W m⁻² short, about 14 of them LE at its
-  own Bowen ratio. The rest is the model's: 9 W m⁻² more net radiation and more of it as LE.
-- **The season is too productive and too long:** GPP peaks at 4.9 against 3.3 µmol m⁻² s⁻¹ in July and
-  stays at 1.4 in September, when the tower's is 0.35. The phenology's starting values shed the leaves
-  late; example 02's part 4 is to fit them.
+  own Bowen ratio. The rest is the model's: 9 W m⁻² more net radiation and more of it as LE. In June 2019
+  the ground's evaporation, from the wet moss and the soil beneath it, was 2.7 of the model's 3.0 mm a
+  day of evapotranspiration, and the plants' transpiration 0.2 (a diagnostic run before the phenology fit):
+  the moss evaporates as open water in proportion to how full it is ([`docs/science/surface_organic_layer.md`](../../../../docs/science/surface_organic_layer.md)), and
+  its 6 cm hold up to 54 mm.
+- **The season is too productive:** GPP is 5.0 against 3.3 µmol m⁻² s⁻¹ in July and 2.8 against 1.5 in June.
+  With the phenology fitted it ends as the tower's does, 0.7 against 0.35 in September.
 - **In winter the air heats the snow:** H is −30 to −39 W m⁻² against the tower's −17 to −20, and the snow
   sublimes about 4 W m⁻² more. The ground is too cold (section 4), so the snow draws its heat from the air
   instead.
 
 ## 4. The soil and the snow
 
-The model's daily soil temperature against NEON's sensors at the tower (FLUXNET's TS_F_MDS_1, 4 and 7),
-2019–2024, the model's depth below the moss's top:
+![The Toolik column day by day, 2019-2024: the snow's depth; the soil's temperature in its top 2 m with the model's 0 °C line and NEON's sensors' thaw front; the soil's liquid water](soil.png)
+
+The column's top 2 m day by day ([`plot_soil.py`](plot_soil.py)): the snow, the soil's temperature with
+the model's 0 °C line and the thaw front of NEON's sensors at the tower (2–56 cm), and its liquid water.
+The depth is below the soil's surface, as NEON measures its sensors; the moss is the row above it. The
+model's daily soil temperature against those sensors (FLUXNET's TS_F_MDS_1, 4 and 7), 2019–2024:
 
 | °C | 2 cm, tower / ED-MORE | 26 cm | 56 cm |
 |---|---|---|---|
-| annual mean | −0.6 / −3.2 | −1.3 / −3.9 | −1.5 / −4.0 |
-| June–August | 7.7 / 6.8 | 1.7 / 2.0 | −0.2 / 0.7 |
-| December–February | −4.7 / −9.9 | −2.6 / −8.6 | −1.6 / −7.8 |
-| maximum | 19.6 / 14.3 | 5.5 / 6.2 | 1.2 / 4.0 |
+| annual mean | −0.6 / −3.2 | −1.3 / −4.0 | −1.5 / −4.0 |
+| June–August | 7.7 / 6.9 | 1.7 / 1.6 | −0.2 / 0.5 |
+| December–February | −4.7 / −10.0 | −2.6 / −8.5 | −1.6 / −7.7 |
+| maximum | 19.6 / 14.4 | 5.5 / 5.5 | 1.2 / 3.7 |
 
-- **The ground is about 2.5 °C too cold over the year and 5–6 °C in winter,** at every depth: the column
+- **The thaw keeps going.** Through June and early July the model's thaw front follows the sensors'; from
+  mid July theirs stops near 50 cm, at the permafrost's table, and the model's goes on, to 1.3–1.9 m (2.4 m
+  in 2019), against CALM's 45 cm on the moist acidic tundra plots. The mineral soil below the peat holds
+  little ice to melt: the texture formulas give the Cg a residual water of 0.153 m³ m⁻³ of its 0.239, which
+  stays liquid frozen, so in January the Cg holds 0.20–0.23 m³ m⁻³ of water and 0.16 of it liquid. Toolik's
+  upper permafrost is ice-rich, and its ice's latent heat holds the thaw.
+- **The ground is about 2.5 °C too cold over the year and 6 °C in winter,** at every depth: the column
   settles to the borehole's −4.4 °C at 20 m, where NEON's 56 cm sensors average −0.1 to −1.9 °C.
-- **The summer reaches too deep:** at 56 cm the model peaks at 4.0 °C, the tower at 1.2. The model thaws
-  to 1.4–1.7 m in most years (2.5 m in 2019), against CALM's 45 cm on the moist acidic tundra plots and a
-  thaw just past NEON's 56 cm sensors.
 - **The snow comes and goes on time:** 0.34–0.50 m in April (0.96 m in 2019) and gone by 21–29 May; the
   Toolik Field Station's sonic sensor peaks at 26–60 cm with the ground bare by 3–27 May, and the Imnavait
   SNOTEL, 6 km away, at 58–114 cm, bare by 19 May–19 June.
@@ -152,10 +168,12 @@ The model's daily soil temperature against NEON's sensors at the tower (FLUXNET'
 ## Limitations
 
 1. **The ground's temperature.** Too cold in winter and thawing too deep in summer, the soil swings too far
-   both ways. Three causes to test: the base held at Galbraith Lake's −4.4 °C, where TOOL's ground is
-   warmer; the snow's insulation; and the mineral soil's ice, whose latent heat slows the thaw.
+   both ways. The thaw first: the mineral soil holds too little ice, its residual water from the texture
+   formulas staying liquid when frozen. Then the cold: the base held at Galbraith Lake's −4.4 °C, where
+   TOOL's ground is warmer, and the snow's insulation.
 2. **The summer's LE.** Half the excess is the tower's closure gap, which the calibration can share out as
-   at BCI and Harvard; the rest is the model's, to be read after the calibration and the phenology fit.
+   at BCI and Harvard. The rest is mostly the moss's evaporation, which no fast parameter reaches: it
+   evaporates as open water in proportion to how full it is, where a real moss's dried top resists it.
 3. **The evergreens are upright shoots.** The height law is for erect stems, whose height is their length;
    Toolik's evergreens creep, their stems longer than the canopy is tall, so at 8 cm the stand holds 4,500
    stems m⁻² of 0.89 mm. A Ledum law (Rhododendron groenlandicum in a Minnesota bog, SPRUCE) would make them
@@ -163,7 +181,7 @@ The model's daily soil temperature against NEON's sensors at the tower (FLUXNET'
    through the 2.3 times larger wood area, and leaves GPP unchanged.
 4. **The roughness is fitted, not computed.** z0/h depends on the canopy's density; Raupach (1994) gives it
    from the plant area, which would let it follow the leaves and the snow through the year.
-5. **The water solves.** 357 soil-water solves in the spin-up and 120 in the six years do not converge; the
+5. **The water solves.** 590 soil-water solves in the spin-up and 199 in the six years do not converge; the
    solver carries them through, and the water and energy budgets still close.
 6. **The stand is not a census.** One cohort per plant type, from a 2012 harvest 10 km away and NEON's
    cover; the moss neither photosynthesises nor transpires.
@@ -178,4 +196,4 @@ The model's daily soil temperature against NEON's sensors at the tower (FLUXNET'
 | [`make_toolik_census.py`](make_toolik_census.py) | the stand from the harvest and the cover, the shrubs' allometry, and the steady litter input for the soil carbon |
 | [`ed_config_eval.toml`](ed_config_eval.toml), [`pft_parameters.toml`](pft_parameters.toml), [`output_variables.toml`](output_variables.toml) | the ED-MORE run, its PFTs and its output |
 | [`calibration.toml`](calibration.toml) | the calibration's Toolik choices |
-| [`plot_evaluation.py`](plot_evaluation.py) | the figure |
+| [`plot_evaluation.py`](plot_evaluation.py), [`plot_soil.py`](plot_soil.py) | the figures: the fluxes against the tower, and the soil column day by day |

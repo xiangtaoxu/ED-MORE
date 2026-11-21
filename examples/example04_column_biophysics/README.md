@@ -23,7 +23,7 @@ Each site is a folder in [`sites/`](sites), with its own README, data, configura
 | [Harvard Forest](sites/harvard/README.md), Massachusetts | temperate broadleaf and conifer forest | NEON HARV (AmeriFlux US-xHA), 39 m | 2019–2024 (scored from 2020) | the ForestGEO plot's 2019 census within 200 m of the tower, frozen; a deciduous and a conifer PFT, their phenology fitted with each cohort's own cues | calibrated (both PFTs' capacity and stomata) |
 | Guánica, Puerto Rico | tropical dry forest | NEON GUAN (PR-xGU) | 2019–2024 | NEON's vegetation structure | planned |
 | [Tonzi Ranch](sites/tonzi/README.md), California | oak savanna | AmeriFlux US-Ton, 23.5 m | 2010–2019 (scored from 2011) | oaks at the field survey's size distributions over a C3 annual grass, frozen; their phenology fitted with each cohort's own cues | prototype; the oaks' water path fitted to their measured leaf potential; calibrated with H and LE as measured (its README) |
-| [Toolik](sites/toolik/README.md), Alaska | tussock tundra over permafrost | NEON TOOL (AmeriFlux US-xTL), 8.9 m | 2019–2024, from a 30-year spin-up | synthesised from the site's harvest and NEON's cover, frozen: a tussock sedge and evergreen and deciduous dwarf shrubs, each on its own land-cover patch | prototype; not calibrated (its README) |
+| [Toolik](sites/toolik/README.md), Alaska | tussock tundra over permafrost | NEON TOOL (AmeriFlux US-xTL), 8.9 m | 2019–2024, from a 30-year spin-up | synthesised from the site's harvest and NEON's cover, frozen: a tussock sedge and evergreen and deciduous dwarf shrubs, each on its own land-cover patch; their phenology fitted with each cohort's own cues | prototype; not calibrated (its README) |
 
 ## Results at a glance
 
@@ -40,7 +40,7 @@ is u\*-filtered), and a plain mean over its measured hours would be mostly a mea
 | Harvard, calibrated | 4.56 / 5.22 | 41.1 / 45.0 | 25.2 / 51.3 | 87.3 / 87.3 |
 | Tonzi, default | 2.85 / 3.22 | 31.9 / 35.9 | 57.8 / 49.2 | 103.3 / 81.6 |
 | Tonzi, calibrated | 2.85 / 3.14 | 31.9 / 30.3 | 57.8 / 53.4 | 103.3 / 81.4 |
-| Toolik, default | 0.59 / 0.97 | 13.3 / 30.4 | −1.6 / −10.8 | 17.2 / 21.5 |
+| Toolik, default | 0.59 / 0.97 | 13.3 / 30.8 | −1.6 / −10.8 | 17.2 / 21.7 |
 
 BCI's and Harvard's towers close their energy balance to about 0.75 of the net radiation, and at both the
 calibration's attribution test gives the gap to H: most of the model's higher H is the tower's missing H.

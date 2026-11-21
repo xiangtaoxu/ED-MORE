@@ -31,6 +31,7 @@ mean_growth_resp_py      = "D"
 # The permafrost column, the organic layer and the snow.
 mean_soil_temp_layer_si  = "F D"   # soil temperature, all layers  <-> TS (NEON, 2-56 cm); the thaw depth
 mean_soil_water_layer_si = "F D"   # volumetric soil water, liquid and ice  <-> SWC
+mean_soil_fliq_layer_si  = "D"     # its liquid share, for the soil figure (plot_soil.py)
 mean_organic_temp_py     = "F D"   # the moss and litter's temperature, the surface the snow lies on
 mean_organic_water_py    = "D"     # their water
 mean_swe_py              = "D"     # snow water equivalent       <-> the SNOTEL pillow, the snow surveys
