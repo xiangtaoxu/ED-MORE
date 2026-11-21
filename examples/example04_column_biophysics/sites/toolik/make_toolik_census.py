@@ -22,10 +22,13 @@ evergreen dwarf shrubs (Rhododendron tomentosum, Vaccinium vitis-idaea, Empetrum
    most of the site's deciduous stems. The same table's tundra willows from the foothills near Toolik
    give nearly the same height law. No evergreen dwarf shrub was harvested, so both shrub PFTs take the
    birch's laws.
-4. One cohort per shrub PFT, at the shrubs' height in the site's tussock tundra: the median of the mean
-   shrub height in Walker & Barry's (1991) six tussock-tundra plots at Toolik Lake (ORNL DAAC 1333,
-   WALKER). Its diameter is the one the height law gives at that height; nplant = the PFT's stems over
-   one stem's wood.
+4. One cohort per shrub PFT at its height: the deciduous shrubs at the shrub height of the site's tussock
+   tundra, the median of the mean shrub height in Walker & Barry's (1991) six tussock-tundra plots at
+   Toolik Lake (ORNL DAAC 1333, WALKER), which the taller deciduous shrubs set; the evergreens lower, at
+   Ledum palustre's median height north of 60 N, 8.0 cm (the Tundra Trait Team, Bjorkman et al. 2018,
+   Global Ecol. Biogeogr. 27:1402; 190 plants), Ledum holding three quarters of the evergreens' stems in
+   MAT06. Each cohort's diameter is the one the height law gives at its height; nplant = the PFT's stems
+   over one stem's wood.
 5. The sedge: one row of tillers, diameter 0, at its PFT's height. No count of tillers was found; in a
    frozen stand only the leaf area matters, so TILLERS is a choice and lai_b1 its leaf area over it.
 6. The patches: plants that do not compete for light do not share a patch. The deciduous shrubs and the
@@ -69,6 +72,7 @@ FORM = {"Eriophorum": SEDGE, "Carex": SEDGE, "Luzula": SEDGE, "Calamagrostis": S
 COVER_YEARS = range(2019, 2025)
 BERNER = os.path.join("berner2015", "1-s2.0-S0378112714006094-mmc1.csv")
 WALKER = os.path.join("ornl_above", "Toolik_Lake_Veg_Plots", "Toolik_Lake_Environmental_Data.csv")
+EVERGREEN_HEIGHT = 0.08                 # [m] Ledum palustre's median height north of 60 N (see 4.)
 TILLERS = 1000.0                        # [tillers m-2] the sedge's, a choice (see 5.)
 PATCH = {DECIDUOUS: 1, SEDGE: 2, EVERGREEN: 3}   # the patch each PFT's cohort stands on (see 6.)
 
@@ -131,7 +135,8 @@ def shrub_laws(data):
 
 
 def shrub_height(data):
-    """[m] the median of the mean shrub height in WALKER's tussock-tundra plots (see 4.)."""
+    """[m] the deciduous shrubs' height: the median of the mean shrub height in WALKER's tussock-tundra
+    plots (see 4.)."""
     w = pd.read_csv(os.path.join(data, WALKER), encoding="latin-1")
     plots = w[(w["PRINCIPAL_HABITAT"].str.strip() == "Moist tundra-tussock tundra") & (w["MEAN_SHRUB_HEIGHT"] > 0)]
     return float(plots["MEAN_SHRUB_HEIGHT"].median()) / 100.0
@@ -177,7 +182,7 @@ def steady_litter(cohorts, pft_file):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--data", required=True, help="the Toolik data folder (arc_lter/, neon/)")
+    ap.add_argument("--data", required=True, help="the Toolik data folder (arc_lter/, neon/, ornl_above/, berner2015/)")
     ap.add_argument("--out", required=True)
     ap.add_argument("--pft-file", default=os.path.join(HERE, "pft_parameters.toml"))
     args = ap.parse_args(argv)
@@ -195,8 +200,9 @@ def main(argv=None):
     pft_values["lai_b2"][SEDGE] = 0.0
     pft_values["wai_b1"][SEDGE] = 0.0
     laws = shrub_laws(args.data)
-    height = shrub_height(args.data)
+    heights = {EVERGREEN: EVERGREEN_HEIGHT, DECIDUOUS: shrub_height(args.data)}
     for p in (EVERGREEN, DECIDUOUS):
+        height = heights[p]
         allom, diameter, stem = shrub_allometry(pp[p]["rho"], height, laws)
         stems_c = stems[p] * lai[p] / area_harvest[p] * 1.0e-3 * C_PER_DRY            # [kgC m-2]
         nplant = stems_c / stem
@@ -224,7 +230,7 @@ def main(argv=None):
             fh.write(f"1,{PATCH[p]},{i},{diameter:.4f},{height:.3f},{p},{nplant / area[p]:.6g},{area[p]:.4f}\n")
 
     summary = {"shrub_laws_a_b_n": {k: (round(a, 3), round(b, 3), n) for k, (a, b, n) in laws.items()},
-               "shrub_height_m": height,
+               "shrub_height_m": heights,
                "harvest_leaves_g_m2": leaves, "harvest_stems_g_m2": stems,
                "harvest_leaf_area": {p: round(v, 3) for p, v in area_harvest.items()}, "harvest_lai": round(total, 3),
                "cover_shares": {p: round(v, 3) for p, v in shares.items()},

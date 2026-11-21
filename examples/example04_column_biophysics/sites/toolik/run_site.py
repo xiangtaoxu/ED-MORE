@@ -15,7 +15,8 @@ Steps (the tower file, the forcing and the census file are kept once made; --for
   6. with --calibrate: the fast parameters fitted to the tower (calibration.toml, scripts/calibrate_fast)
   7. the calibrated run, when calibration/ed_config_calibrated.toml exists
 
-The data: --data is the Toolik data folder (neon/, ornl_above/, arc_lter/, uscrn_toolik/); --ameriflux is
+The data: --data is the Toolik data folder (neon/, ornl_above/, arc_lter/, uscrn_toolik/, berner2015/; the
+README lists each); --ameriflux is
 the US-xTL FLUXNET zip (AMF_US-xTL_FLUXNET_2019-2024_v1.3_r1.zip, from AmeriFlux with an account).
 
 Usage:

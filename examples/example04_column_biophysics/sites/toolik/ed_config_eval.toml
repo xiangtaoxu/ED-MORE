@@ -145,13 +145,13 @@ start_clamp    = "error"
 
 [aerodynamics]
 # The canopy's roughness over its height. The stand is three land-cover patches (make_toolik_census.py), each
-# rough by its own plants' height, the shrubs' 20 cm and the tussocks' 14.6, so the site's roughness at the
-# tower is their blend (Mason 1988). The plants are sparse and the moss shows between them: the tower's
-# near-neutral roughness in June-August, 0.0076 m (u* over the log law at 8.9 m, |z/L| < 0.05, 2019-2024),
-# is the blend's when the roughness is 0.039 of the height, against a dense canopy's 0.13 (the model's
-# default, which makes the blend 0.025 m and u* a quarter too high). The moss's own roughness is below
-# that, so the plants set it; no measurement of the moss's was found. Over snow the tower reads 0.0019 m.
-z0m_ratio  = 0.039
+# rough by its own plants' height, the deciduous shrubs' 20 cm, the tussocks' 14.6 and the evergreens' 8, so
+# the site's roughness at the tower is their blend (Mason 1988). The plants are sparse and the moss shows
+# between them: the tower's near-neutral roughness in June-August, 0.0076 m (u* over the log law at 8.9 m,
+# |z/L| < 0.05, 2019-2024), is the blend's when the roughness is 0.076 of the height, against a dense
+# canopy's 0.13 (the model's default, which makes the blend 0.013 m). The moss's own roughness is below the
+# evergreens', so the plants set it; no measurement of the moss's was found. Over snow the tower reads 0.0019 m.
+z0m_ratio  = 0.076
 soil_rough = 0.005                   # [m]
 
 [soil_carbon]
@@ -159,10 +159,10 @@ soil_carbon_on = true
 # The spin-up starts in steady state with the stand's litter (make_toolik_census.py's summary): the leaf fall
 # and fine-root turnover of the three PFTs, the shrubs' wood from their background mortality.
 spinup_steady      = true
-spinup_labile_grnd = 2.064831e-05     # [kgC/m2/day]
+spinup_labile_grnd = 2.064830e-05     # [kgC/m2/day]
 spinup_labile_soil = 1.633813e-04
 spinup_struct_grnd = 1.127072e-05
-spinup_struct_soil = 7.727108e-05
+spinup_struct_soil = 7.727105e-05
 
 # Toolik's soil at NEON's megapit, below its Oi (0-6 cm), which is the moss on the soil (moss_depth): the
 # organic horizons Oe and Oa (6-21 cm in the pit), peat, then the gleyed silt loam with gravel, Bg and Cg
