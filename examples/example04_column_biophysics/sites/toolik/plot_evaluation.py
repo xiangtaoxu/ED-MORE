@@ -6,14 +6,14 @@ The tower and the model are read as at every site (../../evaluation.py: the site
 where it was measured, the model's UTC hours moved to local time). Tundra over permafrost has two
 regimes, so the figure has three rows for carbon (GPP, NEE), water (LE) and energy (H, net radiation):
 the mean diurnal cycle in the green season (June-August: snow-free, in leaf) and in midwinter
-(December-February: under snow, in the polar night), and the mean seasonal cycle by calendar month. Every mean uses only the hours both have, and is made from each
-(calendar month, hour of the day) averaged over the years (../../evaluation.py, cycle_bins): a month's mean
-weighs its 24 hours the same, however few calm nights the tower kept. A month is shown when the tower
-measured at least ten days of it, and each of its hours at least five times. NEE is positive toward the
-atmosphere in both. The band around the tower's diurnal cycle is its mean +-2 standard errors: an hour of
-the day averages only the hours the tower measured, few on calm nights (README, Results). The scoring
-starts in 2011: 2010 takes the canopy from the census, which starts in full leaf in January, to its own
-season, and wets the soil column to the water table. With the calibration's fit (--fit, calibration/fit.json by default), the tower is also drawn as the
+(December-February: under snow, in the polar night), and the mean seasonal cycle by calendar month. Every
+mean uses only the hours both have, and is made from each (calendar month, hour of the day) averaged over
+the years (../../evaluation.py, cycle_bins): a month's mean weighs its 24 hours the same, however few calm
+nights the tower kept. A month is shown when the tower measured at least ten days of it, and each of its
+hours at least five times. NEE is positive toward the atmosphere in both. The band around the tower's
+diurnal cycle is its mean +-2 standard errors: an hour of the day averages only the hours the tower
+measured, few on calm nights. The run starts from the spin-up's state (run_site.py), so every day is
+scored. With the calibration's fit (--fit, calibration/fit.json by default), the tower is also drawn as the
 calibration scores it (dashed), as at BCI: GPP with the tower's respiration divided by the fitted kappa,
 and H and LE with the energy-closure gap shared as the fit shared it. Each panel's bias is then against
 that line.

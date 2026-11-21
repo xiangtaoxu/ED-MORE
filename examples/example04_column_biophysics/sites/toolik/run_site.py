@@ -8,8 +8,9 @@ Steps (the tower file, the forcing and the census file are kept once made; --for
      US-xTL, FLUXNET) with the USCRN station's humidity and precipitation (prepare_tower.py)
   2. the forcing file data/toolik_forcing.nc (scripts/prepare_input/flux_tower/make_tower_forcing.py)
   3. the census file, the stand synthesised from the site's harvests and cover (make_toolik_census.py)
-  4. the spin-up: 30 years on the six tower years, recycled, from the census and the soil's January 2019
-     profile, writing its state on 2019-01-02 (SPINUP_YEARS)
+  4. the spin-up: 30.5 years on the six tower years, recycled, from the census on 2 July, when its full
+     leaf is the stand's own state, and the soil's July profile, writing its state on 2019-01-02
+     (SPINUP_YEARS)
   5. the six tower years from that state, with hourly output (ed_config_eval.toml)
   6. with --calibrate: the fast parameters fitted to the tower (calibration.toml, scripts/calibrate_fast)
   7. the calibrated run, when calibration/ed_config_calibrated.toml exists
@@ -41,7 +42,7 @@ CALIBRATE_FAST = os.path.join(ROOT, "scripts", "calibrate_fast", "calibrate_fast
 DATA = os.path.join(HERE, "data")
 OUTPUT = os.path.join(HERE, "output")
 CALIB = os.path.join(HERE, "calibration")
-SPINUP_YEARS = 30                     # five passes of the six tower years
+SPINUP_YEARS = 30                     # five passes of the six tower years, from the midsummer before them
 START = "2019-01-02"                  # the evaluation's start, where the spin-up writes its state
 RECYCLE = ("2019-01-01 09:00", "2025-01-01 09:00")   # [UTC] the six tower years, midnight AKST to midnight
 
@@ -58,10 +59,11 @@ def run(cmd, log=None):
 
 
 def spinup_config(config):
-    """The evaluation's configuration started from the census SPINUP_YEARS before START, on the tower
-    years recycled, writing only its state at START and daily output."""
+    """The evaluation's configuration started from the census on the 2 July before SPINUP_YEARS ahead of
+    START, on the tower years recycled, writing only its state at START and daily output. In midsummer the
+    census's full leaf is the stand's own state; from January the stand would winter in full leaf."""
     cfg = RunConfig.load(config, relative_to=HERE)
-    start = f"{int(START[:4]) - SPINUP_YEARS}{START[4:]}"
+    start = f"{int(START[:4]) - SPINUP_YEARS - 1}-07-02"
     for key, value in {"init.init_mode": 1, "run.start_time": start, "run.end_time": START,
                        "forcing.recycle": True, "forcing.recycle_start": RECYCLE[0], "forcing.recycle_end": RECYCLE[1],
                        "output.prefix": "spinup", "output.fast.enabled": False,

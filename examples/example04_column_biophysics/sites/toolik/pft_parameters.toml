@@ -16,7 +16,10 @@
 #   CLM5 the CLM5.0 parameter file (clm5_params.c171117.nc) and Technical Note (Lawrence et al. 2018):
 #        broadleaf evergreen shrub, broadleaf deciduous boreal shrub, C3 arctic grass
 #   CLM45 the CLM4.5 Technical Note (Oleson et al. 2013, NCAR/TN-503+STR), Table 8.1
-#   B23  Berner, Orndahl & Burns 2023, Arctic Data Center, doi:10.18739/A2QV3C526 (shrub allometry)
+#   B15  Berner et al. 2015, For. Ecol. Manage. 337:110-118, doi:10.1016/j.foreco.2014.10.027, Appendix A
+#        (harvested shrubs: dwarf birch and willows in tundra and boreal forest)
+#   WB91 Walker & Barry 1991, Toolik Lake vegetation plots (ORNL DAAC 1333, doi:10.3334/ORNLDAAC/1333):
+#        the mean shrub height of its six tussock-tundra plots
 #   TTT  the Tundra Trait Team database (Bjorkman et al. 2018, Global Ecol. Biogeogr. 27:1402,
 #        doi:10.1111/geb.12821): the plants' heights north of 60 N
 #   C96  Chapin et al. 1996, J. Veg. Sci. 7:347-358, Alaska's maximum rooting depths (Iversen et al. 2015,
@@ -41,13 +44,13 @@ leaf_width         = [0.001, 0.005, 0.01]   # [m] E. vaginatum's filiform blades
                                             #   narrow leaves (Ledum's 2-5 mm, V. vitis-idaea's 5-10 mm); B. nana's
                                             #   round blades, about 1 cm (the species' descriptions, Flora of North
                                             #   America)
-branch_diameter    = [0.005, 0.005, 0.005]  # [m] a dwarf shrub's twigs: its stems are 0.1-3 cm at the ground (B23)
+branch_diameter    = [0.005, 0.005, 0.005]  # [m] a dwarf shrub's twigs: its stems are 0.1-2.5 cm at the ground (B15)
 reproduction_investment_fraction = [0.3, 0.3, 0.3]
 recruit_carbon_efficiency          = [1.0e-3, 1.0e-3, 1.0e-3]
 seed_rain_recruits = [0.01, 0.01, 0.01]     # [plant/m2/yr]
 include_pft        = [1, 1, 1]
 min_recruit_height = 0.05                   # [m] below every PFT's height
-min_repro_height   = [0.2, 0.13, 0.32]      # [m] each PFT's height: the stand is frozen
+min_repro_height   = [0.146, 0.20, 0.20]    # [m] each PFT's height: the stand is frozen
 photosynthetic_pathway = [1, 1, 1]
 vcmax25            = [68.9, 61.7, 78.0]     # [umol/m2/s] the sedge: Toolik-ecotype E. vaginatum, 68.9 (S18, Table 4);
                                             #   the evergreens: no measurement was found, CLM4.5's broadleaf evergreen
@@ -115,24 +118,28 @@ f_labile_stem          = [0.05, 0.05, 0.05]
 struct_lignin_frac     = [0.25, 0.25, 0.25]
 
 [allometry]
-# The shrubs: Berner, Orndahl & Burns 2023's dwarf birch, the stem's diameter at the ground (diameter_height
-# = 0) for both shrub PFTs, since no evergreen dwarf shrub's allometry was found: height 27.16 D^0.526 cm,
-# fitted on B23's 43 stems; the stem's above-ground carbon its above-ground mass, 21.09 D^3.01 g, less its
-# leaves at the PFT's share in M06 (0.386 and 0.218), at 0.5 gC per g; the leaf area following that mass;
-# the stem's silhouette, its diameter times its height, its wood area; and the stem all sapwood. Each caps at
-# the 90th percentile of its species' heights (TTT): B. nana's 32 cm, R. tomentosum's 17 and V. vitis-idaea's 8
-# weighted by their leaves in M06, 13 cm; the sedge stands at E. vaginatum's, 20 cm. make_toolik_census.py
-# prints the values below and the leaf area each cohort holds.
+# The shrubs: the dwarf birch harvested by B15, the stem's diameter D [cm] at the ground (diameter_height =
+# 0), for both shrub PFTs, since no evergreen dwarf shrub was harvested. make_toolik_census.py fits them in
+# log-log on B15's 52 birch:
+#   - the height, 62.66 D^0.850 cm (the 25 with a height, R2 0.87);
+#   - the stem's above-ground carbon, its wood (stem and branch), 25.86 D^2.915 g (R2 0.97), at 0.5 gC per g;
+#   - the leaf area, following the new growth (leaves and new twigs), 4.82 D^2.413 g (R2 0.95).
+# The stem's silhouette, its diameter times its height, is its wood area, and the stem is all sapwood. Both
+# shrub cohorts stand at the shrubs' height in the site's tussock tundra, 20 cm (WB91, the median of six
+# plots), so D = 0.26 cm. There the birch's new growth is 0.37 of its wood, as M06's new leaves and stems are
+# 0.40 (deciduous) and 0.42 (evergreen) of its old stems. The shrubs cap at the tallest of those plots, 30
+# cm (WB91). A grass's height is its hgt_max: the sedge stands at E. vaginatum's median, 14.6 cm (TTT).
+# make_toolik_census.py prints the values below and the leaf area each cohort holds.
 height_allometry = "power"
-hgt_max    = [0.20, 0.13, 0.32]       # [m]
-diameter_height = [1.3, 0.0, 0.0]     # [m] the shrubs' stems at the ground (B23); a grass ignores it
-b1Ht       = -1.303425
-b2Ht       = 0.526
-agb_c1     = [0.054017, 0.054017, 0.081502]
-agb_c2     = 1.191607
-lai_b1     = [0.000247973, 0.219031, 0.269306]   # the sedge's per tiller [m2]; each shrub cohort's its leaf area
-lai_b2     = [0.0, 1.191607, 1.191607]
-wai_b1     = [0.0, 0.0013, 0.0032]    # [m2 per cm of diameter] 0.01 m/cm times the PFT's height
+hgt_max    = [0.146, 0.30, 0.30]      # [m]
+diameter_height = [1.3, 0.0, 0.0]     # [m] the shrubs' stems at the ground (B15); a grass ignores it
+b1Ht       = -0.467496
+b2Ht       = 0.850116
+agb_c1     = [0.034008, 0.034008, 0.039318]
+agb_c2     = 1.02269
+lai_b1     = [0.000247973, 0.0701978, 0.06774]   # the sedge's per tiller [m2]; each shrub cohort's its leaf area
+lai_b2     = [0.0, 0.846727, 0.846727]
+wai_b1     = [0.0, 0.002, 0.002]      # [m2 per cm of diameter] 0.01 m/cm times the cohort's height
 wai_b2     = [1.0, 1.0, 1.0]
 sapwood_area_b1  = [0.7853982, 0.7853982, 0.7853982]   # [cm2/cm^2] pi/4: the stem is all sapwood
 sapwood_area_b2  = [2.0, 2.0, 2.0]

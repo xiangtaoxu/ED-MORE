@@ -25,7 +25,7 @@ demography_on             = false
 recruitment_on            = true
 cohort_fusion_on          = true
 patch_disturbance_on      = true
-patch_fusion_on           = true
+patch_fusion_on           = false   # the land-cover patches stay apart: their plants do not compete for light
 max_cohort                = 60
 n_cohort_fusion_iter      = 6
 cohort_size_tol_min       = 0.02
@@ -53,9 +53,9 @@ init_mode    = 2                  # the spin-up's state (run_site.py); the spin-
 restart_file = "output/spinup-S-20190102000000.nc"
 census_file  = "data/toolik_census_ed.csv"   # run_site.py builds it (make_toolik_census.py)
 pft_config   = "pft_parameters.toml"
-# [K] the spin-up's start, one per soil layer (toolik_traits.py): NEON's five soil plots on 1-2 January 2019,
-# -2.4 C at the top to -0.4 C at 56 cm, then a line to the deep temperature
-soil_temp    = [270.79, 271.16, 271.38, 271.50, 271.74, 272.02, 272.46, 272.59, 272.70, 272.68, 272.65, 272.60, 272.52, 272.42, 272.27, 272.04, 271.71, 271.19, 270.48, 269.61]
+# [K] the spin-up's start, one per soil layer (toolik_traits.py): NEON's five soil plots on 1-2 July 2019, in
+# midsummer when the spin-up starts, 8.3 C at the top to -0.2 C at 56 cm, then a line to the deep temperature
+soil_temp    = [281.43, 280.17, 279.17, 278.23, 276.95, 276.00, 275.18, 273.06, 272.93, 272.91, 272.87, 272.82, 272.74, 272.63, 272.47, 272.23, 271.88, 271.33, 270.58, 269.66]
                                   # each layer starts at its field capacity ([soil], a texture per layer)
 
 [output]
@@ -143,15 +143,26 @@ co2_const      = 418.0
 recycle        = false             # the six tower years cover the run; the spin-up recycles them
 start_clamp    = "error"
 
+[aerodynamics]
+# The canopy's roughness over its height. The stand is three land-cover patches (make_toolik_census.py), each
+# rough by its own plants' height, the shrubs' 20 cm and the tussocks' 14.6, so the site's roughness at the
+# tower is their blend (Mason 1988). The plants are sparse and the moss shows between them: the tower's
+# near-neutral roughness in June-August, 0.0076 m (u* over the log law at 8.9 m, |z/L| < 0.05, 2019-2024),
+# is the blend's when the roughness is 0.039 of the height, against a dense canopy's 0.13 (the model's
+# default, which makes the blend 0.025 m and u* a quarter too high). The moss's own roughness is below
+# that, so the plants set it; no measurement of the moss's was found. Over snow the tower reads 0.0019 m.
+z0m_ratio  = 0.039
+soil_rough = 0.005                   # [m]
+
 [soil_carbon]
 soil_carbon_on = true
 # The spin-up starts in steady state with the stand's litter (make_toolik_census.py's summary): the leaf fall
 # and fine-root turnover of the three PFTs, the shrubs' wood from their background mortality.
 spinup_steady      = true
-spinup_labile_grnd = 2.064832e-05     # [kgC/m2/day]
-spinup_labile_soil = 1.633816e-04
+spinup_labile_grnd = 2.064831e-05     # [kgC/m2/day]
+spinup_labile_soil = 1.633813e-04
 spinup_struct_grnd = 1.127072e-05
-spinup_struct_soil = 7.727116e-05
+spinup_struct_soil = 7.727108e-05
 
 # Toolik's soil at NEON's megapit, below its Oi (0-6 cm), which is the moss on the soil (moss_depth): the
 # organic horizons Oe and Oa (6-21 cm in the pit), peat, then the gleyed silt loam with gravel, Bg and Cg

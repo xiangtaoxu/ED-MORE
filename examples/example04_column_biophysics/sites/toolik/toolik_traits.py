@@ -19,7 +19,7 @@ on the soil ([soil].moss_depth). The column's depths are the pit's less those 6 
   * The mineral horizons, Bg (21-45 cm) and Cg (45-73 cm), take the model's own texture formulas
     (scripts/prepare_input/soil). Below the pit the column is the Cg to 18 m: nothing deeper was measured.
 
-The start (soil_start): each layer's temperature on 1-2 January 2019, the forcing's first days, from
+The start (soil_start): each layer's temperature on 1-2 July 2019, midsummer, when the spin-up starts, from
 NEON's five soil plots (DP1.00041.001, 2-56 cm, each sensor at its recorded depth that day); below the
 deepest sensor, a straight line to the deep temperature at its depth ([soil].deep_temp, deep_depth).
 
@@ -58,7 +58,7 @@ MINERAL = ["Bg", "Cg"]
 # 479, Fig. 1b, read off the figure), carried to 2021 at its 2000-2014 trend, 0.3 C per decade.
 DEEP_TEMP = 273.15 - 4.4                # [K]
 DEEP_DEPTH = 20.0 - PIT_SOIL_TOP        # [m] the borehole's 20 m below the ground surface
-START = ("2019-01-01", "2019-01-03")    # the days whose mean starts the soil
+START = ("2019-07-01", "2019-07-03")    # the days whose mean starts the soil: the spin-up starts in midsummer
 
 
 def vg_theta_head(h, theta_sat, theta_res, alpha, n):

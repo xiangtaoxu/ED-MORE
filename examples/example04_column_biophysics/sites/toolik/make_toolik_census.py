@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0
-"""The Toolik stand, synthesised from the site's harvest and cover: one cohort per PFT on one patch, for
-ed_config_eval.toml's census start, with the PFT file's allometry and the soil carbon's steady litter.
+"""The Toolik stand, synthesised from the site's harvest and cover: one cohort per PFT, each on its own
+land-cover patch, for ed_config_eval.toml's census start, with the PFT file's allometry and the soil carbon's
+steady litter.
 
 The PFTs (pft_parameters.toml): 1 the tussock sedge (Eriophorum vaginatum, Carex bigelowii), a grass; 2 the
 evergreen dwarf shrubs (Rhododendron tomentosum, Vaccinium vitis-idaea, Empetrum nigrum, Cassiope tetragona);
@@ -14,14 +15,23 @@ evergreen dwarf shrubs (Rhododendron tomentosum, Vaccinium vitis-idaea, Empetrum
    (DP1.10058.001, 2019-2024, the run's years) splits that total among the PFTs: cover is the leaves'
    projection.
 2. The shrubs' stems: each shrub PFT keeps the harvest's above-ground stems (new and old) per leaf area.
-3. One cohort per shrub PFT, at its PFT's height cap (hgt_max) and at the diameter at the ground whose
-   allometric height that is: Berner, Orndahl & Burns 2023's dwarf birch (Arctic Data Center,
-   doi:10.18739/A2QV3C526): above-ground dry mass 21.09 BD^3.01 g, BD [cm] at the ground (n 43, R2 0.97);
-   height 27.16 BD^0.526 cm, fitted here in log-log on its 43 stems (R2 0.27). No such allometry was
-   found for evergreen dwarf shrubs, so both shrub PFTs take the birch's. A stem is that mass less its
-   leaves, at the PFT's leaf share in MAT06; nplant = the PFT's stems over one stem's.
-4. The sedge: one row of tillers, diameter 0, at its PFT's height. No count of tillers was found; in a
+3. The shrubs' allometry, fitted here in log-log on the dwarf birch (Betula nana) harvested by Berner et
+   al. 2015 (For. Ecol. Manage. 337:110, Appendix A; BERNER): 52 plants, the diameter BD [cm] at the
+   ground; their height (the 25 with one), their wood (stem and branch) and their new growth (leaves and
+   new twigs). The paper finds the same birch allometry in boreal forest and tundra, and Betula nana is
+   most of the site's deciduous stems. The same table's tundra willows from the foothills near Toolik
+   give nearly the same height law. No evergreen dwarf shrub was harvested, so both shrub PFTs take the
+   birch's laws.
+4. One cohort per shrub PFT, at the shrubs' height in the site's tussock tundra: the median of the mean
+   shrub height in Walker & Barry's (1991) six tussock-tundra plots at Toolik Lake (ORNL DAAC 1333,
+   WALKER). Its diameter is the one the height law gives at that height; nplant = the PFT's stems over
+   one stem's wood.
+5. The sedge: one row of tillers, diameter 0, at its PFT's height. No count of tillers was found; in a
    frozen stand only the leaf area matters, so TILLERS is a choice and lai_b1 its leaf area over it.
+6. The patches: plants that do not compete for light do not share a patch. The deciduous shrubs and the
+   tussocks each take the ground NEON's cover gives them; the evergreen dwarf shrubs, creeping a few cm
+   tall in the moss between the tussocks, take the rest. Each cohort's density is its PFT's per m2 of its
+   own patch, so the stand's leaf area and stems stay the harvest's.
 
 It prints the values the PFT file holds (the allometry the census assumes) and the [soil_carbon] steady
 litter input; a PFT file that differs is reported.
@@ -57,9 +67,10 @@ FORM = {"Eriophorum": SEDGE, "Carex": SEDGE, "Luzula": SEDGE, "Calamagrostis": S
         "Diapensia": EVERGREEN,
         "Betula": DECIDUOUS, "Salix": DECIDUOUS, "Vaccinium uliginosum": DECIDUOUS, "Arctostaphylos": DECIDUOUS}
 COVER_YEARS = range(2019, 2025)
-BERNER_MASS = (21.09, 3.01)             # [g], [-] above-ground dry mass = a BD^b, BD [cm] at the ground
-BERNER_HEIGHT = (27.16, 0.526)          # [cm], [-] height = a BD^b
-TILLERS = 1000.0                        # [tillers m-2] the sedge's, a choice (see 4.)
+BERNER = os.path.join("berner2015", "1-s2.0-S0378112714006094-mmc1.csv")
+WALKER = os.path.join("ornl_above", "Toolik_Lake_Veg_Plots", "Toolik_Lake_Environmental_Data.csv")
+TILLERS = 1000.0                        # [tillers m-2] the sedge's, a choice (see 5.)
+PATCH = {DECIDUOUS: 1, SEDGE: 2, EVERGREEN: 3}   # the patch each PFT's cohort stands on (see 6.)
 
 
 def harvest(data):
@@ -84,8 +95,8 @@ def pft_of(name):
 
 
 def cover_shares(data):
-    """Each PFT's share of the vascular cover: the mean over COVER_YEARS of each year's mean cover per
-    1 m2 subplot."""
+    """Each PFT's share of the vascular cover and its cover of the ground [0-1]: the mean over
+    COVER_YEARS of each year's mean cover per 1 m2 subplot."""
     files = sorted(glob.glob(os.path.join(data, "neon", "DP1.10058.001", "*", "*div_1m2Data*")))
     c = pd.concat([pd.read_csv(f, low_memory=False) for f in files])
     c = c[c["taxonID"].notna()].copy()
@@ -96,20 +107,47 @@ def cover_shares(data):
     per = c.dropna(subset=["pft"]).groupby(["year", "subplot", "pft"])["percentCover"].sum().unstack(fill_value=0.0)
     yearly = per.groupby(level="year").mean()
     mean = yearly.mean()
-    return {int(p): float(mean[p] / mean.sum()) for p in mean.index}, yearly.round(1)
+    return ({int(p): float(mean[p] / mean.sum()) for p in mean.index}, {int(p): float(mean[p] / 100.0) for p in mean.index},
+            yearly.round(1))
 
 
-def shrub_allometry(leaf_share, rho, hgt_max):
-    """The birch's laws as the PFT file holds them (D [cm], H [m], AGB [kgC]): height exp(b1Ht) D^b2Ht,
-    stem AGB agb_c1 rho^agb_c2 (D^2 H)^agb_c2 = the above-ground mass less the leaves, and the leaf area
-    following the above-ground mass, lai_b2 = agb_c2; the cohort's diameter at the height cap."""
-    (a, b), (ha, hb) = BERNER_MASS, BERNER_HEIGHT
-    b1ht, b2ht = math.log(ha / 100.0), hb
-    c2 = b / (2.0 + hb)
-    c1 = 1.0e-3 * C_PER_DRY * (1.0 - leaf_share) * a / (rho ** c2 * math.exp(b1ht * c2))
-    diameter = (100.0 * hgt_max / ha) ** (1.0 / hb)
-    stem = 1.0e-3 * C_PER_DRY * (1.0 - leaf_share) * a * diameter ** b        # [kgC per plant]
-    return dict(b1Ht=b1ht, b2Ht=b2ht, agb_c1=c1, agb_c2=c2, lai_b2=c2), diameter, stem
+def power_law(x, y):
+    """y = a x^b fitted in log-log by least squares on the pairs where both are positive: (a, b, n)."""
+    ok = (x > 0) & (y > 0)
+    b, ln_a = np.polyfit(np.log(x[ok]), np.log(y[ok]), 1)
+    return float(np.exp(ln_a)), float(b), int(ok.sum())
+
+
+def shrub_laws(data):
+    """BERNER's dwarf birch (see 3.), BD [cm]: height [cm], wood and new growth [g dry], each a BD^b as (a, b, n)."""
+    b = pd.read_csv(os.path.join(data, BERNER), encoding="latin-1", skiprows=8)
+    b = b[b["Genus"] == "Betula"]
+    col = {key: pd.to_numeric(b[name], errors="coerce").to_numpy() for key, name in
+           (("bd", "BD (cm)"), ("height", "Height (cm)"), ("stem", "Stem (g)"), ("branch", "Branch (g)"),
+            ("new", "NewGrowth (g)"))}
+    return {"height": power_law(col["bd"], col["height"]),
+            "wood": power_law(col["bd"], col["stem"] + col["branch"]),
+            "new_growth": power_law(col["bd"], col["new"])}
+
+
+def shrub_height(data):
+    """[m] the median of the mean shrub height in WALKER's tussock-tundra plots (see 4.)."""
+    w = pd.read_csv(os.path.join(data, WALKER), encoding="latin-1")
+    plots = w[(w["PRINCIPAL_HABITAT"].str.strip() == "Moist tundra-tussock tundra") & (w["MEAN_SHRUB_HEIGHT"] > 0)]
+    return float(plots["MEAN_SHRUB_HEIGHT"].median()) / 100.0
+
+
+def shrub_allometry(rho, height, laws):
+    """The birch's laws as the PFT file holds them (D [cm], H [m], AGB [kgC]): height exp(b1Ht) D^b2Ht; the
+    stem's above-ground carbon, its wood, agb_c1 rho^agb_c2 (D^2 H)^agb_c2; and the leaf area following the
+    new growth, (D^2 H)^lai_b2. Also the diameter at `height` and one stem's wood [kgC]."""
+    (ha, hb, _), (wa, wb, _), (_, nb, _) = laws["height"], laws["wood"], laws["new_growth"]
+    b1ht = math.log(ha / 100.0)
+    c2 = wb / (2.0 + hb)
+    c1 = 1.0e-3 * C_PER_DRY * wa / (rho ** c2 * math.exp(b1ht * c2))
+    diameter = (100.0 * height / ha) ** (1.0 / hb)
+    stem = 1.0e-3 * C_PER_DRY * wa * diameter ** wb
+    return dict(b1Ht=b1ht, b2Ht=hb, agb_c1=c1, agb_c2=c2, lai_b2=nb / (2.0 + hb)), diameter, stem
 
 
 def steady_litter(cohorts, pft_file):
@@ -145,7 +183,7 @@ def main(argv=None):
     args = ap.parse_args(argv)
 
     leaves, stems = harvest(args.data)
-    shares, yearly = cover_shares(args.data)
+    shares, cover, yearly = cover_shares(args.data)
     pp = {p: mc.pft_params(args.pft_file, p) for p in (SEDGE, EVERGREEN, DECIDUOUS)}
     area_harvest = {p: leaves[p] * 1.0e-3 * C_PER_DRY * pp[p]["sla"] for p in pp}       # [m2 m-2]
     total = sum(area_harvest.values())
@@ -156,33 +194,41 @@ def main(argv=None):
     pft_values["lai_b1"][SEDGE] = lai[SEDGE] / TILLERS
     pft_values["lai_b2"][SEDGE] = 0.0
     pft_values["wai_b1"][SEDGE] = 0.0
+    laws = shrub_laws(args.data)
+    height = shrub_height(args.data)
     for p in (EVERGREEN, DECIDUOUS):
-        leaf_share = leaves[p] / (leaves[p] + stems[p])
-        allom, diameter, stem = shrub_allometry(leaf_share, pp[p]["rho"], pp[p]["hgt_max"])
+        allom, diameter, stem = shrub_allometry(pp[p]["rho"], height, laws)
         stems_c = stems[p] * lai[p] / area_harvest[p] * 1.0e-3 * C_PER_DRY            # [kgC m-2]
         nplant = stems_c / stem
-        height = pp[p]["hgt_max"]
         cohorts.append((p, diameter, nplant, height))
         pft_values[f"pft{p}"] = {k: round(v, 6) for k, v in allom.items()}
         pft_values["lai_b1"][p] = lai[p] / (nplant * (diameter * diameter * height) ** allom["lai_b2"])
         pft_values["lai_b2"][p] = allom["lai_b2"]
         pft_values["wai_b1"][p] = 0.01 * height                                       # [m2 per cm of stem]
-        for key in ("b1Ht", "b2Ht", "agb_c1", "agb_c2"):
+        for key in ("b1Ht", "b2Ht", "agb_c1", "agb_c2", "lai_b2"):
             have = pp[p][key]
             if not math.isclose(have, allom[key], rel_tol=1.0e-4):
                 print(f"NOTE: the PFT file's {key} for PFT {p} is {have}, the census assumes {allom[key]:.6g}")
+        if pp[p]["hgt_max"] < height:
+            print(f"NOTE: the PFT file's hgt_max for PFT {p} is {pp[p]['hgt_max']}, below the cohort's {height} m")
 
+    area = {DECIDUOUS: cover[DECIDUOUS], SEDGE: cover[SEDGE]}
+    area[EVERGREEN] = 1.0 - area[DECIDUOUS] - area[SEDGE]                              # the moss between the tussocks
     os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
     with open(args.out, "w") as fh:
         fh.write("# The Toolik stand (NEON TOOL), written by make_toolik_census.py: one cohort per PFT synthesised from\n"
-                 "# MAT06's harvest and NEON's cover (NOT measured plants). height is for reference.\n")
+                 "# MAT06's harvest and NEON's cover (NOT measured plants), each on its own land-cover patch\n"
+                 "# (patch_area: its share of the ground). height is for reference.\n")
         fh.write("site_id,patch_id,cohort_id,diameter,height,pft,nplant,patch_area\n")
-        for i, (p, diameter, nplant, height) in enumerate(cohorts, start=1):
-            fh.write(f"1,1,{i},{diameter:.4f},{height:.3f},{p},{nplant:.6g},1.0\n")
+        for i, (p, diameter, nplant, height) in enumerate(sorted(cohorts, key=lambda c: PATCH[c[0]]), start=1):
+            fh.write(f"1,{PATCH[p]},{i},{diameter:.4f},{height:.3f},{p},{nplant / area[p]:.6g},{area[p]:.4f}\n")
 
-    summary = {"harvest_leaves_g_m2": leaves, "harvest_stems_g_m2": stems,
+    summary = {"shrub_laws_a_b_n": {k: (round(a, 3), round(b, 3), n) for k, (a, b, n) in laws.items()},
+               "shrub_height_m": height,
+               "harvest_leaves_g_m2": leaves, "harvest_stems_g_m2": stems,
                "harvest_leaf_area": {p: round(v, 3) for p, v in area_harvest.items()}, "harvest_lai": round(total, 3),
                "cover_shares": {p: round(v, 3) for p, v in shares.items()},
+               "patch_area": {p: round(v, 4) for p, v in area.items()},
                "lai": {p: round(v, 3) for p, v in lai.items()},
                "cohorts": [{"pft": p, "diameter_cm": round(d, 4), "nplant_m2": round(n, 3), "height_m": h}
                            for p, d, n, h in cohorts],
